@@ -1,0 +1,1558 @@
+计 算 机 研 究 与 发 展 DOI:10.7544∕issn1000G1239.20211154 JournalofComputerResearchandDevelopment 59(5):1035 1053,2022
+收 稿 日 期 :2021-11-16;修 回 日 期 :2022-01-20
+基 金 项 目 :国 家 自 然 科 学 基 金 项 目 (U1836210);国 家 重 点 研 发 计 划 项 目 (2018YFB0804701)
+ThisworkwassupportedbytheNationalNaturalScienceFoundationofChina (U1836210)andtheNationalKeyResearch &
+DevelopmentProgram ofChina (2018YFB0804701).
+通 信 作 者 :张 玉 清 (zhangyq@ucas.ac.cn)
+工业控制系统安全综述
+杨 婷1,2 张嘉元2,3 黄在起1 陈禹劼1 黄成龙1 周 威4 刘 鹏5 冯 涛3 张玉清1,2,6
+1(西安电子科技大学网络与信息安全学院 西安 710071)
+2(中国科学院大学国家计算机网络入侵防范中心 北京 101408)
+3(兰州理工大学计算机与通信学院 兰州 730050)
+4(华中科技大学网络空间安全学院 武汉 430074)
+5(美国宾夕法尼亚州立大学信息科学与技术学院 美国宾夕法尼亚州斯泰特科利奇 16802)
+6(海南大学计算机与网络空间安全学院 海口 570228)
+(yangt@nipc.org.cn)
+SurveyofIndustrialControlSystemsSecurity
+YangTing1,2,ZhangJiayuan2,3,HuangZaiqi1,ChenYujie1,HuangChenglong1,Zhou Wei4,LiuPeng5,
+FengTao3,andZhangYuqing1,2,6
+1(SchoolofCyberEngineering,XidianUniversity,Xi􀆳an710071)
+2(NationalComputerNetworkIntrusionProtectionCenter,UniversityofChineseAcademyofSciences,Beijing101408)
+3(SchoolofComputerandCommunication,LanzhouUniversityofTechnology,Lanzhou730050)
+4(SchoolofCyberScienceandEngineering,HuazhongUniversityofScience & Technology,Wuhan430074)
+5(CollegeofInformationSciencesandTechnology,PennsylvaniaStateUniversity,StateCollege,PA,USA16802)
+6(SchoolofComputerScienceandCyberspaceSecurity,HainanUniversity,Haikou570228)
+Abstract Inadditiontotheapplicationofmanufacturingindustries,industrialcontrolsystemsare
+also widely usedin criticalinfrastructure such astransportation,energy,and watertreatment
+industries.Accelerated application of digital,network,andintelligenttechnologiesinindustrial
+controlsystems,moreand moresmartdevicesareconnectedtoit,leadingtoseverechallengestoits
+security.Therefore,the security ofindustrial control systems has attracted the attention of
+researchers.Inordertolettheresearcherssystematicallyunderstandthecurrentresearchprogress,
+wehaveresearchedthecoredatabaseof WebofScience,EIdatabase,thenetworkandinformation
+securityrelatedpapersofCCFrecommendedinternationalacademicconferencesandotherhighGlevel
+research work in the pastthree years.First,the architecture ofindustrialcontrolsystemsis
+introduced,thenthesecuritythreatsthatICSfacesareintroduced.Moreover,accordingtothe
+architectureoftheindustrialcontrolsystems,wedividethesecurityresearch workintothreeparts:
+thecommunicationsecurityofindustrialcontrolsystem andcloud,thecommunicationsecurityof
+human machineinterface(HMI)todevice,thesecurityofdevicefirmwareandothersecurityresearch
+issues,analyzethemfromtheperspectiveofattackanddefense.Finally,weputforwardthe main
+challengesthatsecurityresearchfaces,identifyopenproblemsforfutureresearchdirections.
+
+
+Keywords industrialcontrolsystemssecurity;Industry4.0;industrialInternetofthings;attack;
+countermeasures
+摘 要 工业控制系统除了应用于生产制造行业外,还广泛应用于交 通、水 利 和 电 力 等 关 键 基 础 设 施.随
+着 工 业 数 字 化 、网 络 化 、智 能 化 的 推 进 ,许 多 新 技 术 应 用 于 工 业 控 制 系 统 ,提 高 了 工 业 控 制 系 统 的 智 能 化
+水平,但其也给工业控制系统的安全带来严峻的挑战.因此,工业控制系统的安全倍受研究人员的关 注.
+为了让研究人员系统化地了解目前的研 究 进 展,调 研 了 近 3 年 WebofScience核 心 数 据 库、EI数 据 库
+和 CCF 推荐网络与信息安全国际学术会议中发表的 与 工 业 控 制 系 统 安 全 相 关 论 文 以 及 其 他 相 关 的 高
+水平研究工作.首先,介绍工 业 控 制 系 统 的 体 系 结 构 及 面 临 的 威 胁.然 后,依 据 工 业 控 制 系 统 的 体 系 结
+构,自上而下将其安全研究工作分 为ICSG云 平 台 通 信 安 全、HMIG设 备 通 信 安 全、设 备 固 件 安 全 以 及 其
+他安全研究,并从攻击和防御角度进行分析 和 整 理.最 后,提 出 当 前 工 业 控 制 系 统 安 全 研 究 依 然 面 临 的
+主 要 挑 战 ,并 指 出 未 来 研 究 发 展 的 方 向 .
+关键词 工业控制系统安全;工业4.0;工业物联网;攻击;防御
+中图法分类号 TP391
+与传统网络安全相 比,工 业 控 制 系 统(industrial
+controlsystem,ICS)在 过 去 从 未 被 认 为 存 在 潜 在
+网络安全风险.在 工 业 4.0 时 代[1],为 了 方 便 维 护 和
+管理,工业控制系统连接了越来越多的组件和设 备.
+并且随着“中国制造2025”的推进,工 业 控 制 系 统 将
+进一步地数字化、网络化和 智 能 化[2].由 于 现 有 工 业
+硬件无法轻易替换 或 更 新,而 将 目 前 的 安 全 功 能 集
+成到现有工业控制 系 统 中 极 具 挑 战 性 (解 决 方 案 必
+须 向 后 兼 容 几 十 年 前 的 设 备 ),工 业 控 制 系 统 正 面 临
+严重的安全威 胁.如 图 1 所 示,总 结 了 近 20 年 影 响
+力较大的工业控制 系 统 安 全 事 件,其 中 典 型 的 安 全
+事件是 Stuxnet攻 击 伊 朗 核 设 备 和 Industoryer入
+侵乌克 兰 电 网.Stuxnet是 第 一 个 包 含 PLCrootkit
+的病毒,它将恶 意 代 码 注 入 到 PLC 程 序 中,使 离 心
+机以超出可接受范 围 的 速 度 运 行,从 而 破 坏 伊 朗 核
+计划.Industoryer 病 毒 是 针 对 工 业 控 制 协 议 IEC
+60870G5G101,IEC60870G5G104,OPCDA 和IEC61850
+设计的.2016年12月,Industroyer攻 击 了 乌 克 兰 电
+网 ,它 能 够 扫 描 工 业 控 制 系 统 的 环 境 ,直 接 向 远 程 控
+制单元发送命令.综上所述,这些安全事件不仅会 打
+乱人们正常的生活和生产秩序,还会造成公司商业资
+料的泄露和财产损失,严重的甚至会危及国家安全.
+Fig.1 IndustrialcontrolsystemcyberGattacks
+图1 工业控制系统安全事件
+自 2019 年 以 来,全 球 范 围 内 爆 发 新 冠 疫 情,许
+多工作人员不得不 在 家 办 公,他 们 需 要 使 用 家 庭 计
+算机 通 过 VPN 连 接 到 工 业 控 制 系 统,因 此 增 加 了
+对工业控制系 统 连 通 性 的 需 求.这 加 速 了 信 息 技 术
+(informationtechnology,IT)和 操 作 技 术 (operation
+technology,OT)网 络 融 合 ,促 进 了 工 业 控 制 系 统 数
+字化转型.除 此 之 外,在 疫 情 中,原 始 设 备 制 造 商 和
+系统集成商则受到 了 运 输 服 务 设 备 的 限 制,进 入 现
+场变得更加困难,因 此 也 增 加 了 对 第 三 方 安 全 远 程
+访问的需求.通常,家庭网络比公司网络的安全标 准
+1036 计算机研究与发展 2022,59(5)
+
+
+低,而且许多安全公 司 已 经 检 测 到 这 些 家 庭 计 算 机
+被用来对工业 控 制 系 统 网 络 执 行 不 必 要 的 扫 描.根
+据 Kaspersky 统 计[3],2021 年 上 半 年 期 间,从 工 业
+控制系统的计算机设备 上 成 功 阻 止 了 5150 种 恶 意
+软件.随着计算能力和存储能力的提高,网络攻击 的
+复杂性将进一步增 强,使 用 现 代 化 的 新 技 术 和 方 法
+来检测和抵御攻击刻不容缓.
+目前已有不少面向工业控制系统安全的综述研
+究 .文 献 [4]分 析 了 工 业 控 制 系 统 面 临 的 典 型 威 胁 和
+攻击,讨论了尚未解 决 的 安 全 问 题 及 相 应 的 工 业 控
+制 系 统 安 全 解 决 方 案 ,提 供 了 未 来 的 研 究 方 向 ,但 是
+没 有 对 相 关 文 献 进 行 分 析 .文 献 [5]主 要 对 工 业 控 制
+系 统 中 的 安 全 解 决 方 案 进 行 了 调 研 .文 献 [6]对 工 业
+控制系统漏洞报告 进 行 了 深 入 分 析,衡 量 出 工 业 控
+制系统的组件 和 安 全 策 略 受 已 知 漏 洞 的 影 响.文 献
+[7]分 析 了 物 联 网 和 工 业 物 联 网 都 存 在 的 安 全 挑 战 ,
+以及工业物联网系 统 特 有 的 安 全 挑 战,并 指 出 如 何
+应对这些挑战.但是,工业控制系统攻击和防御技 术
+迅速发展,有必要重 新 归 纳 和 总 结 该 领 域 近 期 的 研
+究工作.
+Fig.2 StatisticsofrepresentativeresearchonICSsecurity
+图2 工业控制系统安全代表性研究统计
+本文主要对近3 年(2019G01—2021G10)Webof
+Science核心数据库、EI数据库、CCF 推 荐 网 络 与 信
+息安全国际学术会议中发表的与工业控制系统安全
+相关论文,以及其他 相 关 的 高 水 平 研 究 工 作 进 行 深
+入调研分析.图 2 展 示 了 工 业 控 制 系 统 安 全 相 关 调
+研 文 献 数 量 的 逐 年 变 化 情 况 ,可 以 看 到 ,针 对 攻 击 的
+文 献 集 中 在 2018 年 及 以 前 ,近 3 年 的 文 献 主 要 是 防
+御方案,但也 有 新 的 攻 击 方 法 被 提 出.因 此,基 于 这
+些新增加的文献,归 纳 和 分 析 工 业 控 制 系 统 的 研 究
+现状与方向有着重要的现实意义.
+本文根据工业控制系统的基本结构从攻击和防
+御2个角度,对近3 年 的 工 业 控 制 系 统 安 全 研 究 工
+作 进 行 了 分 析 ,主 要 贡 献 包 括 3 个 方 面 :
+1)介 绍 了 工 业 控 制 系 统 基 本 的 体 系 结 构 ,依 据
+工业控制系统的体系结构对各个组成部分面临的主
+要威胁展开全面讨 论,剖 析 了 威 胁 产 生 的 原 因 及 危
+害 ,展 示 了 针 对 各 种 威 胁 现 有 的 解 决 方 案 ;
+2)深入 分 析 了 针 对ICSG云 平 台 通 信、HMIG设
+备通信和设备固件 的 具 体 攻 击,并 对 不 同 攻 击 的 检
+测、防御方案进行 分 类 讨 论,对 类 似 的 检 测、防 御 方
+案 进 行 了 对 比 分 析 ,展 示 了 这 些 技 术 方 案 的 效 果 ;
+3)揭示了工 业 控 制 系 统 领 域 未 来 发 展 过 程 中
+将面临的挑战和机 遇,并 对 工 业 控 制 系 统 安 全 未 来
+的研究趋势进行展望.
+1 工业控制系统体系结构及面临的威胁
+本节 首 先 介 绍 了 工 业 控 制 系 统 的 基 本 结 构,然
+后从ICSG云 平 台 通 行 安 全、HMIG设 备 通 信 安 全 和
+设备固件安全3个方向分析归纳了各结构部分面临
+的威胁.
+1.1 工业控制系统体系结构
+工业 控 制 系 统 的 体 系 结 构 如 图 3 所 示,主 要 包
+括 服 务 器∕云 平 台、人 机 交 互 界 面 (human machine
+interface,HMI)、主 终 端 装 置 (masterterminalunit,
+MTU)、远程终端单元(remoteterminalunit,RTU)、
+现 场 设 备 5 部 分 .工 业 控 制 系 统 工 作 的 大 致 流 程 :
+现 场 设 备 将 生 产 过 程 中 的 实 时 数 据 传 递 到 PLC,
+PLC 根据预先设定好 的 程 序 对 数 据 进 行 处 理,然 后
+对设备进行 控 制 或 者 将 数 据 上 传 到 MTU;用 户 可
+以根据人机交互界面上实时显示的数据来监控设备
+的状况或对设备进 行 操 作;服 务 器 或 者 云 端 会 对 这
+些设备数据进行存 储,便 于 工 作 人 员 对 数 据 汇 总 和
+分析.
+1.1.1 服务器∕云平台
+工业控制系统服务器会通过软件程序实时收集
+来 自 众 多 传 感 器 、执 行 器 、远 程 终 端 单 元 和 实 时 的 控
+制信息等,例 如 CPU 的 温 度、风 扇 的 转 速、门 阀 的
+位置等.除 此 之 外,其 还 可 以 对 数 据 进 行 汇 总 和 分
+析,例如平均 值、标 准 偏 差 等.大 型 企 业 需 要 服 务 器
+实时组合和分析设 备 产 生 的 数 据 来 下 达 命 令,这 些
+数据使用标准格式 进 行 存 储,并 通 过 数 据 分 析 和 可
+视 化 显 示 结 果 ,进 而 比 较 生 产 的 效 率 和 性 能 .
+1037
+杨 婷等:工业控制系统安全综述
+
+
+Fig.3 Thearchitectureofindustrialcontrolsystems
+图3 工业控制系统基本架构
+1.1.2 人机交互界面
+工业控制系统通过人机交互界面对设备进行配
+置和 操 作,包 括 设 备 的 运 行、停 止、更 新、故 障 排 除
+等.人机交互 界 面 是 通 过 网 络 与 MTU 连 接 的 1 台
+或多台计算机,可以 在 紧 急 或 极 端 事 件 的 情 况 下 快
+速通知和错误报警.根据设备运行状况,展示设备 的
+运行数据和状态.
+1.1.3 主终端装置
+MTU 负责从 RTU 收集数据并传输到 HMI或
+服务 器.MTU 和 RTU 之 间 是 双 向 通 信,MTU 和
+RTU 之间的通信是由 MTU 发起的,可以通过控制
+人 员 操 作 触 发 ,也 可 以 设 置 周 期 性 自 动 触 发 .
+1.1.4 远程终端单元
+RTU 是 PLC 技术的发展,既 有 PLC 的 传 统 功
+能,更有其独特的特 点.RTU 和 PLC 通 过 现 场 总 线
+或无线网 络 连 接 到 传 感 器 和 执 行 器 来 收 集 实 时 信
+息 ,并 操 作 和 控 制 设 备 .
+1.1.5 现场设备
+现场 设 备 是 工 业 物 联 网 系 统 中 的 数 据 来 源,主
+要包括传感器 和 执 行 器.传 感 器 用 来 收 集 设 备 状 态
+的周期性数据,例 如 温 度 传 感 器、恒 温 器、压 力 传 感
+器和 RFID 等;执行器主要用来执行控制命令.
+1.2 工业控制系统面临的威胁
+工业 控 制 系 统 接 入 互 联 网 后,攻 击 者 可 以 利 用
+已知的IT 网络缺陷连接到控制台.工业控制系统对
+于 安 全 防 护 的 缺 失 (例 如 ,对 来 自 外 部 的 控 制 进 行 适
+当身份验证),打 开 了 工 业 控 制 系 统 的 攻 击 面.工 业
+控制 系 统 既 面 临 着 传 统IT 的 安 全 威 胁,又 面 临 着
+OT 的安全 威 胁.本 文 只 讨 论 工 业 控 制 系 统 中 特 有
+的IT 和 OT 安全威胁.依据工业控制系统的体系结
+构,自上而下地将 研 究 工 作 分 为ICSG云 平 台 通 信 安
+全、HMIG设备通信安 全、设 备 固 件 安 全 以 及 其 他 安
+全相关研究.
+1.2.1 ICSG云平台通信安全
+在传 统 的 工 业 控 制 系 统 中,设 备 的 控 制 和 管 理
+都是在本地进行的.近年来,工业控制系统逐渐从 单
+片架构迁移到 分 布 式 云 架 构.云 计 算 在 工 业 自 动 化
+方向的市场潜 力 巨 大.用 户 可 以 从 云 计 算 运 营 商 租
+用硬 件 资 源,例 如 服 务 器、存 储、网 络 等,将 软 件 放
+在这些资源上运行,通 过 网 络 获 得 应 用 软 件 所 提 供
+的信息与数据.用户只需投入少量的使用成本,即 可
+得到与从前同 功 效、高 质 量 的 服 务.因 此,工 业 控 制
+系统的数据逐步转变为云存储.但是,云平台的应 用
+使工业控制系统的 网 络 环 境 变 得 更 加 复 杂 (云 平 台
+1038 计算机研究与发展 2022,59(5)
+
+
+自身不安全,信息上 下 交 互 也 不 安 全),工 业 控 制 系
+统和外部通信过程,除 了 要 面 临 传 统 的IT 威 胁,还
+要面临新的安全威 胁 和 漏 洞,其 中 工 业 控 制 系 统 和
+云 平 台 通 信 面 临 的 安 全 威 胁 包 括 :云 平 台 相 关 攻 击 、
+工业防火墙漏洞利用和端口扫描.
+1.2.2 HMIG设备通信安全
+在工 业 控 制 系 统 中,设 备 通 过 网 络 连 接 进 行 通
+信,进而协调整个生产制造过程.用户通过软件程 序
+实时收集和存储工 业 控 制 系 统 中 的 运 行 数 据,以 便
+进一步的管理 和 分 析.工 业 控 制 系 统 使 用 的 通 信 协
+议在不同的行业、不 同 的 地 域 或 者 不 同 的 供 应 商 之
+间差别 很 大,常 用 的 工 业 通 信 协 议 包 括 Modbus,
+Fieldbus和 IEC60870G5 等.工 业 通 信 协 议 设 计 时
+仅 考 虑 运 行 在 封 闭 的 环 境 中 ,很 少 考 虑 到 安 全 性 ,因
+此 这 些 协 议 容 易 受 到 各 种 恶 意 攻 击 ,如 窃 听 、篡 改 和
+伪造等.PLC 是工业控制系统的核心部件,攻击者可
+以通过网络将 恶 意 的 逻 辑 代 码 注 入 到 PLC 的 控 制
+逻辑中来实 现 恶 意 攻 击,例 如 病 毒 Stuxnet就 是 通
+过改变 PLC 的 控 制 逻 辑 来 实 现 攻 击.除 此 之 外,工
+业控制系统中存在 着 不 同 类 型 的 传 感 器,攻 击 者 可
+以利用电磁干扰来修改传感器读数.因此,人机交 互
+界面和设备通信面 临 的 安 全 威 胁 包 括:PLC 控 制 逻
+辑注入攻击、ICS 专 有 通 信 协 议 攻 击 和 传 感 器 欺 骗
+攻击.
+1.2.3 设备固件安全
+随着 自 动 化 和 智 能 化 技 术 的 进 步,工 业 控 制 系
+统 之 间 的 设 备 高 度 互 连 、相 互 依 赖 ,越 来 越 多 的 设 备
+连接到工业控 制 系 统.这 些 设 备 的 微 控 制 器 芯 片 是
+由特定供应商提供,攻 击 者 通 过 利 用 漏 洞 来 劫 持 设
+备或恶意修改其固件对工业控制系统中的设备进行
+控制,尤其是 PLC 设 备 固 件,它 可 根 据 系 统 输 入 来
+管理和控制现场设备,如果攻击者可以修改 PLC 设
+备固件,那么属于其 权 限 范 围 内 的 任 何 物 理 系 统 组
+件都可以被完全控制.因此,设备固件安全威胁包 括
+固件篡改和漏洞利用.
+2 ICSG云平台通信安全
+目前,大 量 基 于 云 的 技 术 被 应 用 于 工 业 控 制 系
+统,这给工业控制系统带来了新的安全威胁.本节 将
+从攻 击 和 防 御 2 个 角 度 对ICSG云 平 台 通 信 安 全 研
+究工作进行归纳和分析.
+2.1 攻 击
+2.1.1 针对云平台的攻击
+工业 控 制 系 统 的 数 据 存 储 到 云 端,云 平 台 利 用
+虚拟技术实现多用 户 应 用 并 发 运 行,用 户 对 数 据 失
+去 了 控 制 ,可 能 不 会 意 识 到 详 细 的 云 平 台 安 全 策 略 、
+漏 洞 和 恶 意 软 件 信 息 .文 献 [8]指 出 云 平 台 面 临 不 安
+全的 API接口、内 部 攻 击、数 据 泄 露、服 务 劫 持、账
+号盗用等安全 问 题.工 业 控 制 系 统 中 关 键 数 据 的 丢
+失和篡改都会给用 户 带 来 不 可 估 量 的 损 失,而 这 些
+问题都会使存储在其中的数据面临安全威胁.
+Table1 ThreatstoIndustrialControlSystems 表1 工业控制系统面临的威胁
+分类 攻击 成因 危害 防御
+ICSG云 平 台 通 信 安 全
+HMIG设 备 通 信 安 全
+设备固件安全
+云平台相关攻击 安全策略不当,内部攻击 数据泄露,数据篡改
+工业防火墙漏洞利用 程序漏洞,固件没有及时更新 程序崩溃,系统无法
+正常工作
+端口扫描 攻击信息采集 漏洞利用
+PLC 控制逻辑注入攻击 通过漏洞篡改逻辑控制程序 PLC 无法正常工作
+ICS专有通信协议攻击 设计中没有考虑到安全性 窃听、篡改,中间人攻击
+传感器欺骗攻击 传感器的通信信道安全性低 影响传感器的正常读数
+固件篡改或漏洞利用 程序编写不当或程序被篡改 设备不能正常运转,
+被攻击者控制
+雾计算
+区块链
+安全测试
+入侵检测
+蜜罐
+流量识别
+异常检测
+远程认证
+异常检测
+协议模糊测试
+欺骗攻击检测
+静态分析
+保护固件更新过程
+漏洞检测
+1039
+杨 婷等:工业控制系统安全综述
+
+
+2.1.2 工业防火墙安全
+工业控制系统和云之间的网络连接可能会成为
+工业控制系 统 的 后 门,被 攻 击 者 利 用[9].因 此,互 补
+的网络安全解决方 案 被 引 入 到 工 业 控 制 系 统 中,例
+如工业防火墙、工业网关.工业防火墙与传统的防 火
+墙原理类似,通过监 控 和 控 制 网 络 内 部 和 网 络 之 间
+的流量来抵御攻击.然而,工业控制系统的网络环 境
+相 对 复 杂 ,例 如 老 化 的 工 业 设 备 、分 布 在 多 个 地 点 的
+网络等.为了应对复杂的网络环境,工业防火墙增 加
+了加密、VPN、深度 包 检 测 等 功 能.工 业 防 火 墙 在 工
+业控制系统的安全 防 护 中 扮 演 着 重 要 的 角 色,但 不
+能保 证 绝 对 的 安 全.2016 年,在 施 耐 德 电 气 的
+ConneXium 防 火 墙 产 品 中 发 现 了 一 个 缓 冲 区 溢 出
+漏洞,攻击者可以在 SNMP 的登录身份验证过程中
+执行代码[10].2019 年,美 国 电 网 遭 到 了 与 工 业 防 火
+墙相关的攻击,攻击 者 利 用 防 火 墙 固 件 中 的 一 个 漏
+洞强制防火墙在10h的时 间 内 持 续 重 启,导 致 控 制
+中 心 和 受 影 响 站 点 之 间 反 复 失 去 通 信 [11].
+2.1.3 端口扫描攻击
+Shodan 是 一 款 网 络 扫 描 工 具 ,能 够 很 容 易 地 识
+别面向互联网的工 业 控 制 设 备 并 询 问 可 用 服 务,发
+现现有服务的相 关 漏 洞.文 献 [12]从 攻 击 者 的 角 度
+利用搜索引擎 Shodan、漏洞数据库等公共工具发现
+工 业 设 备 ,查 找 常 用 设 备 的 漏 洞 ,并 对 设 备 和 漏 洞 进
+行映射.文 献 [13]通 过 Shodan 搜 索 网 络 上 的 PLC
+设备,分析并验证 了 部 分 PLC 漏 洞.SHINE 项 目 使
+用 ShodanAPI和 700 多个专门设计的询问来 识 别
+易受攻击的面 向 互 联 网 的 工 业 控 制 系 统 设 备.该 项
+目收集了超过1000000个IP 地址,这 些IP 地 址 属
+于 SCADA 和控制 系 统 及 其 相 关 的 设 备[14].除 此 之
+外 ,文 献 [15]展 示 了 一 种 新 的 威 胁 向 量 ,攻 击 者 可 以
+利用 PLC 作为 SNMP 扫描器 通 往 内 部 工 业 控 制 系
+统网络的网关.文献[16]提出了一种通过 HMI进行
+单点渗透的方案,使 用 机 器 学 习 模 型 作 为 选 择 识 别
+工业控制系统流程 的 分 类 器,利 用 控 制 理 论 在 工 业
+控制系统中设计了 通 用 的 基 于 扰 动 的 攻 击,攻 击 者
+可以在没有先验知识的情况下进行高精确度的端到
+端攻击.
+2.2 防 御
+2.2.1 雾计算
+雾计算是一 种 水 平 的 系 统 架 构,将 计 算、存 储、
+控制和网络功能分 布 到 更 接 近 用 户 的 地 方[17].雾 计
+算可以被认为 是 云 计 算 的 扩 展.雾 计 算 定 义 的 系 统
+要符 合 安 全 性、可 伸 缩 性、开 放 性、自 主 性、可 靠 性
+等.雾节点可以放置在本地,是实现雾计算服务的 物
+理和逻辑网络元素.当数据量特别大时,雾节点也 可
+以作为外部云存储 之 间 的 中 间 件,对 存 储 在 云 中 的
+数据进行加密∕解密.对 于 边 缘 设 备 则 不 需 要 知 道 底
+层存储和安全机制[18].雾 计 算 可 以 缓 解 传 统 云 计 算
+模型中由于数据传 输 造 成 的 高 延 迟 问 题,同 时 也 有
+益 于 保 持 隐 私 数 据 及 安 全 敏 感 数 据 的 机 密 性 [19].
+2.2.2 蜜罐
+蜜罐已经被证明是收集真实数据的非常有价值
+的 工 具 ,例 如 恶 意 软 件 的 有 效 载 荷 ,可 以 帮 助 更 好 地
+理解攻击者使 用 的 攻 击 方 法 和 策 略.本 文 对 基 于 蜜
+罐 的 防 御 方 法 进 行 了 归 纳 总 结 ,如 表 2 所 示 ,常 见 的
+研 究 角 度 有 收 集 攻 击 数 据 、识 别 攻 击 源 、分 析 攻 击 影
+响、交互扩 展 性 和 伪 装 真 实 设 备.文 献 [20]提 出 了
+HoneyPLC,它是一个高交互、可 扩 展 和 恶 意 软 件 收
+集的蜜罐,支 持 广 泛 的 PLC 模 型 和 供 应 商.该 工 具
+表现出了高水平的 伪 装:它 被 多 种 广 泛 使 用 的 侦 察
+工具识别为真实设备,包括 Nmap,Shodan,Siemens
+Step7 Manager等.文献[21]开发了几十个蜜罐来收
+集与工业控制系统 相 关 的 攻 击 数 据,分 析 了 工 业 控
+制系统 面 临 的 主 要 攻 击 方 法 和 攻 击 模 式,识 别 出
+7个 确 定 的 攻 击 源.文 献 [22]设 计 了 一 个 高 交 互 的
+工业控制系统蜜罐 网 络,可 以 识 别 和 分 析 针 对 工 业
+控 制系统设备的攻击.在一年多的时间里,作者收集
+Table2 TheWorkComparisonofHoneypotDefense 表2 基于蜜罐的防御部分工作对比
+已有工作
+研究角度
+收集攻击数据 识别攻击源 分析攻击影响 交互扩展性 伪装真实设备
+文献[20] √ √ × √ √
+文献[21] √ √ √ × ×
+文献[22] √ √ √ √ ×
+文献[23] × √ √ × ×
+注 :“√ ”表 示 文 献 中 完 成 了 该 工 作 ,“× ”表 示 文 献 中 未 完 成 该 工 作 .
+1040 计算机研究与发展 2022,59(5)
+
+
+了80000 个 蜜 罐 交 互,并 进 行 了 详 细 分 析,其 中 只
+有9个针对工 业 控 制 系 统 的 恶 意 攻 击.恶 意 攻 击 包
+括 DOS、重放攻击、操纵逻辑、协议攻 击 和 缓 冲 区 溢
+出攻击.文献[23]设 计 了 一 种 基 于 功 能 代 码 和 流 量
+特征的分层 DFAGSVM 识 别 模 型 来 识 别 Shodan 扫
+描,并 从 扫 描 时 间、扫 描 频 率、扫 描 端 口、区 域 偏 好、
+工业控制系统协议 偏 好、工 业 控 制 系 统 协 议 功 能 比
+例等方面评估 Shodan扫描对工业控制系统的影响.
+2.2.3 工业防火墙安全检测
+文 献 [24]对 2 个 商 用 工 业 控 制 系 统 防 火 墙 进 行
+安 全 测 试 ,测 试 范 围 覆 盖 了 功 能 测 试 、异 常 测 试 和 渗
+透测试.文献[25]提 出 了 一 种 主 机 入 侵 检 测 体 系 结
+构,允 许 执 行 IDS 的 多 种 常 见 功 能 (例 如 集 中 式
+HostIDS 配 置 和 管 理 、日 志 收 集 、系 统 审 计 、事 件 触
+发或监控分析),同时还支持被动入侵检测 (例如日
+志 和 警 报 生 成 ).
+2.2.4 区块链技术的应用
+文献[26]利用 区 块 链 保 证 数 据 的 完 整 性,采 用
+高效的复制机制实 现 数 据 备 份,使 数 据 在 遭 受 攻 击
+后能够恢复.文 献 [27]提 出 了 一 个 基 于 区 块 链 的 工
+业控制系统通信协 议,以 处 理 通 信 安 全 和 系 统 设 备
+存储约束问题.文 献 [28]提 出 了 一 种 新 的 用 于 硬 实
+时控制系统数据完 整 性 验 证 的 递 归 水 印 算 法,该 文
+作 者 利 用 水 印 密 钥 ,将 水 印 噪 声 应 用 于 硬 实 时 信 号 ,
+并通过未加密的硬 实 时 通 道 发 送,通 过 加 密 的 非 实
+时通道将相同的密 钥 传 输 给 接 收 方,因 此 使 用 相 同
+的 密 钥 ,接 收 方 可 以 检 测 数 据 是 否 被 攻 击 者 修 改 .文
+献 [29]提 出 了 基 于 区 块 链 的 工 业 控 制 系 统 数 据 保 护
+框 架 ,该 框 架 应 用 多 签 名 技 术 完 成 多 方 认 证 ,实 验 表
+明其适用于实时协同的工业控制系统.
+3 HMIG设备通信安全
+人机交互界面和设备的通信过程中存在较多的
+安全隐患,本 节 从 攻 击 和 防 御 2 个 角 度 对 HMIG设
+备通信安全进行了分析.
+3.1 攻 击
+3.1.1 控制逻辑注入攻击
+现有的控制逻辑攻击侧重于通过网络向目标
+PLC 注入恶 意 控 制 逻 辑,在 工 业 控 制 系 统 中,PLC
+通常用于直接与传 感 器 和 执 行 器 交 互,并 执 行 局 部
+自动控制.PLC 上运行2种软件:固件(即操作系统)
+和控制逻辑(类似于应用程序),PLC 基本架构如图4
+所示.在 PLC 固件上运行的 逻 辑 通 常 可 以 通 过 网 络
+或本地 USB 进行修改.控制逻辑注入攻击 面 临 2 个
+关键问题:1)攻 击 PLC 控 制 逻 辑 的 程 序;2)从 控 制
+中心中隐藏攻击.
+Fig.4 PLCarchitecture
+图4 PLC 基本架构
+文献[30]提出 了 一 个 工 业 控 制 系 统 勒 索 软 件,
+它可以对文件和数据进行加密,修改 PLC 的逻辑控
+制.作者在 SIEMENSS7G300PLC 上证明了攻 击 的
+可行性.文献[31]通过网 络 操 纵 传 输 到 PLC 的 数 据
+包 ,进 而 对 控 制 逻 辑 进 行 修 改 ,该 文 作 者 在 2 个 不 同
+厂商的 PLC 上实现了攻击,并证明这些攻击可以成
+功躲避入侵检测.文 献 [32]提 出 了 梯 形 逻 辑 编 写 的
+恶意程序,通过持续 改 变 行 为 或 等 待 特 定 的 触 发 信
+号来激活恶 意 程 序,进 而 中 断 PLC 的 正 常 操 作.文
+献[33]研究了 PLC 梯 形 逻 辑 代 码 或 程 序 中 存 在 的
+关键 漏 洞,并 提 出 了 相 应 的 解 决 方 案,以 保 证 PLC
+的安全性.文献[34]提出 了 针 对 单 个 PLC 的 虚 假 数
+据注 入 攻 击,攻 击 者 通 过 分 析 目 标 PLC 的 I∕O 轨
+迹,以产生一组 输 入 来 控 制 PLC 输 出,只 需 要 子 系
+统的部分 信 息,就 可 以 达 到 想 要 的 恶 意 结 果.文 献
+[35]证 明 了 PLC 蠕 虫 的 可 行 性,其 中 PLC 是 攻 击
+的源头,可 能 会 在 PLC 内 部 传 播,不 需 要 PC 或 服
+务 器 ,因 此 不 会 被 防 病 毒 产 品 检 测 到 .文 献 [36]分 析
+了 XGBPLC 的内 存 和 网 络 协 议 结 构,并 利 用 发 现
+的 漏 洞 发 起 重 放 攻 击 ,在 已 有 的 存 储 结 构 的 基 础 上 ,
+对 PLC 进行了内存调制攻 击 并 造 成 了 致 命 错 误.文
+献[37]提出了一种针对 PLC 控制逻辑引擎的攻击,
+利用 PLC 固 有 的 编 程 方 式 和 启 动∕停 止 引 擎 的 特
+点,通过网络攻击可以成功地使控制逻辑引擎失 效.
+文献[38]提出了一 种 新 的 反 编 译 工 具,可 以 从 网 络
+捕获重构攻击代码.
+1041
+杨 婷等:工业控制系统安全综述
+
+
+3.1.2 ICS专有通信协议攻击
+工业控制系统专有协议用于工业软件和工业设
+备之间的通信,指定了消息到功能的映射关系.除 了
+标准协议规定的功 能 外,许 多 工 业 制 造 商 还 对 其 产
+品 的 功 能 进 行 了 扩 展 ,超 出 了 原 协 议 规 定 的 范 围 ,同
+时这些操作很可能 造 成 通 信 接 口 的 暴 露,在 扩 展 功
+能实施 的 过 程 中 没 有 很 好 地 考 虑 安 全 问 题.文 献
+[39]通过对工 业 控 制 系 统 的 重 要 组 成 部 分 PLC 实
+施 拒 绝 服 务 攻 击 、启 动∕停 止 攻 击 和 中 间 人 攻 击 来 揭
+示攻击的结构.文献[40]通过操纵 HMI和多个 PLC
+之间的 Modbus通信使人机界面显示一致的系统假
+视 图 ,该 攻 击 成 功 地 欺 骗 了 操 作 人 员 ,并 使 系 统 处 于
+停 电 状 态 .然 而 ,文 献 [41]指 出 文 献 [40]中 攻 击 者 只
+是随机选择一些指 令 进 行 反 向 操 作,并 不 能 保 证 攻
+击目标的实现.因 此,文 献 [41]设 计 了 一 种 增 强 的、
+策略性的多级语义 攻 击,该 攻 击 依 赖 系 统 状 态 转 换
+规则来精确地决定 要 反 转 哪 个 控 制 指 令,该 方 法 可
+以在保持其隐 蔽 性 的 同 时 显 著 提 高 攻 击 成 功 率.文
+献[42]提出了启发 式 推 理 攻 击,攻 击 者 能 够 对 来 自
+HMI和 PLC 之间的网络请求和响应报文 按 照 周 期
+性发送顺序进行排 序,再 根 据 报 文 长 度 进 行 分 类 推
+断出 PLC 信号命令.
+3.1.3 传感器欺骗攻击
+基 于 声 学 、射 频 、激 光 和 其 他 物 理 模 式 的 模 拟 干
+扰会诱发故障,甚至控制传感器的输出.传感器输 出
+的可用性和完整性 受 损,会 给 基 于 可 靠 传 感 器 测 量
+进行自动化决 策 的 关 键 安 全 系 统 带 来 重 大 风 险.文
+献[43]提出了一种 传 感 器 数 据 欺 骗 攻 击,攻 击 者 可
+以拦截传感器测量 值,通 过 读 取 和 修 改 通 信 信 道 中
+传 感 器 读 数 ,诱 导 系 统 达 到 不 安 全 状 态 ,从 而 对 系 统
+造成破坏.文献[44]在 文 献 [43]的 基 础 上 提 出 了 一
+种 攻 击 方 案 ,其 放 宽 了 攻 击 条 件 ,允 许 更 多 类 别 的 攻
+击 策 略 .文 献 [45]提 出 了 传 感 器 数 据 欺 骗 隐 形 攻 击 ,
+该攻击不会被操 作 人 员 发 现.文 献 [46]提 出 并 建 立
+了离散事件系统的 执 行 器 攻 击 模 型,证 明 了 正 态 攻
+击者的存 在 性,并 给 出 了 其 特 征.文 献 [47]合 成 了
+3种传感器欺 骗 攻 击,使 用 一 个 离 散 的 结 构 来 模 拟
+监督者和环境的 交 互.文 献 [48]利 用 系 统 学 习 到 的
+物理约束来操纵传感器读数的子集以躲避基于重构
+的 异 常 探 测 器 ,从 而 隐 藏 攻 击 .文 献 [49]提 出 了 第 一
+个 可 证 明 的 隐 蔽 通 道 ,攻 击 者 使 用 高 质 量∕低 噪 声 传
+感器和计算单元构 造 一 个 隐 蔽 传 感 器,隐 蔽 通 信 被
+编码在秘密传输传 感 器 的 输 出 噪 声 中,其 分 布 与 良
+性 传 感 器 (具 有 可 比 规 格 )难 以 区 分 .
+3.2 防 御
+3.2.1 基于协议分析的异常检测
+文 献 [50]利 用 了 工 业 控 制 系 统 特 定 应 用 程 序 操
+作 的 周 期 性 ,测 量 协 议 不 同 阶 段 执 行 中 的 偏 差 ,以 检
+测在工业控制系统体系结构中的各层次上的异常事
+件.文献[51]通 过 分 析 工 业 控 制 系 统 中 网 络 数 据 包
+的 结 构 ,从 中 提 取 工 业 控 制 系 统 中 协 议 的 特 征 ,并 应
+用无监督学习神经网络方法进行工业控制系统异常
+检测.文献[52]提 出 了 一 种 分 析 工 业 私 有 协 议 结 构
+的 方 法 ,来 提 取 控 制 设 备 的 信 息 ,实 现 对 工 业 协 议 的
+有效网络流量 监 控.由 于 工 业 协 议 的 多 样 性 和 缺 乏
+统一的标准,使入侵 检 测 技 术 适 应 大 量 不 同 的 协 议
+有很大的困难.文 献 [53]提 出 了 将 工 业 协 议 转 换 为
+抽象的协议消息,以 实 现 基 于 不 同 工 业 协 议 的 独 立
+于协议的语义入侵检测.
+3.2.2 基于机器学习算法的异常检测
+目前主要的基于机器学习算法的异常监测工作
+如 表 3 所 示 ,具 体 描 述 如 下 .文 献 [54]利 用 卷 积 神 经
+网络提出了特征处理算法,将传统IT 网 络 的 异 常 检
+测 知识转移到工业控制系统网络中,能够充 分 挖 掘
+Table3 ComparisonofAttackDetectionBasedon MachineLearningAlgorithm 表3 基于机器学习算法的异常检测工作对比
+已有工作 测试数据集 算法 精确度∕% 准确率∕% 召回率∕%
+文献[54] 沙箱模拟 CNN 95.53 71.10
+文献[55] 天然气管道数据集
+LSTM 90.68 90.42 90.68
+GRU 91.70 91.77 91.70
+文献[56] SwaT 数据集 CNN+ LSTM 97.20 77.30
+文 献 [57]
+文 献 [58]
+WADI数据集 LSTM 47.44
+SwaT 数据集 LSTM 78.81
+WADI数据集 DIF 76.50 57.40
+SwaT 数据集 DIF 93.50 83.50
+1042 计算机研究与发展 2022,59(5)
+
+
+流 量 数 据 的 特 征 ,并 准 确 地 识 别 异 常 行 为 .文 献 [55]
+提出利用递归神经网络对工业控制系统的网络流量
+进 行 建 模 和 预 测 ,并 用 于 异 常 检 测 ,以 天 然 气 管 道 数
+据集 为 例,对 2 种 递 归 神 经 网 络 结 构 (LSTM 和
+GRU)进行 了 测 试.文 献 [56]提 出 了 一 种 基 于 深 度
+神经网络的集成电 路 异 常 检 测 框 架,该 框 架 使 用 扩
+张 卷 积 和 长 短 期 记 忆 (LSTM)层 来 学 习 工 业 控 制 系
+统中传感器和驱动 器 数 据 的 时 间 特 征,在 安 全 水 处
+理试验台上得到 了 验 证.文 献 [57]提 出 了 一 个 异 常
+检 测 框 架 ,利 用 机 器 学 习 和 数 据 挖 掘 技 术 ,从 工 业 控
+制 系 统 操 作 数 据 日 志 中 提 取 规 则 ,进 行 异 常 检 测 .文
+献 [58]提 出 了 一 种 新 型 的 半 监 督 双 隔 离 森 林 攻 击 检
+测 系 统 ,该 系 统 由 2 个 独 立 的 隔 离 森 林 模 型 组 成 ,分
+别使用归一化原始 数 据 (执 行 器 信 号 和 传 感 器 测 量
+的 正 常 数 据 )和 主 成 分 分 析 对 数 据 进 行 预 处 理 ,通 过
+分离异常来检测攻击.
+3.2.3 基于软件定义网络的异常检测
+文献[59]提 出 了 基 于 云 的 入 侵 检 测 和 防 御 系
+统,利用软件定义网 络 和 网 络 功 能 虚 拟 化 来 检 测 任
+何恶意网络活动.文 献 [60]针 对 工 业 控 制 系 统 的 通
+信需求设计了一个基于软件定义网络和网络功能虚
+拟化的通信基础设 施,开 发 了 一 种 针 对 双 向 工 业 控
+制系统流的攻击检 测 和 定 位 算 法,并 设 计 了 一 种 最
+佳 干 预 策 略 ,以 满 足 工 业 应 用 的 通 信 和 安 全 需 求 .文
+献[61]在 SDN 控制 器 上 执 行 深 度 包 检 测 来 识 别 恶
+意网络数据包.
+3.2.4 基于流量和日志分析的异常检测
+文 献 [62]提 出 了 一 种 通 过 流 量 识 别 工 业 控 制 系
+统网络攻击的方法,该 方 法 还 可 以 通 过 流 量 分 析 评
+估恶意攻击的 意 图 并 提 出 了 防 御 攻 击 的 建 议.文 献
+[63]研究了影响工 业 系 统 的 4 种 攻 击 类 型:直 接 攻
+击、顺序攻击、时间 攻 击 和 超 请 求 攻 击,通 过 分 析 发
+送 数 据 顺 序 ,提 出 了 基 于 滤 波 器 的 攻 击 检 测 方 法 ,并
+且具有良好的检 测 结 果.文 献 [64]提 出 了 一 种 基 于
+行为模型的异常检 测 方 法,该 方 法 从 工 业 控 制 网 络
+流量中提取行为数 据 序 列,建 立 控 制 器 和 工 业 控 制
+系统受控过程的正 常 行 为 模 型,并 比 较 测 试 行 为 数
+据 和 预 测 行 为 数 据 ,以 检 测 异 常 .文 献 [65]提 出 了 一
+种用于工业 PLC 的时序指纹识别技术,通过对 PLC
+的输入∕输出 作 为 请 求∕响 应 消 息 的 函 数 进 行 建 模,
+从而对扫描周期和控制逻辑之间的关系进行建模来
+检测重 放 攻 击.文 献 [66]提 出 了 一 种 新 的 方 法 对
+IECG60870G5G104网络中 自 发 事 件 的 时 序 特 性 进 行
+建 模 ,并 利 用 该 模 型 进 行 异 常 检 测 .文 献 [67]中 基 于
+自回归综合移动平均的流量预测模型可以对工业控
+制系统网络的短期 流 量 进 行 预 测,并 根 据 流 量 模 式
+的异常变化准确检测渗透攻击.此外,该异常检测 模
+型采用 单 类 支 持 向 量 机,能 够 通 过 分 析 以 太 网∕IP
+数据包 中 的 关 键 字 段 来 检 测 恶 意 控 制 指 令.文 献
+[68]提出了一种主 机 异 常 检 测 系 统,通 过 该 系 统 可
+以 实 施 过 滤 策 略 ,以 保 护 网 络 主 机 .
+文献[69]提出 了 一 种 基 于 自 编 码 器 的 新 方 法,
+用于检测工业控制 系 统 运 行 中 的 异 常 情 况,并 且 训
+练了几个基于具有不同架构的自动编码器的神经网
+络,并评估了它们中 的 每 一 个 在 检 测 过 程 控 制 系 统
+工作中的异常问 题 中 的 有 效 性.文 献 [70]提 出 了 一
+种基于时域和频域分析的数据驱动入侵检测方法,
+利用了闭环控制所 需 的 传 感 器 测 量,不 消 耗 额 外 的
+系 统 资 源 ,也 不 依 赖 系 统 模 型 ,同 时 提 取 时 域 和 频 域
+特征,利用工业控制 系 统 正 常 运 行 条 件 下 的 特 征 向
+量建立隐式马 尔 可 夫 模 型 用 于 实 时 入 侵 检 测.文 献
+[71]以系统的监 控 控 制 和 数 据 采 集 日 志 作 为 输 入,
+利用数据驱动结构学习将系统的控制不变量抽象为
+控制图,然 后 监 控 图 边 缘 的 权 值 以 检 测 异 常.文 献
+[72]提 出 了 一 种 基 于 复 合 自 编 码 器 模 型 的 学 习 正 态
+模式的异常检测方 法,与 一 般 的 自 编 码 器 神 经 网 络
+对数据进行预测和 重 构 不 同,该 模 型 对 输 入 数 据 同
+时进行预测和重构,克 服 了 单 独 使 用 每 一 个 数 据 的
+缺点,此外,利用模 型 得 到 的 误 差,提 出 一 个 变 化 率
+来定位最可能受到攻击的设备.
+3.2.5 传感器欺骗攻击检测
+文 献 [73]提 出 了 检 测 传 感 器 欺 骗 攻 击 的 检 测 模
+型,传感器系统通过 关 闭 传 感 器 来 监 测 传 感 器 输 出
+中的攻击信号,一旦 微 控 制 器 检 测 到 攻 击 信 号 的 存
+在,微控制器就拒绝进一步处理传感器输出.与其 他
+检测方法相比,该 方 法 不 仅 成 本 低、节 省 空 间,而 且
+部署速度快.文 献 [74]采 用 概 率 有 限 状 态 自 动 机 进
+行 系 统 建 模 ,根 据 成 功 达 到 不 安 全 状 态 的 可 能 性 ,从
+概率的角度量化 攻 击 策 略.文 献 [75]提 出 了 一 种 全
+分布式自适应控制策略,并获得了渐近输出一致 性.
+文献[76]提出了一 种 混 淆 方 法,使 控 制 器 对 执 行 器
+使 能 攻 击 具 有 弹 性 ,从 而 保 持 原 有 闭 环 系 统 的 行 为 .
+3.2.6 工业控制系统协议模糊测试
+工业控制系统协议模糊测试可以有效地检测协
+议 的 漏 洞 ,表 4 对 相 关 的 研 究 工 作 进 行 了 比 较 .文 献
+[77]介 绍 了 一 种 基 于 差 异 感 知 的 工 业 控 制 系 统 协 议
+模糊种子选择 方 法 DSS.DSS 比 较 工 业 控 制 系 统 消
+息以确定它们是否 触 发 相 同 的 执 行 路 径,从 而 选 择
+1043
+杨 婷等:工业控制系统安全综述
+
+
+包含少量 种 子 但 获 得 高 边 缘 覆 盖 率 的 高 质 量 种 子
+集.文献[78]在 目 前 应 用 最 广 泛 的 协 议 模 糊 测 试 工
+具 Peach的基础上构建 了 Peach∗ ,并 在 Modbus和
+DNP3等多个 工 业 控 制 系 统 协 议 上 进 行 了 实 验.结
+果表明,与原 Peach 相 比,Peach∗ 的 速 度 更 快,发 现
+的路径更多.文 献 [79]提 出 了 一 个 函 数 代 码 感 知 的
+模糊框架 Polar,该框架通过实现新的语义感知突变
+和选择策略对模糊过程进行优化.与 AFL和 AFLFast
+相 比 ,Polar以 1.5~12 倍 的 速 度 实 现 相 同 的 代 码 覆
+盖率和错误检测数量,在24h内发现的路径数量增加
+了0~91%.文献[80]提出了一个模糊系统ICPFuzze,
+该系统使用长短期记忆网络学习协议的特征并自动
+生 成 突 变 测 试 数 据 ,还 利 用 测 试 的 响 应 ,调 整 权 重 策
+略,以发现更多导致异常连接状态的数据.通过与 开
+源和商用模糊测试 工 具 的 比 较,验 证 了 该 方 法 的 有
+效性.
+Table4 ComparisonofFuzzingICSCommunicationProtocols 表4 ICS通信协议模糊测试工作比较
+已有工作 优化策略 测试协议 效果
+文献[77] 种子选择 Modbus,S7comm 使用较少的种子,可以达到相同的覆盖率
+文献[78] 代码覆盖率 Modbus,DNP3 速度提高1.2~25倍,覆盖率增加8.35%~36.84%
+文献[79] 种子突变 Modbus,IEC104,IEC61850 速度提高1.5~12倍,覆盖率增加0~91%
+文献[80] 种子突变 Modbus,DLMS 在短时间内发现更多崩溃
+3.2.7 远程认证技术
+文 献 [81]提 出 了 一 种 将 混 合 远 程 认 证 技 术 与 基
+于物理的模型相结 合 的 方 法,以 保 持 工 业 控 制 系 统
+的控制行为完整性,并 评 估 了 它 对 针 对 安 全 水 处 理
+设施的各种攻击 的 有 效 性.文 献 [82]提 出 了 一 种 用
+于工业控制系统控 制 过 程 的 新 型 远 程 认 证 方 案,它
+将基于软件的 认 证 与 物 理 行 为 关 联.该 方 案 能 够 检
+测到在训练阶段未 见 过 的 攻 击,并 通 过 计 算 控 制 过
+程验证产生的 加 密 哈 希 距 离 来 测 量 异 常.文 献 [83]
+提 出 、实 现 并 评 估 了 一 种 委 托 认 证 协 议 ,它 是 第 一 种
+用于缺乏对远程认证硬件支持的商品设备的安全远
+程认证技术,以实现 对 可 能 受 到 损 害 的 远 程 嵌 入 式
+设备的软件状态进行安全远程验证.
+4 设备固件安全
+在3.1.1节中描述 的 控 制 逻 辑 注 入 攻 击 的 主 要
+目标是工业控制系统中的控制软件及其通信过程,
+而不是直接修 改 底 层 设 备 固 件.本 节 重 点 介 绍 了 通
+过修改设备固件来执行远程触发攻击以及针对此类
+攻击的缓解方案.
+4.1 攻 击
+攻击 者 通 过 发 现 易 受 攻 击 的 程 序 内 存,进 而 劫
+持程序的执行流程.哈佛结构的 CPU 广泛应用于工
+业物联网设备,文献[84]利 用 程 序 漏 洞 永 久 地 将 任
+何代码片段注入到哈佛结构的 CPU 程序内存中.文
+献[85]研究了 PLC 固件漏洞,提出了一种通用的固
+件分析和远程代码 注 入 攻 击 方 法,并 进 行 实 验 来 演
+示如何更新和上 传 固 件.文 献 [86]通 过 远 程 修 改 目
+标 PLC 中运行的控制逻辑以自动中断物理进程,还
+采用了一种新的虚拟 PLC 方法,通过将工程软件与
+捕获的原始控制逻 辑 的 网 络 流 量 结 合 起 来,隐 藏 恶
+意修改操作.文 献 [87]提 出 了 一 种 对 PLC 的 攻 击,
+进而实现了对电网控制系统的物理感知隐身攻击.
+该程序可以在 PLC 的 输 出 模 块 将 控 制 命 令 发 送 到
+物理设备执行器之 前 修 改 控 制 命 令,以 最 大 限 度 地
+破 坏 物 理 电 源 设 备 ,导 致 设 备 大 规 模 故 障 .文 献 [88]
+展示了攻击者如何利用嵌入式设备引脚控制设备操
+作和 相 关 的 硬 件 中 断,篡 改 嵌 入 式 系 统I∕O 的 完 整
+性和可用性.文 献 [89]介 绍 了 针 对 智 能 电 网 的 固 件
+修 改 攻 击 ,通 过 修 改 中 继 上 运 行 的 固 件 ,进 而 利 用 中
+继 的 设 计 缺 陷 使 设 备 级 联 断 电 .在 文 献 [90]中 ,作 者
+演示了如何使用常用的工具将固件加载到2个不同
+的现场设备的以太 网 卡,并 指 出 攻 击 者 可 以 编 写 自
+己的恶意固件,然后 恶 意 固 件 加 载 到 现 场 设 备 以 太
+网 卡 ,进 而 可 以 对 被 控 制 的 进 程 、其 他 现 场 设 备 和 控
+制系统网络上的其他系统发起攻击.
+4.2 防 御
+本文对设备固件安全相关的研究工作进行了归
+纳 和 整 理 ,具 体 如 表 5 所 示 .
+4.2.1 静态分析
+文献[91]将3.2万份固件图像分解成170万个独
+立文件,然 后 对 其 进 行 静 态 分 析 ,在 超 过 693 个 固 件
+映 像 中 发 现 了 38 个 以 前 未 知 的 漏 洞 .文 献 [92]介 绍
+1044 计算机研究与发展 2022,59(5)
+
+
+了工业物联网领域 的 静 态 程 序 分 析 工 具,并 对 PLC
+程序进行了安全 测 试.文 献 [93]开 发 了 模 块 化 的 工
+业控制程序逆向工 程 框 架,用 于 工 业 控 制 系 统 二 进
+制程序逆向分析.文献[94]提 出 了 一 种 PLC 固 件 分
+析 技 术 ,将 可 疑 的 固 件 与 原 始 固 件 进 行 静 态 分 析 ,检
+测代 码 差 异,例 如 删 除、添 加 和 修 改 函 数 等.文 献
+[95]提 出 了 一 种 基 于 程 序 分 析 和 时 间 上 下 文 的 自 动
+安全审查方法,通过 执 行 静 态 程 序 分 析 创 建 定 时 事
+件因果关系图,分析 PLC 代码和事件之间的因果关
+系,生成事件序列,可用于自动检测隐藏的安全违规.
+Table5 SummaryofDeviceFirmwareSecurity 表5 设备固件安全研究工作汇总
+防御方法 已有工作 研究内容
+文献[91] 对固件图像分解成独立文件进行静态分析发现漏洞
+文献[92] 对工业控制系统静态程序分析工具进行了介绍
+静态分析 文献[93] 对工业控制系统二进制程序进行逆向分析
+文献[94] 对 PLC 固件进行静态分析,检测代码差异
+文献[95] 基于程序分析和时间上下文的自动安全审查方法
+文献[96] 通过提取传输的固件信息来识别和组织篡改固件
+文献[97] 通过模糊测试来评估 PLC 二进制文件和控制器交互的安全性
+固件安全更新 文献[98] 利用固件的物理特性和加密模块进行身份验证
+文献[99] 监控固件更新命令和捕获固件进行验证
+文献[100] 基于硬件原语和加密模块实现嵌入式系统固件安全更新
+文献[101] 通过测量固件执行中的低级硬件事件来检测固件恶意篡改
+其他 文献[102] 在 PLC 固件使用行为监控检测恶意负载异常
+文献[103] 分析已知漏洞补丁包来检测未知漏洞
+4.2.2 固件安全更新
+文 献 [96]提 出 了 一 个 确 保 固 件 更 新 的 完 整 性 和
+真实性的工具,该工 具 能 够 成 功 提 取 正 在 传 输 的 固
+件 信 息 ,及 时 识 别 和 阻 止 被 篡 改 的 固 件 .文 献 [97]开
+发了一个工业控制系统模糊测试框架,用于评估 PLC
+二进制文件和控 制 器 交 互 的 安 全 性.文 献 [98]利 用
+设备固有的物理特性和集成的加密模块对固件包进
+行身份验 证,以 确 保 固 件 的 保 密 性 和 完 整 性.文 献
+[99]提出了一个确保 PLC 固件更新完整性的方案,
+通 过 监 控 固 件 更 新 命 令 ,进 而 捕 获 固 件 ,在 固 件 传 递
+给 PLC 之前进 行 验 证.文 献 [100]提 出 了 一 个 嵌 入
+式系统固件安 全 更 新 的 框 架.该 框 架 基 于 硬 件 原 语
+和 加 密 模 块 ,可 以 部 署 在 通 信 通 道 不 安 全 的 环 境 中 .
+4.2.3 其他方法
+文献[101]通过 测 量 固 件 执 行 过 程 中 发 生 的 低
+级硬件事件的数量来检测嵌入式控制系统固件中的
+恶意修改.文 献 [102]提 出 对 合 法 的 PLC 有 效 负 载
+程序的运行行为进行建模,并在 PLC 固件中使用运
+行行为监控 来 检 测 有 效 负 载 攻 击,并 通 过 监 控I∕O
+访 问 模 式 、网 络 访 问 模 式 以 及 负 载 程 序 的 时 序 特 征 ,
+检测恶意 PLC 负 载 的 异 常 行 为.文 献 [103]提 出 了
+VulHunter,即在分 析 已 知 漏 洞 补 丁 包 的 基 础 上 发
+现 未 知 漏 洞 ,设 计 并 实 现 了 二 进 制 比 较 、包 提 取 和 背
+景 语 义 求 解 等 算 法 .文 献 [104]提 出 了 一 个 分 布 式 工
+业控制系统的控制 行 为 完 整 性 解 决 方 案,该 方 案 可
+以精确地模拟所有 PLC 的 状 态,通 过 监 控 整 个ICS
+的输入和输出行为,检测出 PLC行为中的不一致性.
+5 其他研究
+5.1 高级持续威胁的防护
+高级持续威胁是一种针对特定组织的复杂攻击
+类 型 ,攻 击 者 拥 有 丰 富 的 经 验 和 资 源 ,可 以 在 长 时 间
+不 被 发 现 的 情 况 下 渗 透 到 受 害 者 网 络[105].文 献 [106]
+提出一种基于意见 动 力 学 的 新 技 术,该 技 术 允 许 跟
+踪攻击的所有阶段,通 过 关 联 不 同 的 异 常 测 量 随 时
+间的变化,从而估计威胁的持久性和资源的临界 值.
+由此产生的信息对于监测控制系统的整体健康状况
+和 部 署 相 应 的 响 应 程 序 至 关 重 要 .文 献 [107]建 立 了
+传播模型来探索 PLCGPC 蠕虫在 PLCGPC 耦合网络
+中的传播行 为,并 提 出 了 抑 制 PLCGPC 蠕 虫 传 播 和
+降低工业控制系统网络安全威胁的建议.
+1045
+杨 婷等:工业控制系统安全综述
+
+
+5.2 对抗样本攻击
+基于机器学习的入侵检测系统的普及和应用使
+得工业控制系统的网络攻击检测更加灵活和高效.
+然而,也引入 了 一 个 额 外 的 攻 击 向 量———对 抗 样 本
+攻击.目前关于 对 抗 机 器 学 习 的 研 究 主 要 集 中 在 互
+联网领域,它给 CPS应用带来的风险还没有得到 很
+好 的 研 究 .文 献 [108]利 用 生 成 对 抗 网 络 和 工 业 控 制
+系 统 的 攻 击 数 据 自 动 生 产 攻 击 .文 献 [109]研 究 了 应
+用于 CPS的机器学习的潜在漏洞,提出了约束对 抗
+机器学习算法,该算 法 可 以 有 效 地 生 成 对 抗 性 的 样
+本,即使在实际约束 下 也 会 显 著 降 低 机 器 学 习 模 型
+的 性 能 .文 献 [110]通 过 使 用 基 于 雅 可 比 矩 阵 的 显 著
+映 射 攻 击 生 成 对 抗 样 本 ,同 时 探 索 分 类 行 为 ,探 讨 了
+对抗学习如何用于目标监督模型.
+5.3 工业控制系统实验台
+在实际操作现场开发或验证安全技术是相当困
+难 的 ,为 了 保 证 工 业 控 制 系 统 的 安 全 性 ,需 要 创 建 与
+实际环境相似 的 实 验 环 境.数 学 模 型 能 够 准 确 量 化
+维持特定工业控制系统的系统动态和控制回路稳定
+性 所 需 的 开 销 .文 献 [111]设 计 了 基 于 实 际 工 业 控 制
+系统的实验测试平 台,提 出 了 用 数 学 模 型 来 评 估 工
+业控制系统中安全 解 决 方 案 的 效 率 和 弹 性,并 对 所
+提出模型的有效 性 进 行 了 评 估.文 献[112G113]针 对
+各种攻击场景的工业控制系统数据集进行了比较分
+析,并讨论了将数据 集 应 用 于 工 业 控 制 系 统 安 全 研
+究的注意事项,建立 了 用 于 实 验 环 境 的 工 业 控 制 系
+统试验台,为应 用 机 器 学 习 和 人 工 智 能 算 法 的IDS
+系 统 提 供 数 据 集 .文 献 [114]设 计 了 一 个 配 电 自 动 化
+实验平台,并利 用 该 平 台 发 现 多 个 SCADA 基 础 设
+施漏洞.
+5.4 软件定义网络安全
+软件定义 网 络(softwaredefinednetwork,SDN)
+允许软件对网 络 流 进 行 实 时 控 制.在 工 业 控 制 系 统
+中,SDN 可以提供负载均衡、防火 墙、流 量 监 控 等 常
+规路由之外的 特 定 功 能.现 在 越 来 越 多 的 研 究 中 使
+用了 SDN.文献[115]对 现 有 的 SDN 攻 击 进 行 了 整
+理,通 过 SDN 测 试 台 来 评 估 这 些 攻 击 的 严 重 性.文
+献[116]研究 了 工 业 控 制 系 统 环 境 中 SDN 的 攻 击.
+网络控制的集中化使工业控制系统成为主要的攻击
+目标,可能导致系 统 内 出 现 单 点 故 障,控 制 SDN 控
+制器的攻击者几乎 获 得 对 网 络 的 完 全 控 制,作 者 描
+述并演示了一些简单但高效的攻击.
+6 工业物联网安全的挑战与机遇
+本节基于第5节中对安全威胁以及相应的防御
+方 案 的 分 析,提 出 当 前 研 究 面 临 的 挑 战 和 机 遇.
+图5中展示了挑战和机遇的对应关系.
+Fig.5 Challengesandopportunities
+图5 挑战与机遇
+6.1 目前面临的主要挑战
+6.1.1 安全防御机制缺失
+由于早期设计过程中工业控制系统与互联网隔
+离 ,因 此 安 全 机 制 没 有 被 详 细 地 考 虑 ,同 时 工 业 设 备
+的硬件无法轻易地 被 替 换,导 致 现 有 的 部 分 设 备 没
+有 通 信 加 密 和 认 证 方 案 .文 献 [117]调 研 了 美 国 工 业
+控 制 系 统 网 络 应 急 响 应 小 组 发 布 的 关 于 277 家 供 应
+商工业控制系统 设 备 的 988 份 漏 洞 报 告,发 现 最 常
+见 的 漏 洞 与 “输 入 验 证 不 当 ”有 关 ,其 次 是 “网 页 生 成
+过程中输入中和 不 当”和 “认 证 不 当”.除 此 之 外,工
+业控制系统的生命 周 期 比 标 准 计 算 机 系 统 长,随 着
+攻击技术不断进化,势 必 将 对 工 业 控 制 系 统 安 全 造
+成严重的威胁.
+6.1.2 工业控制系统专有协议安全漏洞较多
+文献[118]指出目前仍有大部分设备使用 Modbus
+TCP,EtherNetIP,Profinet和 DNP3 协 议,在 网 络
+上很容易扫描到这些设备.由于协议存在认证缺 失、
+权 限 管 理 缺 失 、加 密 缺 失 等 安 全 问 题 ,设 备 很 容 易 被
+攻击者控 制.文 献 [119]总 结 了 针 对 工 业 通 信 协 议
+“Modbus协 议 ”的 安 全 攻 击 ,包 括 拦 截 、中 断 、修 改 、
+伪造.除此之 外,在 工 业 控 制 系 统 中,部 分 工 业 控 制
+系统协议通常是设 备 专 有 的,是 由 供 应 商 或 利 益 相
+关方保密的,确切的协议规范是不开放的.这给安 全
+人员分析协议的安全性带来了一定的困难.
+6.1.3 高级持续威胁
+目前 工 业 控 制 系 统 面 临 许 多 安 全 威 胁,其 中 危
+害最大的是 APT 攻 击[120],并 且 针 对 工 业 控 制 系 统
+1046 计算机研究与发展 2022,59(5)
+
+
+的大型攻击都属于 APT 攻击,例 如 Stuxnet,Flame
+和 Havex.APT 攻击的参 与 者 往 往 是 组 织 良 好 的 且
+可能是由政府资助 的 黑 客 和 专 业 人 士,他 们 有 能 力
+开发和维护专门为自己的目的而设计的恶意软件,
+并能解读窃取到的数据.通常 APT 的攻击方式较复
+杂 ,攻 击 范 围 相 对 于 其 他 普 通 的 攻 击 方 式 来 说 较 窄 ,
+但是能 在 更 长 的 时 间 内 保 持 不 被 发 现,因 此 使 得
+APT 攻 击 更 难 检 测 和 防 御.目 前,工 业 控 制 系 统 的
+安全防御 措 施 并 不 能 有 效 地 抵 御 APT 攻 击,在 未
+来的研究工作中可 以 结 合 工 业 控 制 系 统 的 特 点,制
+定有针对性的防御方案.
+6.1.4 工业控制系统数据安全
+数据 是 第 4 次 工 业 革 命 的 核 心,数 字 化、自 动
+化、智能化的背后都依赖数据的分析和处理.由于 连
+接的工业设备种类 和 数 量 的 增 加,工 业 控 制 系 统 产
+生并需要处理 的 数 据 在 快 速 增 长.工 业 4.0 中 最 大
+的问题之一就是如 何 在 不 影 响 系 统 完 整 性、不 泄 露
+数据隐私 和 不 增 加 成 本 的 情 况 下 管 理 大 量 冗 余 数
+据.工业控制系统数据安全主要包括数据存储安 全、
+数据访问安全 和 数 据 传 输 安 全.如 果 任 何 环 节 出 现
+问题,都会给公司 带 来 巨 大 的 损 失,例 如,未 经 授 权
+的访问或者越权访 问 敏 感 数 据,就 会 导 致 数 据 泄 露
+给公司带来严重影响.
+6.1.5 内部攻击或安全配置管理环节薄弱
+内部攻击是指组织内部人员使用工具对工业控
+制系统发起一 系 列 违 规 的 操 作.内 部 人 员 对 工 业 控
+制系统有一定的权 限,因 此 内 部 攻 击 的 危 害 远 大 于
+外部攻击.工作人员的安全意识薄弱,会导致工业 防
+火墙配置不当、使用 设 备 出 厂 时 统 一 的 安 全 口 令 或
+者密码强度较弱、没 有 及 时 更 新 固 件 或 未 打 补 丁 的
+固件等,这些都会给 工 业 控 制 系 统 带 来 严 重 的 安 全
+威胁.
+6.2 未来研究机遇
+6.2.1 工业控制系统模拟
+对于 大 多 数 研 究 机 构 来 说,为 网 络 安 全 研 究 构
+建工业控制系 统 的 成 本 太 高,难 以 实 现.然 而,模 拟
+方法允许研究人员 轻 松 部 署 工 业 控 制 系 统,以 分 析
+它对攻击的反 应.文 献[121]讨 论 了 使 用 NodeGRED
+(一种开源软件)来 模 拟 工 业 控 制 系 统 的 环 境,以 处
+理 可 编 程 逻 辑 控 制 器 的 任 务,并 更 新 和 管 理
+ModbusTCP∕IP 服 务 器.文 献 [122]提 出 了 工 业 控
+制系统网络靶场的 开 发,该 靶 场 基 于 实 时 攻 防 游 戏
+模型,结合典型工业系统的动态仿真模型.当系统 的
+单个部件因故障或 其 他 原 因 而 无 法 运 行 时,由 于 替
+换组件与初始组件 不 同,需 要 一 个 完 整 的 工 作 周 期
+来验证可替换 组 件 的 可 用 性.将 数 字 双 胞 胎 包 含 在
+对象及其控制系统 的 生 命 周 期 中,可 以 有 效 地 解 决
+在这种情况下系 统 修 改 (单 个 组 件 更 换)的 问 题.数
+字双胞胎是一个更便宜的模拟系统,可以用于测 试.
+由于某些属性允许 对 多 个 副 本 进 行 并 行 测 试,并 在
+某些限制内影响模 型 时 间,因 此 它 提 供 了 更 高 质 量
+的 测 试 .数 字 双 胞 胎 是 工 业 控 制 系 统 的 虚 拟 实 体 ,它
+为安全研究提供了 新 的 平 台,例 如 模 拟 和 复 制 系 统
+行为[123].文献[124]提 出 了 一 种 基 于 数 字 双 胞 胎 的
+入侵检测算法实现 方 案,通 过 数 字 双 胞 胎 可 以 精 确
+地反映物理系 统 的 内 部 行 为.该 算 法 放 置 在 数 字 双
+胞胎中能够及时检 测 攻 击,对 不 同 类 型 的 攻 击 进 行
+分 类 ,而 不 会 对 实 际 系 统 造 成 负 面 影 响 .
+6.2.2 雾计算
+雾计算除了能够实现工业控制系统到云端的数
+据 安 全 存 储 外,还 能 实 现 流 量 监 控 和 分 析.文 献
+[125]提出了 一 种 基 于 雾 计 算 的 分 布 式 DDoS 防 御
+方案,该方案将流量 分 析 工 作 负 载 灵 活 分 配 到 多 个
+分布式位 置 并 根 据 需 要 分 配 虚 拟 化 的 网 络 计 算 功
+能.雾节点由于不受计算资源的严格限制,并且响 应
+时 间 短 ,因 此 能 够 对 本 地 的 安 全 事 件 及 时 响 应 ,更 好
+地维护工业控制系统的安全.
+6.2.3 区块链的应用
+区 块 链 被 广 泛 应 用 于 金 融 领 域 ,例 如 比 特 币 、以
+太 坊 .区 块 链 能 够 有 效 地 记 录 分 布 式 点 对 点 网 络 上2
+个或多个参与方之 间 的 交 易,存 储 的 数 据 由 网 络 中
+的所有成员 共 同 拥 有,并 且 永 久 不 可 修 改[126].区 块
+链为多个实体进行数据交互提供了一个可信和安全
+的平台,可以用于工 业 控 制 系 统 中 数 据 的 收 集 和 存
+储,例如智能能源[127].除此之外,区 块 链 还 可 以 用 于
+工 业 控 制 系 统 中 的 安 全 通 信[128]、设 备 管 理[129]、异
+常检测[130].在 过 去 的 几 年 中 出 现 了 许 多 区 块 链 项
+目 ,但 目 前 区 块 链 的 研 究 还 处 于 起 步 阶 段 ,它 还 面 临
+可 扩 展 性 、能 源 和 成 本 效 率 、资 源 约 束 等 挑 战 .
+6.2.4 工业控制系统协议标准化
+目前工业控制系统中使用的通信协议存在较多
+的安全隐患,研究人 员 除 了 对 当 前 使 用 的 协 议 进 行
+安全测试来修复漏 洞,还 可 以 根 据 需 求 设 计 安 全 的
+通用协议来解 决 当 前 面 临 的 困 境.国 家 相 关 的 部 门
+也可以出台相应的政策对工业控制系统通信协议进
+行标准化.
+1047
+杨 婷等:工业控制系统安全综述
+
+
+6.2.5 入侵检测
+虽然 现 在 已 经 有 多 种 入 侵 检 测 方 案 被 提 出,例
+如基于协议分析的 检 测 方 案、基 于 流 量 和 数 据 分 析
+的检测方案等,但是 随 着 计 算 能 力 和 攻 击 技 术 的 进
+步 ,新 型 攻 击 会 不 断 出 现 ,例 如 针 对 机 器 学 习 算 法 的
+毒化攻击[131].因 此 要 实 时 关 注 攻 击 者 的 动 向,更 新
+入 侵 检 测 技 术 ,才 能 更 好 地 抵 御 攻 击 者 的 进 攻 .
+7总 结
+由 于 工 业 控 制 系 统 的 开 放 性 、复 杂 性 和 多 样 性 ,
+所以在其发展过程中不可避免地面临各种各样的安
+全威胁,针对各类安 全 威 胁 的 有 效 防 御 是 保 障 工 业
+控制 系 统 安 全 的 重 要 方 式 和 手 段.本 文 调 研 了 近 3
+年工业控制系统安 全 研 究 中 的 代 表 性 工 作,依 据 工
+业控制系统的体系 结 构,从 攻 击 和 防 御 的 角 度 分 别
+阐述其中的主要类 型,并 以 此 为 基 础 分 析 了 当 前 工
+业控制系统领域面临的挑战.工业控制系统的模 拟、
+雾计算、区块链的应 用 以 及 工 业 控 制 系 统 协 议 的 标
+准 化 的 进 步 给 未 来 研 究 带 来 了 机 遇 .随 着 “工 业 4.0”
+的 不 断 推 进 ,相 应 的 安 全 研 究 也 必 将 不 断 深 入 ,为 工
+业控制系统的发展提供保障.
+作者 贡 献 声 明:杨 婷 设 计 论 文 整 体 调 研 方 案 及
+论文撰写;张 嘉 元 负 责 论 文 部 分 撰 写 及 画 图;黄 在
+起 、陈 禹 劼 、黄 成 龙 负 责 论 文 素 材 整 理 及 论 文 部 分 撰
+写 ;周 威 、刘 鹏 、冯 涛 负 责 最 终 论 文 的 审 核 及 修 订 ;张
+玉清提出论文整体 研 究 思 路,及 最 终 论 文 的 审 核 与
+修订.
+参考文献
+[1] LasiH,FettkeP,Kemper H G,etal.Industry4.0 [J].
+Business & InformationSystemsEngineering,2014,6(4):
+239242 [2] ZhouJi.IntelligentmanufacturingGmaindirectionof“Madein
+China2025”[J].China MechanicalEngineering,2015,26
+(17):22732284 (inChinese)
+(周济.智能制造———“中国制 造 2025”的 主 攻 方 向 [J].中 国
+机 械 工 程 ,2015,26(17):2273 2284) [3] Kaspersky ICS CERT. Threat landscape for industrial
+automationsystems[EB∕OL].[2021G11G13].https:∕∕icsGcert.
+kaspersky.com∕media∕KasperskyGICSGCERTGThreatGlandscapeG
+forGindustrialGautomationGsystemsGstatisticsGforGH1G2021GEn.pdf [4] PanchalA C,KhadseV M,MahalleP N.Securityissuesin
+IIoT:A comprehensivesurvey ofattacksonIIoT andits
+countermeasures[C]∕∕Procof2018IEEE GlobalConfon
+WirelessComputingand Networking (GCWCN).Piscataway,
+NJ:IEEE,2018:124130
+[5] AsgharM R,Hu Q,ZeadallyS.Cybersecurityinindustrial
+controlsystems:Issues,technologies,andchallenges [J].
+ComputerNetworks,2019,165:106946
+[6] ThomasRJ,GardinerJ,ChothiaT,etal.Catch meifyou
+can: An inGdepth study of CVE discovery time and
+inconsistenciesfor managingrisksincriticalinfrastructures
+[C]∕∕Procofthe2020JointWorkshoponCPS&IoTSecurity
+andPrivacy.New York:ACM,2020:4960
+[7] YuXingjie,Guo Huaqun.AsurveyonIIoTsecurity [C]∕∕
+Procof2019IEEE VTS AsiaPacific WirelessCommunications
+Symp (APWCS).Piscataway,NJ:IEEE,2019:15
+[8] SinghA,ChatterjeeK.Cloudsecurityissuesandchallenges:
+Asurvey [J].JournalofNetworkandComputerApplications,
+2017,79:88115
+[9] Sajid A, Abbas H,Saleem K.CloudGassisted IoTGbased
+SCADAsystemssecurity:A review ofthestateoftheart
+andfuturechallenges[J].IEEE Access,2016,4:1375 1384
+[10] Schneider Electric.Security NotificationGConneXium [EB∕
+OL].[2021G11G13].https:∕∕www.se.com∕uk∕en∕download∕
+document∕SEVDG2016G035G01∕
+[11] WesternElectricCoordinatingCouncil.Lessonlearned:Risks
+posedbyfirewallfirmwarevulnerabilities [EB∕OL].[2021G
+11G13].https:∕∕www.eenews.net∕assets∕2019∕09∕06∕document_
+ew_02.pdf
+[12] AntonSD D,FraunholzD,KrohmerD,etal.Theglobal
+stateofsecurityinindustrialcontrolsystems:Anempirical
+analysis of vulnerabilities around the world [J].IEEE
+InternetofThingsJournal,2021,24(8):752517540
+[13] LeeT,Kim S,Kim K.Aresearchonthevulnerabilitiesof
+PLCusingsearch engine [C]∕∕Procof2019Int Confon
+Information and Communication Technology Convergence
+(ICTC).Piscataway,NJ:IEEE,2019:184188
+[14] ByresE.Projectshine:1,000,000InternetGconnectedscada
+andICS systems and counting [EB∕OL].[2021G11G13].
+https:∕∕www.tofinosecurity.com∕blog∕projectGshineG1000000G
+internetGconnectedGscadaGandGicsGsystemsGandGcounting
+[15] KlickJ,LauS,Marzin D,etal.InternetGfacingPLCsasa
+network backdoor [C] ∕∕Proc of 2015 IEEE Conf on
+CommunicationsandNetworkSecurity (CNS).Piscataway,
+NJ:IEEE,2015:524532
+[16] SarkarE,Benkraouda H,Maniatakos M.Icame,Isaw,I
+hacked: Automated generation of processGindependent
+attacksforindustrialcontrolsystems[C]∕∕Procofthe15th
+ACM AsiaConfonComputerandCommunicationsSecurity.
+New York:ACM,2020:744758
+[17] OpenFog Consortium.IEEE Standard for Adoption of
+OpenFog Reference Architecturefor Fog Computing [S].
+Piscataway,NJ:IEEE,2018:1176
+[18] Atieh A, Nanda P, Mohanty M.ContextGAware fog
+computingimplementationforindustrialInternetofthings
+[C]∕∕Procof2021IntWirelessCommunicationsand Mobile
+Computing (IWCMC).Piscataway,NJ:IEEE,2021:598
+603
+1048 计算机研究与发展 2022,59(5)
+
+
+[19] Ning Zhenyu,Zhang Fengwei,Shi Weisong.A study of
+using TEE on edge computing [J].Journalof Computer
+ResearchandDevelopment,2019,56(7):1441 1453 (in
+Chinese)
+(宁振宇,张锋巍,施巍松.基于边缘计算的可信执 行 环 境 研
+究 [J].计 算 机 研 究 与 发 展 ,2019,56(7):1441 1453)
+[20] LópezGMorales E, RubioGMedrano C, Doupé A, et al.
+HoneyPLC: A nextGgeneration honeypot for industrial
+controlsystems[C]∕∕Procofthe2020 ACM SIGSAC Conf
+on Computer and Communications Security.New York:
+ACM,2020:279291
+[21] Li Ke, You Jianzhou, Wen Hui, et al.Collaborative
+intelligence analysis forindustrial control systems threat
+profiling [C]∕∕Proc of the Future Technologies Conf.
+Switzerland:Springer,Cham,2018:94106
+[22] Dodson M, Beresford A R, Vingaard M.Using global
+honeypotnetworkstodetecttargetedICSattacks[C]∕∕Proc
+of 2020 12th Int Conf on Cyber Conflict (CyCon).
+Piscataway,NJ:IEEE,2020,1300:275291
+[23] ChenYongle,LianXiaowei,YuDan,etal.Exploringshodan
+fromtheperspectiveofindustrialcontrolsystems[J].IEEE
+Access,2020,8:7535975369
+[24] NguyenT D,AustinSC,IrvineCE.Astrategyforsecurity
+testingindustrialfirewalls [C]∕∕Proc ofthe 5th Annual
+IndustrialControlSystem Security (ICSS)Workshop.New
+York:ACM,2019:3847
+[25] MartinezC V,VogelGHeuserB.A hostintrusiondetection
+system architecture for embedded industrial devices [J].
+JournaloftheFranklinInstitute,2021,358(1):210236
+[26] Maw A,AdepuS,MathurA.ICSGBlockOpS:Blockchainfor
+operationaldata securityinindustrialcontrolsystem [J].
+Pervasiveand MobileComputing,2019,59:101048
+[27] Brandão R. A blockchainGbased protocol for message
+exchangeinaICSnetwork:Studentresearchabstract[C]∕∕
+Procofthe35thAnnualACM SymponAppliedComputing.
+New York:ACM,2020:357360
+[28] SongZ,SkuricA,JiK.Arecursivewatermark methodfor
+hard realGtime industrial control system cyberGresilience
+enhancement[J].IEEE TransactionsonAutomationScience
+andEngineering,2020,17(2):10301043
+[29] Rahman Z, Khalil I, Yi Xun,et al.BlockchainGbased
+securityframeworkforacriticalindustry4.0cyberGphysical
+system [J].IEEECommunicationsMagazine,2021,59(5):
+128134
+[30] ZhangYipeng,SunZhonghao,YangLiqun,etal.A11your
+PLCsbelongtome:ICSransomwareisrealistic[C]∕∕Procof
+2020IEEE19thIntConfon Trust,SecurityandPrivacyin
+Computingand Communications (TrustCom).Piscataway,
+NJ:IEEE,2020:502509
+[31] YooH,AhmedI.Controllogicinjectionattacksonindustrial
+controlsystems[C]∕∕ProcofIFIPIntConfonICTSystems
+SecurityandPrivacyProtection.Switzerland:Springer,Cham,
+2019:3348
+[32] GovilN,Agrawal A,Tippenhauer N O.Onladderlogic
+bombs in industrial control systems [M] ∕∕Computer
+Security.Switzerland:Springer,Cham,2017:110126
+[33] Serhane A, Raad M, Raad R, et al.PLC codeGlevel
+vulnerabilities[C]∕∕Procof2018IntConfonComputerand
+Applications (ICCA).Piscataway,NJ:IEEE,2018:348
+352
+[34] McLaughlin S, Zonouz S. ControllerGaware false data
+injectionagainstprogrammablelogiccontrollers[C]∕∕Procof
+2014 IEEE Int Conf on Smart Grid Communications
+(SmartGridComm).Piscataway,NJ:IEEE,2014:848853
+[35] SpennebergR,Brüggemann M,SchwartkeH.PLCGblaster:
+A wormlivingsolelyinthePLC[J].BlackHatAsia,2016,
+16:116
+[36] LeeJC,ChoiH P,KimJH,etal.Identifyingandverifying
+vulnerabilitiesthrough PLC network protocoland memory
+structureanalysis[J].CMCGComput MatContin,2020,65
+(1):5367
+[37] Qasim S A,Ayub A,JohnsonJ,etal.AttackingtheIEC
+61131logicengineinprogrammablelogiccontrollers [C]∕∕
+Proc of Int Conf on Critical Infrastructure Protection.
+Switzerland:Springer,Cham,2021:7395
+[38] Senthivel S, Dhungana S, Yoo H, et al. Denial of
+engineeringoperationsattacksinindustrialcontrolsystems
+[C]∕∕Procofthe8th ACM Confon Dataand Application
+SecurityandPrivacy.New York:ACM,2018:319329
+[39] YılmazE N,Sayan H H,Üstünsoy F,etal.ICS cyber
+attackanalysisandanew diagnosisapproach [C]∕∕Procof
+theIntConfonArtificialIntelligenceandAppliedMathematicsin
+Engineering.Switzerland:Springer,Cham,2019:127141
+[40] KleinmannA,AmichayO,WoolA,etal.Stealthydeception
+attacksagainstSCADA systems [M]∕∕ComputerSecurity.
+Switzerland:Springer,Cham,2017:93109
+[41] HuYan,Sun Yuyan,Wang Youcheng,etal.Anenhanced
+multiGstagesemanticattackagainstindustrialcontrolsystems
+[J].IEEE Access,2019,7:156871156882
+[42] ChoiT,BaiG,KoR K L,etal.Ananalyticsframeworkfor
+heuristicinferenceattacksagainstindustrialcontrolsystems
+[C]∕∕Procof2020IEEE19thIntConfon Trust,Security
+andPrivacyinComputingandCommunications(TrustCom).
+Piscataway,NJ:IEEE,2020:827835
+[43] SuRong.Supervisorsynthesistothwartcyberattack with
+boundedsensorreadingalterations [J].Automatica,2018,
+94:3544
+[44] GóesR M,Kang E,Kwong R,etal.Stealthy deception
+attacksforcyberGphysicalsystems[C]∕∕Procof2017IEEE
+56th Annual Conf on Decision and Control (CDC ).
+Piscataway,NJ:IEEE,2017:42244230
+[45] ZhangQi,LiZhiwu,Seatzu C,etal.Stealthyattacksfor
+partiallyGobserveddiscreteeventsystems[C]∕∕Procof2018
+IEEE 23rd Int Conf Emerging Technologies and Factory
+Automation (ETFA).Piscataway,NJ:IEEE,2018:1161
+1164
+1049
+杨 婷等:工业控制系统安全综述
+
+
+[46] LinLiyong,ThuijsmanS,Zhu Yuting,etal.Synthesisof
+supremalsuccessful normalactuator attackers on normal
+supervisors [C]∕∕Proc of 2019 American Control Conf
+(ACC).Piscataway,NJ:IEEE,2019:56145619
+[47] MeiraGGóesR,Kang E,Kwong R H,etal.Synthesisof
+sensordeceptionattacksatthesupervisorylayerofcyber
+physicalsystems[J].Automatica,2020,121:109172
+[48] Erba A, Taormina R, Galelli S, et al. Constrained
+concealment attacks against reconstructionGbased anomaly
+detectorsinindustrialcontrolsystems[C]∕∕ProcofAnnual
+Computer Security Applications Conf.New York:ACM,
+2020:480495
+[49] HerzbergA,KfirY.ThechattyGsensor:A provablyGcovert
+channelin cyberphysicalsystems [C]∕∕Procofthe35th
+AnnualComputerSecurity ApplicationsConf (ACSAC􀆳19).
+New York:ACM,2019:638649
+[50] Bolboac􀅢 R,Genge B, Haller P.Using sideGchannelsto
+detectabnormalbehaviorinindustrialcontrolsystems[C]∕∕
+Procof2019IEEE 15thIntConfonIntelligentComputer
+Communication and Processing (ICCP).Piscataway,NJ:
+IEEE,2019:435441
+[51] Si Wen,LiJianghai, Huang Xiaojin.Features extraction
+based on deep analysis of network packetsin industrial
+control systems [C]∕∕Proc of Int Symp on Software
+Reliability,IndustrialSafety,CyberSecurity and Physical
+ProtectionforNuclearPowerPlant.Berlin:Springer,2019:
+524529
+[52] Shim KS,SohnI,LeeE,etal.EnhancetheICSnetwork
+security using the WhitelistGbased network monitoring
+throughprotocolanalysis[J].Journalof Web Engineering,
+2021,20(1):132
+[53] Wolsing K, Wagner E, Henze M.Facilitating protocolG
+independentindustrialintrusiondetectionsystems[C]∕∕Procof
+the2020 ACM SIGSACConfonComputerandCommunications
+Security.New York:ACM,2020:21052107
+[54] HuYibo,ZhangDinghua,CaoGuoyan,etal.Networkdata
+analysisand anomaly detection using CNN technique for
+industrialcontrolsystemssecurity [C]∕∕Procof2019IEEE
+Int Conf on Systems, Man and Cybernetics (SMC ).
+Piscataway,NJ:IEEE,2019:593597
+[55] Sokolov A N, Alabugin S K, Pyatnitsky I A.Traffic
+modelingbyrecurrentneuralnetworksforintrusiondetection
+inindustrialcontrolsystems[C]∕∕Procof2019IntConfon
+Industrial Engineering, Applications and Manufacturing
+(ICIEAM).Piscataway,NJ:IEEE,2019:15
+[56] SapkotaS, Mehdy A K M,Reese S,etal.FALCON:
+Framework for anomaly detection in industrial control
+systems[J].Electronics,2020,9(8):11921212
+[57] Feng C,Palleti V R, Mathur A,et al.A systematic
+frameworktogenerateinvariantsforanomaly detectionin
+industrialcontrolsystems [C∕OL]∕∕Proc of NDSS.2019
+[2021G11G13].https:∕∕www.ndssGsymposium.org∕wpGcontent∕
+uploads∕ndss2019_07AG3_Feng_slides.pdf
+[58] Elnour M, Meskin N,Khan K,etal.A dualGisolationG
+forestsGbased attack detection framework for industrial
+controlsystems[J].IEEE Access,2020,8:3663936651 [59] BrugmanJ,Khan M,KaseraS,etal.Cloudbasedintrusion
+detection and prevention system for industrial control
+systemsusing software defined networking [C]∕∕Proc of
+2019 Resilience Week (RWS).Piscataway, NJ:IEEE,
+2019,1:98104 [60] SándorH,GengeB,SzántóZ,etal.Cyberattackdetection
+and mitigation:Softwaredefinedsurvivableindustrialcontrol
+systems[J].InternationalJournalofCriticalInfrastructure
+Protection,2019,25:152168 [61] SainzM,GaritanoI,IturbeM,etal.Deeppacketinspection
+for intelligent intrusion detection in softwareGdefined
+industrialnetworks:Aproofofconcept[J].LogicJournalof
+theIGPL,2020,28(4):461472 [62] ShengChuan,YaoYu,Yang Wei,etal.Howtofingerprint
+attacktrafficagainstindustrialcontrolsystemnetwork[C]∕∕
+Procof20191stIntConfonIndustrialArtificialIntelligence
+(IAI).Piscataway,NJ:IEEE,2019:16 [63] Sicard F,Zamaï É,Flaus J M.An approach based on
+behavioralmodelsandcriticalstatesdistancenotionforimproving
+cybersecurityofindustrialcontrolsystems [J].Reliability
+Engineering & System Safety,2019,188:584603 [64] SongZhanwei,LiuZenghui.Abnormaldetection methodof
+industrialcontrol system based on behavior model [J].
+Computers& Security,2019,84:166178 [65] AhmedC M,Ochoa M,ZhouJianying,etal.Scanningthe
+cycle:TimingGbasedauthentication on PLCs [C]∕∕Procof
+the2021ACM AsiaConfonComputerandCommunications
+Security.New York:ACM,2021:886900 [66] LinCY,NadjmGTehraniS.Timingpatternsandcorrelations
+inspontaneousSCADAtrafficforanomalydetection[C∕OL]
+∕∕Proc of the 22nd Int Symp on Research in Attacks,
+Intrusionsand Defenses.2019 [2021G11G13].https:∕∕www.
+usenix.org∕system∕files∕raid2019GlinGchihGyuan.pdf [67] Yu Wenbin,Wang Yiyin,Song Lei.Atwostageintrusion
+detectionsystem forindustrialcontrolnetworks based on
+ethernet∕IP [J].Electronics,2019,8(12):1545 1562 [68] ColelliR,FogliettaC,PanzieriS,etal.Thesmartextension
+approachforsecuringindustrialcontrolsystems [J].IFACG
+PapersOnLine,2020,53(2):1120711212 [69] PyatniskyIA,SokolovA N.Assessmentoftheapplicability
+ofautoencodersintheproblem ofdetectinganomaliesinthe
+workofindustrialcontrolsystems[C]∕∕Procof2020 Global
+SmartIndustry Conf(GloSIC).Piscataway, NJ:IEEE,
+2020:234239 [70] Huang Dajian,Shi Xiufang,Zhang Wenan A.False data
+injectionattackdetectionforindustrialcontrolsystemsbased
+onbothtimeGandfrequencyGdomainanalysisofsensordata
+[J].IEEEInternetofThingsJournal,2020,8(1):585595 [71] Yang Zeyu, He Liang,Cheng Peng,etal.PLCGSleuth:
+DetectingandlocalizingPLCintrusionsusingcontrolinvariants
+[C∕OL]∕∕Procofthe23rdIntSymponResearchinAttacks,
+Intrusionsand Defenses (RAID 2020).2020:333 348.
+[2021G11G13].https:∕∕www.usenix.org∕system∕files∕raid20G
+yang.pdf
+1050 计算机研究与发展 2022,59(5)
+
+
+[72] WangChao,Wang Bailiang,Liu Haikuo,etal.Anomaly
+detectionforindustrialcontrolsystem basedonautoencoder
+neuralnetwork [J].Wireless Communicationsand Mobile
+Computing,2020,2020:110
+[73] ZhangYouqian,Rasmussen K.Detectionofelectromagnetic
+interferenceattacksonsensorsystems [C]∕∕Procof2020
+IEEESymponSecurityandPrivacy (SP).Piscataway,NJ:
+IEEE,2020:203216
+[74] MeiraGGóesR,Kwong R,LafortuneS.Synthesisofsensor
+deception attacks for systems modeled as probabilistic
+automata[C]∕∕Procof2019AmericanControlConf(ACC).
+Piscataway,NJ:IEEE,2019:56205626
+[75] GaoRui,HuangJianghuai,WangLei.Leaderlessconsensus
+controlofuncertain multiGagentssystems with sensorand
+actuatorattacks[J].InformationSciences,2019,505:144156
+[76] Zhu Yuting,Lin Liyong,Su Rong.Supervisorobfuscation
+againstactuatorenablementattack [C]∕∕Procof201918th
+European Control Conf (ECC).Piscataway, NJ:IEEE,
+2019:17601765
+[77] BaiShuangpeng, Wen Hui,Fang Dongliang,etal.DSS:
+DiscrepancyGAwareseedselection methodforICS protocol
+fuzzing[C]∕∕ProcofIntConfon AppliedCryptographyand
+Network Security.Switzerland: Springer, Cham,2021:
+2748
+[78] LuoZhengxiong,Zuo Feilong,Shen Yuheng,etal.ICS
+protocol fuzzing: Coverage guided packet crack and
+generation [C]∕∕Proc of 2020 57th ACM∕IEEE Design
+AutomationConf(DAC).Piscataway,NJ:IEEE,2020:16
+[79] Luo Zhengxiong,Zuo Feilong,Jiang Yu,et al.Polar:
+FunctioncodeawarefuzztestingofICSprotocol[J].ACM
+Transactionson Embedded Computing Systems,2019,18
+(5s):122
+[80] Lin P Y, Tien C W, Huang T C,et al.ICPFuzzer:
+Proprietarycommunicationprotocolfuzzingbyusingmachine
+learningandfeedbackstrategies[J].Cybersecurity,2021,4
+(1):115
+[81] Salehi M, BayatGSarmadi S.PLC defender: Improving
+remoteAttestationtechniquesforPLCsusingphysicalmodel
+[J].IEEEInternetofThingsJournal,2020,8(9):7372
+7379
+[82] GhaeiniH R,Chan M,BahmaniR,etal.PAtt:PhysicsG
+basedattestation ofcontrolsystems [C∕OL]∕∕Procofthe
+22ndInt Symp on Research in Attacks,Intrusions and
+Defenses(RAID2019).2019:165180.[2021G11G13].https:∕∕
+www.usenix.org∕system∕files∕raid2019Gghaeini.pdf
+[83] AmmarM,CrispoB,DeOliveiraNunesI,etal.Delegated
+attestation:ScalableremoteattestationofcommodityCPSby
+blendingproofsofexecution withsoftwareattestation [C]∕∕
+Procofthe14thACM ConfonSecurityandPrivacyin Wireless
+andMobileNetworks.New York:ACM,2021:3747
+[84] Francillon A, Castelluccia C.Code injection attacks on
+harvardGarchitecturedevices [C]∕∕Proc ofthe 15th ACM
+ConfonComputerandCommunicationsSecurity.New York:
+ACM,2008:1526
+[85] BasnightZ,ButtsJ,LopezJrJ,etal.Firmwaremodification
+attacksonprogrammablelogiccontrollers[J].International
+JournalofCriticalInfrastructure Protection,2013,6(2):
+7684
+[86] KalleS,Ameen N,Yoo H,etal.ClikonPLCs! attacking
+controllogicwithdecompilationandvirtualPLC [C∕OL]∕∕
+Proc of Binary Analysis Research (BAR ) Workshop,
+Networkand Distributed System Security Symp (NDSS).
+2019 [2021G11G13].https:∕∕www.ndssGsymposium.org∕wpG
+content∕uploads∕bar2019_74_Kalle_paper.pdf
+[87] GarciaL,BrasserF,CintugluM H,etal.Hey,mymalware
+knowsphysics! attacking PLCs with physical modelaware
+Rootkit[C∕OL]∕∕ProcofNDSS.2017 [2021G11G13].https:∕∕
+www. ndssGsymposium. org∕wpGcontent∕uploads∕2017∕09∕
+ndss2017_08G1_Garcia_paper.pdf
+[88] AbbasiA, Hashemi M.Ghostin the PLC designing an
+undetectableprogrammablelogiccontrollerrootkitvia pin
+controlattack[J].Black HatEurope,2016,2016:135
+[89] Konstantinou C, Maniatakos M.Impact of firmware
+modificationattackson powersystemsfielddevices [C]∕∕
+Procof2015IEEEIntConfonSmartGridCommunications
+(SmartGridComm).Piscataway,NJ:IEEE,2015:283288
+[90] PeckD,PetersonD.LeveragingEthernetcardvulnerabilities
+infield devices [C]∕∕Proc of SCADA Security Scientific
+Symp.2009:1 19.[2021G11G13].https:∕∕icscsi.org∕library∕
+Documents∕ICS_ Vulnerabilities∕DigitalBondGLeverage Ethernet
+VulnerabilitiesinFieldDevices.pdf
+[91] Costin A,Zaddach J,Francillon A,etal.A largeGscale
+analysisofthesecurityofembeddedfirmwares[C]∕∕Procof
+the23rd USENIX Security Symp (USENIX Security􀆳14).
+Berkeley,CA:USENIX Association,2014:95110
+[92] Florin I L, B􀅢lan T.Vulnerability remediation in ICS
+infrastructurebased onsourcecodeanalysis [C]∕∕Procof
+202019th RoEduNet Conf:Networkingin Education and
+Research (RoEduNet).Piscataway,NJ:IEEE,2020:16
+[93] Keliris A, Maniatakos M.ICSREF: A framework for
+automatedreverseengineeringofindustrialcontrolsystems
+binaries[J].arXivpreprint,arXiv:1812.03478,2018
+[94] GarciaJrA M.Firmwaremodificationanalysisinprogrammable
+logiccontrollers[C∕OL]∕∕ProcofIntConfonCyberWarfare
+andSecurity.2014 [2021G11G13].https:∕∕apps.dtic.mil∕sti∕
+pdfs∕ADA599675.pdf
+[95] Zhang Mu, Chen C Y, Kao Binchou,et al.Towards
+automatedsafetyvetting ofPLC codeinrealGworld plants
+[C]∕∕Procof2019IEEESymponSecurityandPrivacy(SP).
+Piscataway,NJ:IEEE,2019:522538
+[96] BenkraoudaH,ChakkantakathM A,KelirisA,etal.Snifu:
+Securenetworkinterceptionforfirmwareupdatesinlegacy
+PLCs [C]∕∕Proc of 2020 IEEE 38th VLSI Test Symp
+(VTS).Piscataway,NJ:IEEE,2020:16
+[97] Tychalas D, Benkraouda H, Maniatakos M.ICSFuzz:
+ManipulatingI∕Os and repurposing binary codeto enable
+instrumentedFuzzinginICScontrolapplications [C]∕∕Proc
+ofthe30thUSENIXSecuritySymp (USENIXSecurity􀆳21).
+Berkeley,CA:USENIX Association,2021:28472862
+1051
+杨 婷等:工业控制系统安全综述
+
+
+[98] FalasS,KonstantinouC,MichaelM K.A hardwareGbased
+frameworkforsecurefirmwareupdatesonembeddedsystems
+[C]∕∕Procof2019IFIP∕IEEE27thIntConfonVeryLarge
+Scale Integration (VLSIGSoC).Piscataway, NJ:IEEE,
+2019:198203
+[99] Benkraouda H,Chakkantakath M A, Keliris A,et al.
+Snifu:Securenetworkinterceptionforfirmwareupdatesin
+legacyPLCs[C]∕∕Procof2020IEEE38thVLSITestSymp
+(VTS).Piscataway,NJ:IEEE,2020:16
+[100] FalasS,KonstantinouC,MichaelM K.A modularendGtoG
+endframeworkforsecurefirmware updateson embedded
+systems [J].ACM Journalon Emerging Technologiesin
+ComputingSystems,2021,18(1):119
+[101] Wang Xueyang,Konstantinou C, Maniatakos M,etal.
+Confirm:Detecting firmware modificationsin embedded
+systemsusinghardwareperformancecounters[C]∕∕Procof
+2015 IEEE∕ACM Int Conf on ComputerGAided Design
+(ICCAD).Piscataway,NJ:IEEE,2015:544551
+[102] Yang Huan,ChengLiang,Chuah M C.Detectingpayload
+attackson programmablelogiccontrollers (PLCs)[C]∕∕
+Procof2018IEEE ConfonCommunicationsand Network
+Security (CNS).Piscataway,NJ:IEEE,2018:19
+[103] FuXiao,ShaLetian,YuanZaiping,etal.VulHunter:A
+discoveryforunknown bugsbasedonanalysisforknown
+patches in industry Internet of things [J]. IEEE
+Transactionson Emerging Topicsin Computing,2017,8
+(2):267279
+[104] AdepuS,Brasser F,Garcia L,etal.Controlbehavior
+integrityfordistributedcyberGphysicalsystems [C]∕∕Proc
+of 2020 ACM∕IEEE 11th Int Conf on CyberGPhysical
+Systems(ICCPS).New York:ACM,2020:3040
+[105] SinghS,SharmaP K,MoonS Y,etal.Acomprehensive
+study on APT attacks and countermeasures for future
+networksandcommunications:Challengesandsolutions[J].
+TheJournalofSupercomputing,2019,75(8):45434574
+[106] RubioJE,RomanR,AlcarazC,etal.Trackingadvanced
+persistentthreatsincriticalinfrastructuresthroughopinion
+dynamics [C]∕∕Proc of European Symp on Researchin
+ComputerSecurity.Switzerland:Springer,Cham,2018:
+555574
+[107] Yao Yu,Sheng Chuan,Fu Qiang,etal.A propagation
+model with defensive measures for PLCGPC worms in
+industrialnetworks [J].Applied Mathematical Modelling,
+2019,69:696713
+[108] UmerM A,JilaniM T,AhmedC M,etal.Attackrules:
+Anadversarialapproachto generateattacksforindustrial
+control systems using machine learning [C]∕∕Proc of
+CPSIoTSec.New York:ACM,2021:3540
+[109] LiJiangnan,Yang Yingyuan,Sun J S,etal.Conaml:
+ConstrainedadversarialmachinelearningforcyberGphysical
+systems [C]∕∕Proc of the 2021 ACM Asia Conf on
+ComputerandCommunicationsSecurity.New York:ACM,
+2021:5266
+[110] AnthiE,WilliamsL,Rhode M,etal.Adversarialattacks
+on machinelearning cybersecurity defencesin industrial
+controlsystems [J].JournalofInformation Security and
+Applications,2021,58:102717
+[111] ChekoleE G,Huaqun G.ICSGsea:Formally modelingthe
+conflictingdesignconstraintsinICS [C]∕∕Procofthe5th
+Annual Industrial Control System Security (ICSS )
+Workshop.New York:ACM,2019:6069
+[112] ChoiS,YunJH,Kim S K.AcomparisonofICSdatasets
+forsecurityresearchbasedonattackpaths[C]∕∕ProcofInt
+Conf on Critical Information Infrastructures Security.
+Switzerland:Springer,Cham,2018:154166
+[113] FujdiakR,BlazekP,MlynekP,etal.Developingbatteryof
+vulnerabilitytestsforindustrialcontrolsystems[C]∕∕Proc
+of201910thIFIPIntConfon New Technologies,Mobility
+andSecurity (NTMS).Piscataway,NJ:IEEE,2019:15
+[114] NegiR,KumarP,GhoshS,etal.Vulnerabilityassessment
+and mitigation forindustrialcriticalinfrastructures with
+cyberphysicaltestbed[C]∕∕Procof2019IEEEIntConfon
+IndustrialCyberPhysicalSystems(ICPS).Piscataway,NJ:
+IEEE,2019:145152
+[115] YoonC,LeeS,KangH,etal.Flow wars:Systemizingthe
+attack surfaceand defensesin softwareGdefined networks
+[J].IEEE∕ACM Transactions on Networking,2017,25
+(6):35143530
+[116] GardinerJ,RashidA,NagarajaS,etal.ControllerGinGtheG
+middle:Attacksonsoftwaredefinednetworksinindustrial
+controlsystems [C]∕∕Procofthe2ndJoint Workshopon
+CPS & IoT Security and Privacy (CPSIoTSec􀆳21).New
+York:ACM,2021:6368
+[117] Gonzalez D, Alhenaki F, Mirakhorli M.Architectural
+securityweaknessesinindustrialcontrolsystems (ICS)an
+empiricalstudy based on disclosedsoftwarevulnerabilities
+[C]∕∕Procof2019IEEEIntConfonSoftwareArchitecture
+(ICSA).Piscataway,NJ:IEEE,2019:3140
+[118] IrmakE,ErkekÏ.Anoverview ofcyberGattackvectorson
+SCADAsystems[C]∕∕Procof20186thIntSymponDigital
+Forensicand Security (ISDFS).Piscataway,NJ:IEEE,
+2018:15
+[119] HuitsingP,ChandiaR,Papa M,etal.Attacktaxonomies
+forthe Modbus protocols [J].International Journal of
+CriticalInfrastructureProtection,2008,1:3744
+[120] GroobyS,DargahiT,DehghantanhaA.ProtectingIoTand
+ICS platforms againstadvanced persistentthreat actors:
+Analysis of APT1,silentchollima and molerats [M]∕∕
+Handbook of Big Data and IoT Security.Switzerland:
+Springer,Cham,2019:225255
+[121] DayS,SmallwoodW,KuhnJ.Simulatingindustrialcontrol
+systemsusing NodeGREDandunrealengine4 [C]∕∕Procof
+National Cyber Summit.Switzerland:Springer, Cham,
+2021:1321
+[122] KhanS, Volpatto A,Kalra G,etal.Cyberrangefor
+industrialcontrolsystems (CRGICS)forsimulatingattack
+scenarios[C∕OL]∕∕ProcoftheCEUR Workshop.2021:246
+259.[2021G11G13].http:∕∕ceurGws.org∕VolG2940∕paper21.pdf
+1052 计算机研究与发展 2022,59(5)
+
+
+[123] DietzM,PernulG.Unleashingthedigitaltwin􀆳spotential
+forICSsecurity [J].IEEE Security & Privacy,2020,18
+(4):2027
+[124] Akbarian F,Fitzgerald E,Kihl M.Intrusiondetectionin
+digitaltwinsforindustrialcontrolsystems [C]∕∕Procof
+2020IntConfonSoftware,TelecommunicationsandComputer
+Networks(SoftCOM).Piscataway,NJ:IEEE,2020:16
+[125] ZhouLuying,Guo Huaqun,Deng Gelei.Afogcomputing
+basedapproachto DDoS mitigationinIIoT systems [J].
+Computers& Security,2019,85:5162
+[126] Alladi T, Chamola V, Parizi R M,et al.Blockchain
+applicationsforindustry4.0andindustrialIoT:A review
+[J].IEEE Access,2019,7:176935176951
+[127] He Yujun,Gong Guocheng.A summary ofresearch on
+blockchain technologyin the security field ofIoT [J].
+Telecom Engineering TechnicsandStandardization,2017,
+30(5):1216 (inChinese)
+(何渝君,龚国成.区块链技 术 在 物 联 网 安 全 相 关 领 域 的 研
+究 [J].电 信 工 程 技 术 与 标 准 化 ,2017,30(5):12 16)
+[128] Afanasev M Y,Fedosov Y V,Krylova A A,etal.An
+applicationofblockchainandsmartcontractsfor machineG
+toGmachine communications in cyberGphysical production
+systems[C]∕∕Procof2018IEEEIndustrialCyberGPhysical
+Systems(ICPS).Piscataway,NJ:IEEE,2018:1319
+[129] LauerH R,SalehiS A,Rudolph C,etal.UserGcentered
+attestationforlayeredanddecentralizedsystems[C∕OL]∕∕
+Proc of Workshop on Decentralized IoT Security and
+Standards.2018 [2021G11G13].https:∕∕researchmgt.monash.
+edu∕ws∕portalfiles∕portal∕273194581∕269534447_oa.pdf
+[130] GolombT,MirskyY,EloviciY.CIoTA:CollaborativeIoT
+anomalydetectionviablockchain[J].arXivpreprint,arXiv:
+1803.03807,2018
+[131] Kravchik M,Biggio B,Shabtai A.Poisoning attackson
+cyberattackdetectorsforindustrialcontrolsystems[C]∕∕
+Procofthe36thAnnualACM SymponAppliedComputing.
+New York:ACM,2021:116125
+YangTing,bornin1994.PhDcandidate.Her
+mainresearchinterestisInternetofthings
+security.
+杨 婷,1994 年 生.博 士 研 究 生.主 要 研 究 方
+向为物联网安全.
+ZhangJiayuan,bornin1997.Mastercandidate.
+Her main research interestisinformation
+security.
+张嘉元,1997 年 生.硕 士 研 究 生.主 要 研 究 方
+向为信息安全.
+HuangZaiqi,bornin1997.Mastercandidate.
+His mainresearchinterestsincludeInternet
+ofthingssecurity and artificialintelligence
+security.
+黄在起,1997 年 生.硕 士 研 究 生.主 要 研 究 方
+向 为 物 联 网 安 全 、人 工 智 能 安 全 .
+ChenYujie,bornin1998.Mastercandidate.
+His mainresearchinterestsincludeInternet
+ofthingssecurity and artificialintelligence
+security.
+陈禹劼,1998 年 生.硕 士 研 究 生.主 要 研 究 方
+向 为 物 联 网 安 全 、人 工 智 能 安 全 .
+Huang Chenglong, born in 1999. Master
+candidate. His main research interests
+includeInternetofthingssecurityand Web
+security.
+黄成龙,1999 年 生.硕 士 研 究 生.主 要 研 究 方
+向 为 物 联 网 安 全 、Web 安 全 .
+Zhou Wei,born in 1993.PhD,associate
+professor.His mainresearchinterestsinclude
+Internetofthingssecurityandsystemssecurity.
+周 威,1993年生.博士,副 教 授.主 要 研 究 方
+向 为 物 联 网 安 全 、系 统 安 全 .
+LiuPeng,bornin1971.Professor.His main
+researchinterestiscyberGsecurity.
+刘 鹏,1971 年 生.教 授.主 要 研 究 方 向 为 网
+络安全.
+FengTao,bornin1970.PhD,professor.His
+mainresearchinterestsincludenetworkand
+informationsecurity.
+冯 涛,1970年生.博士,教 授.主 要 研 究 方 向
+为网络与信息安全.
+ZhangYuqing,bornin1966.PhD,professor,
+PhDsupervisor.Hismainresearchinterestis
+informationsecurity.
+张玉 清,1966 年 生.博 士,教 授,博 士 生 导 师.
+主要研究方向为信息安全.
+1053
+杨 婷等:工业控制系统安全综述

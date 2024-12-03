@@ -1,0 +1,708 @@
+053001-1
+2024 年 9 月
+第 61 卷 第 5 期
+Sep. 2024
+Vol. 61 No.5
+四 川 大 学 学 报(自 然 科 学 版)
+Journal of Sichuan University(Natural Science Edition)
+基于模糊测试的 SQL 注入漏洞 挖掘与定位技术研究
+吴昊天,刘嘉勇,贾 鹏
+(四川大学网络空间安全学院,成都 610065)
+摘 要 : 随 着 Java 语 言 成 为 最 流 行 的 开 发 语 言 之 一 ,其 在 金 融 、政 府 和 企 业 等 行 业 的 重 要
+Web 应用系统开发中发挥关键作用 . 然而,Java Web 应用的普及也使其成为网络攻击者的主
+要目标 ,导致安全漏洞频发 ,其中一种危害最大的漏洞就是 SQL 注入漏洞 . 现有的 SQL 注入
+漏洞检测方法以漏洞扫描、机器学习和模糊测试等技术为主 . 但这些技术在测试用例生成方
+面面临挑战:漏洞扫描依赖固定测试用例,机器学习技术样本集训练成本高 ,而传统模糊测试
+的 用 例 变 异 缺 乏 针 对 性 ,从 而 导 致 上 述 技 术 在 SQL 注 入 漏 洞 挖 掘 方 面 的 能 力 较 低 . 因 此 ,针
+对于上述问题,本文提出一种基于模糊测试的 SQL 注入漏洞挖掘与定位方法 . 该方法首先结
+合 遗 传 算 法 的 选 择 、交 叉 和 变 异 过 程 ,并 在 变 异 阶 段 引 入 绕 过 安 全 措 施 的 变 异 策 略 和 基 于 打
+分 机 制 的 变 异 策 略 调 度 机 制 ,使 得 初 始 小 样 本 集 合 能 快 速 收 敛 至 能 有 效 绕 过 代 码 过 滤 措 施 的
+高质量个体 . 提高了测试用例多样性和对漏洞挖掘的针对性 ,从而提升 SQL 注入漏洞检测能
+力 . 此外,本方法利用字节码插桩技术动态获取目标应用程序的运行时状态信息,并结合网络
+报 文 来 实 现 漏 洞 的 检 测 和 精 确 定 位 ,进 而 提 升 漏 洞 挖 掘 的 准 确 性 和 多 层 次 漏 洞 信 息 的 记 录 能
+力 . 为进一步验证本方法的有效性,本文基于上述策略实现 GAFuzz 工具,并将其与现有漏洞
+挖 掘 工 具 和 标 准 遗 传 算 法 进 行 对 比 实 验 . 实 验 结 果 表 明 GAFuzz 在 生 成 高 效 攻 击 用 例 、漏 洞
+挖掘及提供漏洞描述信息方面均展现出较优性能 .
+关键词: 模糊测试;SQL 注入;测试用例生成;遗传算法;漏洞定位
+中图分类号: TP391. 1 文献标志码: A DOI: 10. 19907/j. 0490-6756. 2024. 053001
+A study on SQL injection vulnerability discovery and
+localization techniques based on fuzz testing
+WU Hao-Tian,LIU Jia-Yong,JIA Peng
+(School of Cyber Science and Engineering,Sichuan University,Chengdu 610065,China)
+Abstract: As Java becomes one of the most popular programming languages, it plays a critical role in web ap
+plication development in sectors like finance, government, and business. However, the widespread use of
+Java web applications has made them a major target for cyber attacks, leading to frequent security vulnerabili
+ties, especially SQL injection flaws. Existing detection methods for SQL injection vulnerabilities, such as
+vulnerability scanning, machine learning, and fuzz testing, face challenges in test case generation. These
+methods either depend on fixed test cases, incur high training costs for machine learning models, or lack tar
+收稿日期: 2023-12-30 修回日期: 2024-02-27 接受日期: 2024-02-27 基金项目: 全军共用信息系统装备预研项目(31511080306)
+作者简介: 吴昊天(2000-),女,安徽阜阳人,硕士研究生,研究方向为模糊测试和 Web 安全 . E-mail:wuhaotian41@163. com 通讯作者: 贾鹏 . E-mail:pengjia@scu. edu. cn
+
+
+第 5 期 吴昊天,等:基于模糊测试的 SQL 注入漏洞挖掘与定位技术研究 第 61 卷
+053001-2
+geted mutation in traditional fuzz testing, reducing their effectiveness in detecting SQL injection vulnerabili
+ties. To address these issues, this paper introduces a fuzz testing-based method for identifying and locating
+SQL injection vulnerabilities. This method integrates genetic algorithm processes (selection, crossover, and
+mutation) with mutation strategies that bypass security measures and a scoring mechanism for mutation strat
+egy scheduling. This approach allows for the rapid convergence of a small initial sample set to high-quality
+cases that effectively bypass code filtering, enhancing the diversity and targeting of test cases for vulnerability
+mining. Additionally, the method uses bytecode instrumentation to dynamically capture runtime state infor
+mation of applications and network data for accurate vulnerability detection and localization. The
+effectiveness of this method is further demonstrated by the development and testing of the GAFuzz tool,
+which is compared with existing vulnerability mining tools and standard genetic algorithms. The results show
+that GAFuzz excels in generating effective attack cases, mining vulnerabilities, and providing detailed vulner
+ability information.
+Keywords: Fuzz testing;SQL Injection;Test case generation;Genetic algorithm;Vulnerability localization
+1引言
+随 着 互 联 网 的 不 断 发 展 ,Web 应 用 程 序 得 到 了广泛的应用,成为许多敏感信息流动的平台 . 因 此,针对 Web 应用程序的攻击层出不穷 . 国家信息 安 全 漏 洞 共 享 平 台(CNNVD)的 统 计 数 据[1]表 明 , 在漏洞影响的对象类型中,Web 应用占比 27. 8%, 位于第二 . 统计数据也表明,Web 应用漏洞产生的 原 因 除 了 本 身 架 构 设 计 的 错 误 外 ,28. 8% 都 是 由 于 输 入 验 证 错 误 导 致 ,由 此 产 生 一 系 列 参 数 注 入 型漏洞攻击,像 SQL 注入漏洞等 . SQL 注 入[2]是 在 前 端 输 入 参 数 向 后 端 传 递 的 过 程 中 ,由 于 没 有 进 行 安 全 限 制 和 过 滤 ,使 得 攻 击 者输入的攻击负载可以直接拼接到正常执行的 SQL 语 句 中 ,从 而 执 行 攻 击 语 句 来 获 取 相 关 敏 感 信息 . SQL 注入漏洞也由于其简单和多方面的可利 用性,造成了许多安全事件 . 如 2023 年的 MOVEit 攻击就成功利用 SQL 注入漏洞勒索施耐德电气、 西 门 子 能 源 等 公 司[3],造 成 了 巨 大 的 损 失 . 因 此 针 对 于 复 杂 多 变 的 SQL 注 入 攻 击 ,如 何 有 效 地 发 现 Web 应用程序中的 SQL 注入漏洞并准确定位漏洞 点已成为当前研究的焦点 . 模 糊 测 试 技 术[4]的 主 要 思 想 就 是 传 输 大 量 随 机 数 据 到 应 用 程 序 中 ,通 过 监 控 应 用 程 序 出 现 的 异常来进行漏洞挖掘 . 由于其自动化程度高、使用 成本低的特性已经成为 web 安全领域主流的漏洞 挖掘方法 . 然而,传统模糊测试的测试用例的随机 性 并 不 能 充 分 应 对 以 下 问 题 :SQL 注 入 漏 洞 中 对 于 SQL 用 例 语 法 的 严 格 要 求 、Web 应 用 程 序 中 的 安全过滤措施等 . 这使得模糊测试针对于 SQL 注
+入漏洞的挖掘性能大大降低 . 并且当前 SQL 注入
+检测工具主要是通过分析 Http 响应报文进行漏洞
+检测,存在一定的误报 . 并且在检测出漏洞后只能
+输出 URL 接口、触发 Payload 和报文字节数等相关
+信息,不利于研究人员对漏洞进行定位与复现 .
+因 此 ,针 对 上 述 问 题 ,本 文 提 出 一 种 基 于 遗 传
+算 法[5]的 方 式 来 生 成 模 糊 测 试 挖 掘 SQL 注 入 漏 洞
+的 测 试 用 例 ,并 且 使 用 字 节 码 插 桩 技 术 对 Java 语
+言 实 现 的 SQL 漏 洞 程 序 代 码 进 行 插 桩 ,基 于 程 序
+函数内部信息对漏洞进行检测和定位 . 本文的主
+要工作及贡献如下所示 .
+(1)使 用 遗 传 算 法 生 成 模 糊 测 试 的 测 试 用 例 ,
+利 用 其 交 叉 和 突 变 特 性 ,丰 富 测 试 用 例 的 结 构 和
+组 合 的 多 样 性 ,并 在 适 应 度 值 的 指 导 下 迭 代 生 成
+精英个体集合 .
+(2)将 绕 过 安 全 检 测 的 方 法 融 入 到 遗 传 算 法
+的 变 异 步 骤 中 ,并 引 入 自 适 应 变 异 调 度 策 略 ,根 据
+相关参数对变异策略进行打分和调度 . 这种方法
+增 大 了 攻 击 向 量 绕 过 安 全 策 略 的 概 率 ,并 通 过 优
+化变异策略的调度使得遗传算法以较快的收敛速
+度得到更高质量的个体 .
+(3)提 出 一 种 基 于 字 节 码 插 桩 技 术 的 SQL 注
+入漏洞判定方法 . 在该方法中通过插桩目标程序
+内 部 SQL 注 入 相 关 的 危 险 函 数 ,得 到 程 序 运 行 时
+的 细 粒 度 信 息 ,并 结 合 报 文 信 息 同 时 对 漏 洞 进 行
+检 测 和 定 位 ,相 较 于 黑 盒 测 试 工 具 可 以 降 低 漏 洞
+检测的误报率 . 同时将得到的插桩信息作为遗传
+算 法 中 适 应 度 值 计 算 的 一 部 分 ,用 于 迭 代 优 化 生
+成精英个体 .
+
+
+第 61 卷 四川大学学报(自然科学版) 第 5 期
+053001-3
+2 相关工作
+2. 1 基于静态分析的 SQL 注入攻击检测技术
+静 态 检 测 技 术[6]的 主 要 思 想 是 通 过 词 法 分 析 、
+类 型 推 断 、数 据 流 分 析 等 技 术 对 目 标 程 序 源 代 码
+进 行 分 析 ,并 根 据 SQL 注 入 漏 洞 的 特 征 进 行 代 码
+匹 配 从 而 找 到 漏 洞 . Wan 等[7]提 出 一 种 利 用 语 法
+分 析 的 方 法 来 检 测 SQL 注 入 攻 击 ,通 过 提 取 公 共
+子结构和语法解析树中的重复子结构来识别可疑
+SQL 语句中的恶意部分 . 但是 SQL 注入攻击语句
+的多样性使得构建语法树的难度增加且过程耗
+时 . Hlaing 等[8]通过在预定义的词典单词中搜索标
+记 来 检 测 SQLIA,词 典 中 收 集 了 大 部 分 SQL 注 入
+语 句 的 命 令 或 者 单 词 ,通 过 比 较 输 入 语 句 与 已 规
+定的词典内容是否相吻合来检测 SQL 注入漏洞 .
+但该方法的检测准确性的高低严重依赖于词典对
+于 SQL 攻 击 语 句 特 征 覆 盖 的 完 整 性 ,使 得 该 检 测
+方法很容易被绕过 .
+2. 2 基于机器学习的 SQL 注入攻击检测技术
+为了提高 SQL 注入攻击检测的准确率并减少
+人 工 成 本 ,研 究 者 们 开 始 采 用 机 器 学 习[9]进 行 检
+测 . 该类技术的基本思想是通过对现有 SQL 语句
+数 据 库 进 行 特 征 分 析 、模 型 训 练 ,然 后 进 行 二 分 类
+问题的求解 .
+Li 等[10]提 出 使 用 一 种 自 适 应 的 深 度 森 林 方
+法 ,用 于 检 测 SQL 注 入 攻 击 . 该 方 法 将 上 一 层 输
+出的平均值和原始特征向量的连接作为每层的输
+入值并引入自适应算法 AdaBoost 使用每层的错误
+率来动态调整特征的权重 . 实验表明,该方法比经
+典 的 机 器 学 习 方 法 具 有 更 好 的 性 能 . Gandhi 等[11]
+提 出 一 种 基 于 混 合 CNN-BiLSTM 的 模 型 来 识 别
+SQL 注 入 攻 击 . 该 模 型 通 过 使 用 CNN 网 络 用 于
+SQL 语 句 的 特 征 提 取 ,BiLSTM 网 络 用 于 学 习 特
+征 间 的 依 赖 关 系 ,以 此 来 提 升 对 SQL 注 入 攻 击 检
+测的性能 . 但是这种复合的网络架构复杂度较高,
+训练过程中需要消耗的计算成本高 .
+同时,由于 SQL 注入攻击利用的简单便利性,
+现实世界中攻击者往往会在恶意有效载荷中混合
+编码字符、大小写等多种方式来绕过过滤器 . 注入
+载 荷 不 断 变 化 的 多 样 性 和 特 征 集 的 增 加 ,使 得 机
+器学习算法受到固定数量的特征和训练成本的
+限制 .
+2. 3 SQL 注入模糊测试工具研究现状
+测试用例的质量是影响模糊测试漏洞检测能 力的重要因素之一 . 在 SQL 注入漏洞模糊测试领 域,Hammersland 等[12]提出了一种半自动伪随机数
+据的测试用例生成的 Web 应用程序模糊化方案, 该方案在固定脚本的攻击结构中将注入点标记为 模 糊 符 号 ,并 在 模 糊 过 程 中 使 用 随 机 生 成 的 测 试 用例替换它 . 但是该工具一方面测试用例具有较 大的随机性,无法针对性测试 SQL 注入漏洞;另一 方面该工具只能根据返回的 Http 状态码监控程序 运 行 的 状 态 ,必 须 要 人 工 来 分 析 响 应 才 能 定 位 测 试用例是否触发漏洞 . 后来研究者们逐渐采用智能优化算法提高自 动 化 测 试 中 测 试 用 例 的 生 成 质 量 . Cai 等[13]将 遗 传 算 法 应 用 到 模 糊 测 试 的 测 试 用 例 生 成 过 程 中 ,显 著提高了测试用例的生成效率 . 但该算法在收敛 度性能和测试用例覆盖深度方面仍然存在一定的 问 题 . Huang 等[14]通 过 引 入 模 拟 退 火 机 制 优 化 遗 传 算 法 的 相 关 参 数 ,并 将 其 应 用 于 软 件 测 试 数 据 的自动生成,提高了测试用例自动生成的效率 . 陆 紫 光[15]使 用 一 种 改 进 的 自 适 应 遗 传 算 法 用 于 Web 模 糊 测 试 领 域 中 测 试 用 例 的 生 成 ,经 结 果 分 析 表 现出良好的性能 . 但是该算法在变异阶段直接将 编码的数字进行反转,仍然存在一定的缺陷 . 上述 结 果 表 明 ,遗 传 算 法 在 测 试 用 例 生 成 中 具 有 良 好 的优化性能 . 在 SQL 注 入 模 糊 测 试 领 域 ,已 有 多 种 工 具 被 开 发 应 用 . SQLMap 工 具[16]是 当 前 最 流 行 的 SQL
+注 入 检 测 工 具 ,专 为 自 动 化 扫 描 和 检 测 URL 中 的 SQL 注入而设计,覆盖了如报错注入、布尔盲注及 Union 联 合 注 入 等 多 种 注 入 类 型 . 然 而 ,使 用 该 工 具 往 往 需 手 动 指 定 注 入 点 和 绕 过 技 术 . WFuzz[17] 则 是 一 个 专 为 Web 应 用 设 计 的 模 糊 测 试 工 具 ,利 用 字 典 攻 击 或 组 合 输 入 对 目 标 Web 应 用 进 行 爆 破 . 模糊测试性能严重依赖于测试用例的质量 . WaPiti[18]是 一 个 黑 盒 Web 应 用 安 全 审 计 工 具 ,旨 在 检 测 常 见 安 全 漏 洞 ,通 过 发 送 特 定 请 求 并 分 析 响应来识别潜在漏洞 . 尽管其可以将漏洞检测结 果 网 页 化 ,具 有 一 定 的 可 读 性 ,但 对 于 漏 洞 信 息 描 述仍只限于报文和日志 . 综 上 ,遗 传 算 法 在 测 试 用 例 的 生 成 领 域 具 有 很 好 的 性 能 ,但 是 在 当 前 研 究 中 ,对 于 变 异 阶 段 仍 然存在一定的缺陷 . 而当前普遍使用的 SQL 注入
+
+
+第 5 期 吴昊天,等:基于模糊测试的 SQL 注入漏洞挖掘与定位技术研究 第 61 卷
+053001-4
+检测工具的测试用例大部分都是基于内部字典固
+定 的 ,不 能 够 灵 活 针 对 于 被 测 目 标 的 相 关 过 滤 措 施 进 行 绕 过 或 者 进 行 绕 过 策 略 的 调 整 ,致 使 测 试 用例难以成功注入至预定目标 . 除此之外,这些工 具 大 多 停 留 在 URL 接 口 层 面 的 漏 洞 检 测 ,未 能 精 确地定位到潜在漏洞所在的代码部分 .
+3 研究方法
+3. 1 总体框架概述
+本文所提出的基于模糊测试检测 SQL 注入的 框 架 如 图 1 所 示 . 整 体 框 架 有 两 部 分 组 成 :基 于 优 化的遗传算法生成模糊测试测试用例和基于 ByteBuddy 插桩技术对漏洞进行定位和检测 .
+首 先 目 标 程 序 端 利 用 Java agent 代 理 和 Byte
+Buddy 字节码插桩技术在启动目标 Web 应用程序 的 同 时 ,在 程 序 内 部 与 SQL 注 入 相 关 的 危 险 函 数 处 进 行 插 桩 拦 截 ,获 取 程 序 内 部 信 息 ,像 执 行 参 数 、执 行 结 果 、抛 出 异 常 、函 数 所 处 代 码 路 径 和 函 数所在代码行数等信息 . 这些信息将被添加到对 应 URL 接 口 的 响 应 报 文 字 段 中 ,通 过 http 通 信 技 术 传 输 到 遗 传 算 法 模 块 中 ,进 行 适 应 度 计 算 和 漏 洞检测判断 . 遗传算法端的主要功能是在一次次迭代中生 成 可 有 效 绕 过 Web 应 用 程 序 过 滤 措 施 的 测 试 用 例 . 在该过程中,首先将初始样本集提交到目标程 序 中 进 行 模 糊 化 测 试 ,然 后 根 据 目 标 程 序 端 返 回 的响应报文和各种插桩获得的信息进行适应度计 算 ,接 着 根 据 遗 传 算 法 的 原 理 ,重 复 进 行 个 体 选 择 、交 叉 和 变 异 等 操 作 ,直 至 发 现 漏 洞 或 者 循 环 达 到设置代数 . 最终整个模块将输出是否存在漏洞、 漏洞的定位信息和进化的个体集合 . 3. 2 目标程序端插桩
+为了获取 Web 应用程序内部执行的各种细粒
+度 信 息 ,本 文 将 使 用 Java agent 代 理 和 ByteBuddy
+相结合的技术[19]进行字节码插桩的实现 .
+Java agent 是 Java 虚 拟 机 提 供 的 一 种 机 制 ,允
+许在程序运行时对字节码进行修改和增强 . 它主
+要通过在目标程序的 main 方法执行前调用 premain() 方 法 ,并 在 其 中 调 用 transform()方 法 ,使 得 后 续 加 载的所有类都会被拦截并可以进行字节码转换 . ByteBuddy 是 一 个 轻 量 级 的 用 于 生 成 和 修 改 Java 字 节 码 的 库 ,其 主 要 优 势 在 于 提 供 了 一 系 列 API 和注释直接对字节码进行操作 . 图 2 概 述 了 本 文 中 ByteBuddy 插 桩 的 执 行 流
+程 . 首 先 会 在 premain()函 数 中 实 例 化 Agent
+Builder 对 象 ,也 就 是 Java agent 代 理 . 代 理 通 过 在
+命 令 行 中 的 -javaagent 参 数 中 设 置 启 动 . 然 后 pre
+main()函 数 中 实 例 化 拦 截 器 对 象 transform,当 函
+数 Advice. on(HookMethod)匹 配 到 拦 截 的 危 险 函
+数 时 ,visit()函 数 将 访 问 拦 截 代 码 Advice. java. 此
+时,拦截代码会注入到目标危险函数处 . 因为如表 1 所示的函数提供了执行动态 SQL 查 询 的 功 能 ,并 且 如 果 这 些 函 数 没 有 对 用 户 输 入 进 行 充 分 的 验 证 和 转 义 ,就 可 以 导 致 攻 击 者 通 过 注 入 恶 意 SQL 代 码 来 造 成 安 全 漏 洞 . 因 此 ,在 已 公 布 的 Java SQL 注 入 漏 洞 中 ,表 1 所 示 这 些 函 数 经常被攻击者利用来引发危害 . 因此本文主要选 取 表 1 所 示 函 数 作 为 危 险 函 数 . 同 时 ,由 于 这 些 函 数 的 参 数 、执 行 结 果 和 抛 出 异 常 等 信 息 与 SQL 注 入 漏 洞 挖 掘 的 准 确 性 相 关 联 ,因 此 通 过 对 表 格 内 所示函数的插桩可以提高漏洞挖掘能力 .
+图 1 系统总体架构图
+Fig. 1 Overall architecture of the system
+
+
+第 61 卷 四川大学学报(自然科学版) 第 5 期
+053001-5
+Advice 代 码 则 主 要 使 用 表 2 所 示 的 注 释 对 目
+标 危 险 函 数 进 行 信 息 获 取 . 针 对 于 SQL 注 入 ,本
+文 主 要 使 用 @OnMethodExit 注 解 使 Handler 处 理
+方 法 在 危 险 函 数 执 行 后 调 用 ,便 于 获 取 函 数 执 行
+对象和异常来进行漏洞的检测 . 并且通过获取当
+前 Advice 类线程执行的堆栈信息获取危险函数所
+处代码路径和行数 .
+在插桩过程中得到的信息将存储至自定义的
+Result 结 构 体 中 ,存 储 的 信 息 结 构 如 图 3 所 示 . 函
+数 行 数 和 堆 栈 信 息 主 要 用 于 漏 洞 的 定 位 ,函 数 相
+关信息则用于漏洞的检测 .
+3. 3 遗传算法生成测试用例
+在 本 节 中 ,主 要 解 释 了 如 何 将 遗 传 算 法 集 成
+到 SQL 注入漏洞模糊测试中,包括数据预处理、适 应 度 计 算 、个 体 选 择 、交 叉 、变 异 策 略 调 度 的 相 关 原理实现 .
+3. 3. 1 数据预处理 由于 SQL 语句在执行时具 有 严 格 的 语 法 和 语 义 要 求 ,因 此 为 了 保 证 后 续 交
+叉 和 变 异 操 作 中 其 结 构 不 被 破 坏 ,在 该 步 骤 中 需
+要 根 据 语 法 语 义 结 构 对 输 入 的 Payload 进 行 序 列
+划 分 ,使 得 后 续 操 作 均 以 划 分 的 各 个 序 列 为 基 本
+操作单元 .
+在 这 里 ,本 文 将 一 个 Payload 划 分 为 4 个 子 序
+列 ,每 个 序 列 的 定 义 如 表 3 所 示 . 这 时 ,当 Payload
+为 Tsql = 1′ union select 1,2 ,database ( ) -- 时 ,其
+划分后的序列如图 4所示 .
+3. 3. 2 适 应 度 计 算 在 遗 传 算 法 中 ,个 体 的 适 应
+度 越 高 ,其 性 能 表 现 越 优 秀 . 在 本 文 中 ,为 了 衡 量
+测 试 个 体 检 测 SQL 注 入 漏 洞 的 能 力 高 低 ,结 合
+SQL 注 入 漏 洞 的 特 征 ,适 应 度 主 要 被 以 下 因 素 影
+响 :是 否 检 测 出 漏 洞 、响 应 页 面 的 变 化 量 和 测 试 序
+列的有效载荷量 . 计算公式为:F = Es + H S + V s,
+计算规则如下所示 .
+(1)当 测 试 用 例 中 某 个 个 体 能 成 功 触 发 SQL
+图 2 ByteBuddy 插桩流程示意图
+Fig. 2 Schematic diagram of ByteBuddy piling process
+表 1 SQL 注入危险函数
+Tab. 1 SQL injection danger functions
+类名称
+java. sql. Statement
+函数名称
+execute()
+executeQuery()
+executeUpdate()
+executeLargeUpdate()
+executeBatch()
+executeLargeBatch()
+表 2 Advice 类注释及其作用
+Tab. 2 Advice class annotations and their effects
+注解名称
+@OnMethodEnter
+@OnMethodExit
+@Origin
+@AllArguments
+@Thrown
+@Return
+作用
+表示注解的方法会在拦截的目标函数执行前调用
+表示注解的方法会在拦截的目标函数执行后调用
+获取拦截的目标函数对象
+获取目标函数的所有参数
+获取目标函数抛出的异常
+获取目标函数执行后的对象
+图 3 插桩信息存储结构示例
+Fig. 3 Example of pile information storage structure
+图 4 Payload 序列划分示例
+Fig. 4 Example of Payload sequence partitioning
+
+
+第 5 期 吴昊天,等:基于模糊测试的 SQL 注入漏洞挖掘与定位技术研究 第 61 卷
+053001-6
+注 入 漏 洞 时 ,模 糊 测 试 流 程 可 以 结 束 ,该 个 体 适 应
+度值应设置为最高 . SQL 注入按照执行效果可以
+分 类 为 报 错 注 入 、联 合 注 入 、布 尔 盲 注 、堆 叠 注 入
+和时间盲注几大类型 . 因此结合上述各种类型的
+SQL 注入漏洞的检测原理和在目标程序中插桩得
+到 的 函 数 相 关 信 息 ,该 部 分 适 应 度 得 分 Es 的 具 体
+计算规则如表 4所示 .
+(2)注 入 攻 击 载 荷 后 页 面 的 变 化 量 H S 通 过 计
+算有效载荷注入前后响应页面的字符数的差值进
+行 量 化 . 在 标 准 SQL 查 询 场 景 中 ,预 期 的 响 应 只
+呈现有限的数据 . 但在注入攻击的情况下,响应可
+能会显示额外的查询结果 . 尤其在布尔盲注中,会
+通过页面的不同响应来推测敏感数据信息 . 因此,
+较大的页面变化量可能指示着成功的 SQL 注入攻 击 . 该指标计算公式如式(1)所示 .
+H S = | N ( Pnormal )- |
+N ( P injection )
+N ( P normal ) (1)
+(3)测 试 序 列 的 有 效 攻 击 载 荷 量 V S 则 通 过 计
+算 输 入 到 URL 接 口 的 初 始 测 试 序 列 S( I ) 和 在
+SQL 注 入 相 关 危 险 函 数 处 的 执 行 参 数 S ( O )(即 经
+过 程 序 过 滤 的 测 试 序 列)的 相 似 度 这 一 指 标 来 度
+量 . 二者相似程度越高,说明模糊测试序列被程序
+过 滤 得 更 少 ,其 更 容 易 绕 过 安 全 过 滤 策 略 进 而 触
+发漏洞 . 该部分使用 Levenshtein 距离来计算相似
+性,具体的计算方式如式(2)所示 .
+Vs = Dis( I,O )= 1
+1 + Lids( I,O )
+(2)
+Levenshtein 距离具体计算原理如式(3)所示 .
+它表示 I的前 i个字符与 O 的前 j个字符之间的
+Levenshtein 距离 .
+Lids( I,O ) ( i,j )=
+■
+■
+■
+■
+■■■
+■
+■■■
+max ( i,j ), if min ( i,j )= 0
+min
+■
+■
+■
+■■
+■■
+Lids( I,O ) ( i - 1,j )+ 1
+Lids( I,O ) ( i,j - 1 )+ 1, otherwise
+Lids( I,O ) ( i - 1,j - 1 )+ 1
+(3)
+3. 3. 3 交 叉 与 变 异 交 叉 与 变 异 是 遗 传 算 法 中 最 重 要 的 两 个 步 骤 ,可 以 丰 富 个 体 种 群 的 多 样 性
+以提高触发漏洞的能力 . 在这两个操作进行前,需
+要 从 初 始 Payload 中 根 据 适 应 度 高 低 选 择 一 部 分
+个体作为交叉和变异的父代集合 . 算法 1展示了
+遗传算法中选择、交叉和变异的主要思想 .
+算法 1 遗传算法交叉变异操作
+输入:初始 Payload 集合 pop 和适应度值;
+输出:变异后生成的新一代集合 pop_m;
+1)while t < D:
+表 3 Payload 序列化分标准
+Tab. 3 Payload serialization standard
+序列
+S0
+S1
+S2
+S3
+名称
+闭合序列
+逻辑序列
+注入序列
+注释序列
+描述
+用于闭合正常的 SQL 查询语句,如单引号或双引 号等;
+逻辑表达式判断序列,如 or 1=1 或 and 1>2 等;
+表现注入类型特征的攻击语句,如 union xxx、ex
+tractvalue()、sleep()函 数 等 ;
+用 于 在 攻 击 语 句 结 尾 注 释 后 续 sql 语 句 ,如 --+ 、 #等;
+表 4 漏洞检测标准
+Tab. 4 Vulnerability detection standards
+注入类型
+报错注入
+联合注入
+堆叠注入
+布尔盲注
+时间盲注
+检测特征
+函数执行抛出特定异常,像 SQLException:XPATH syntax error 或者包含数据名名称等敏感信息
+函数执行的 SQL 语句包含报错注入的危险函数特征,像 updatexml()、extractvalue()等
+函 数 成 功 执 行 ,返 回 相 应 对 象 类 ,且 返 回 多 条 查 询 结 果
+函数执行的 SQL 语句包含 union 关键字
+函 数 成 功 执 行 ,返 回 相 应 对 象 类 ,且 返 回 多 条 查 询 结 果
+函数执行的 SQL 语句包含“;+ select/update 等关键字”的结构特征
+函 数 成 功 执 行 ,返 回 相 应 对 象 类
+函数执行的 SQL 语句包含“length/Ascii/substring(. . . )+[>/</=]. . . ”的结构特征
+函 数 成 功 执 行 ,返 回 相 应 对 象 类
+函数执行的 SQL 语句包含“if(. . . sleep(. . . )/benchmark(. . . ). . . )”结构特征
+适应度得分
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+总计
+2
+2
+2
+2
+2
+
+
+第 61 卷 四川大学学报(自然科学版) 第 5 期
+053001-7
+2) P i = ( F i /F sum for P i in pop )
+3) pop_s = sort ( pop,Pi )
+4) pop_c = select ( pop_s,P )
+5) pop_cc = crossover ( pop_c,pop,Pc )
+6) pop_m = mutate ( pop_cc,stra,Pm )
+7)end while; 8)select:
+9) for ( i,Pi in pop_s,P ):
+10) r = random. random ( )
+11) if r <= Pi:
+12) pop_c. append ( pop_i )
+13)crossover:
+14) for father in pop_c:
+15) child = father
+16) r_child [ S0,S1,S2,S3 ] = random
+17) mother = random ( pop )
+18) if random_child [ Si ] <= Pc
+19) child [ Si ]= mother [ Si ]
+20) pop_cc . append ( child )
+21)mutate:
+22)update_stra_score ( F,V s,frequencystra )
+23)stra_list = sort ( score,stra )
+24) for Indi in pop_cc:
+25) r_Indi [ S0,S1,S2,S3 ] = random
+26) if random_child [ Si ] <= Pm
+27) child [ Si ]= stra_list [ i ] ( child [ Si ] )
+28) pop_m . append ( child )
+在 选 择 操 作 中(算 法 第 8~12 行),本 文 所 采 用
+的 选 择 策 略 是 轮 盘 赌 策 略[20]. 该 选 择 策 略 是 根 据
+个 体 适 应 度 的 值 确 定 其 被 选 择 的 概 率 ,第 i 个 个 体
+被选择概率的计算公式如式(4)所示 . 对于集合中
+的 每 个 个 体 生 成 一 个 0-1 的 随 机 数 ,当 随 机 数 小 于
+个 体 的 选 择 概 率 Pi,将 该 个 体 添 加 到 集 合 pop_c
+中,用于后续操作 . 因此,个体适应度值越高,其被
+选择的概率越大 .
+Pi = Fi
+∑
+n=1
+M
+Fn
+(4)
+交叉就是指个体集合两两进行随机序列的交
+换 . 在本文 SQL 注入的测试用例生成中则是在划
+分序列的基础上,进行相同位置序列的互换 . 该操
+作既丰富了个体种群的多样性又保证了 SQL 语句
+的整体语法结构没有被破坏 . 在 交 叉 操 作 实 现 过 程(算 法 13~20 行)中 ,首 先 根 据 交 叉 概 率 Pc 确 定 从 初 始 种 群 pop(m 个)中
+选 择 的 交 叉 父 种 群 pop_c ( m × Pc 个 ). 然 后 随 机 选
+择初始种群 pop 的一个序列作为交叉的另一个父
+个 体 . 然 后 为 个 体 的 每 个 序 列(S0,S1,S2,S3)生 成 对 应 的 4 个 0-1 的 随 机 数 ,当 序 列 对 应 的 随 机 数 大 于交叉概率 Pc 时,该序列发生交叉操作 . 这时得到
+子代集合 pop_cc(m × Pc 个).
+在交叉得到的子代集合上后续将进行变异操 作 . 尽管当前 Web 程序端考虑到用户输入的不合 法 性 过 滤 了 一 些 不 合 法 字 符 ,但 是 仍 有 部 分 方 法 可 以 绕 过 这 些 安 全 策 略 ,从 而 完 成 SQL 注 入 . 通 过对现有过滤机制的研究 ,本文将采用如下共计 8 种变异策略 . (1)字 符 编 码 . 在 该 策 略 中 ,本 文 主 要 选 取 了 Java Web 程 序 中 常 见 的 几 种 编 码 方 式 ,向 URL 编
+码、base64 编码、十六进制和 Unicode 编码方式 .
+(2)随 机 大 小 写 . 有 些 安 全 策 略 可 能 只 是 纯 过 滤 大 写 或 者 小 写 字 符 ,因 此 本 文 对 字 符 串 随 机 位置进行大小写变换即可绕过该方式 . 如
+union可能的变异结果为UnIoN.
+(3)敏 感 关 键 字 冗 余 . 某 些 变 异 策 略 可 能 只 对 敏 感 关 键 字 ,像 select、union 等 过 滤 一 次 . 这 时 通过在关键字内部重复插入关键字可有效抵挡该 措施 . (4)同 义 词 替 换 . 该 方 法 主 要 是 将 常 被 过 滤 的字符替换为同功能的其他字符来绕过过滤 . 像 将 and 替 换 为 &&,等 号 替 换 为 like,空 格 替 换 为/
+**/等 .
+(5)混 淆 关 键 字 . 在 该 部 分 中 使 用 内 联 注 释 符(/*! */)对 常 见 关 键 字 进 行 结 构 上 的 改 变 以 绕 过对于固定结构的过滤 . 变 异 过 程(算 法 21~28 行)中 ,个 体 的 各 个 序 列 部 分 具 有 一 定 的 变 异 概 率 Pv,当 每 个 序 列 部 分 对 应 产 生 的 随 机 数 小 于 Pv 时 ,该 序 列 进 行 变 异 操作 . 相较于传统遗传算法的随机选择变异策略, 本 文 将 在 变 异 阶 段 根 据 适 应 度 值 、整 体 使 用 频 次 、 序列过滤情况对使用的变异策略进行打分 . 打分 的基本策略为 1)所有变异策略初始分数为 0; 2)当 个 体 适 应 度 值 大 于 等 于 该 轮 平 均 适 应 度
+
+
+第 5 期 吴昊天,等:基于模糊测试的 SQL 注入漏洞挖掘与定位技术研究 第 61 卷
+053001-8
+时,其对应的变异策略得分+1 分; 3)当 变 异 策 略 当 轮 使 用 频 次 大 于 等 于 当 轮 变 异 序 列 的 个 数/变 异 策 略 总 数 时 ,其 对 应 的 变 异 策
+略-0. 5 分;
+4)当 经 变 异 后 的 序 列 的 有 效 载 荷 没 有 被 安 全 策略过滤时,其对应变异策略得分+1 分; 打分策略 2)和 4)的目的是使得整体的变异趋 势向高质量个体靠拢,增大触发漏洞的可能性 . 打 分 策 略 3)则 是 为 了 保 持 个 体 集 合 的 多 样 性 ,避 免 出现过多重复集合 . 在得分计算完成后,根据得分 情况优先选择较高得分的变异策略进行变异操
+作,返回集合 pop_m.
+为 了 防 止 程 序 陷 入 无 限 循 环 ,需 要 为 遗 传 算 法设置迭代阈值 D. 当没有发现漏洞和迭代次数 小 于 阈 值 时 ,遗 传 算 法 将 重 复 上 述 操 作 ,直 至 触 发 漏洞或达到阈值 .
+4 实验结果与分析
+4. 1 实验相关设置
+4. 1. 1 实 验 环 境 与 数 据 集 本 文 实 验 是 在 处 理
+器 为 11th Gen Intel(R)Core(TM)i7-11700 @
+2. 50 GHz 的 Windows 10 操作系统环境下运行 . 遗
+传算法模块和 Java agent 模块分别是在 Python3. 6 和 jdk1. 8 环境下开发和运行的 .
+本 文 将 Github 上 的“SQL Injection Payload List”项 目[21]中 的 部 分 语 句 作 为 初 始 测 试 用 例 ,其 中包含了能够触发不同类型的 SQL 注入漏洞的有 效负载 . 在 整 体 实 验 过 程 中 ,本 文 选 取 当 前 流 行 的
+SQL 注 入 模 糊 测 试 检 测 工 具 SQLMap、WFuzz、 Wapiti 和标准遗传算法 SGA 以及自适应遗传算法
+AGA 作 为 比 较 对 象 . 并 选 取 Java web 应 用 Web
+Goatv8. 1、Vulnerable-app、和 Hello-java-sec 作为被 测目标 . 4. 1. 2 算 法 参 数 设 置 遗 传 算 法 的 性 能 与 其 实 现 过 程 中 的 各 个 参 数 密 切 相 关 ,在 本 文 实 验 中 遗 传算法的相关参数设置如表 5所示 .
+4. 2 遗传算法有效性验证
+4. 2. 1 算 法 性 能 评 估 该 部 分 实 验 旨 在 验 证 基 于评分机制的自适应变异策略调度对遗传算法中 个体适应度和算法收敛性的影响情况 . 在 本 部 分 实 验 中 将 本 文 遗 传 算 法 GAFuzz 与 标准遗传算法 SGA 以及自适应遗传算法 AGA 作 对比,比较其在 3 个目标上平均适应度值的变化情 况 . 算法在每个目标上的一个 SQL 接口上执行 10 次 ,每 次 的 最 大 迭 代 次 数 为 100. 在 该 部 分 实 验 中 当且仅当迭代次数等于最大迭代次数时停止运 行 . 然后计算每轮过程中 3个目标的平均适应度 值,并将其进行归一化处理 . 统计结果如图 5 所示 .
+从图 5 数据可以看到,本文提出的遗传算法在 应 用 打 分 策 略 动 态 选 择 变 异 策 略 后 ,相 较 于 随 机 选择变异策略的标准遗传算法和自适应遗传算 法 ,其 得 到 个 体 的 平 均 适 应 度 值 较 高 ,说 明 了 本 算 法 在 模 糊 测 试 的 测 试 用 例 生 成 上 的 有 效 性 ,使 其 更容易触发漏洞 . 从 曲 线 变 化 情 况 来 看 ,本 算 法 在 10~20 代 时 , 其 增 长 速 度 明 显 优 于 标 准 遗 传 算 法 SGA,略 高 于 AGA 算法,说明基于打分机制选择变异策略,使得 个体更快速地倾向于向高适应度方向发展 . 并 且 在 40~50 代 时 ,本 算 法 的 平 均 适 应 度 值 就开始逐渐收敛 . 由于遗传算法是在交叉变异过 程 中 进 行 随 机 方 向 的 优 化 ,因 此 存 在 收 敛 速 度 较 慢的问题 . 自适应遗传算法 AGA 是通过自适应策 略动态选择交叉和变异的参数来提高收敛速度 . 从图中数据可以看出本算法的收敛速度仍然高于 AGA 算 法 . 说 明 在 SQL 注 入 漏 洞 检 测 场 景 下 ,自 适应调度变异策略比自适应参数调度策略更利于 个体向高适应度方向发展 .
+4. 2. 2 测 试 用 例 质 量 评 估 在 该 部 分 实 验 中 将
+表 5 遗传算法相关参数
+Tab. 5 Genetic algorithm related parameters
+参数名称
+种群大小
+变异概率
+交叉概率
+迭代阈值
+设置数值
+100
+0. 5
+0. 1
+50
+图 5 算法平均适应度对比试验
+FIg. 5 Comparison test of average fitness of the algorithm
+
+
+第 61 卷 四川大学学报(自然科学版) 第 5 期
+053001-9
+主要通过覆盖率这一指标来验证经过遗传算法优 化后,测试用例的质量是否得到提高 . 其中覆盖率 的 值 越 大 ,说 明 优 化 生 成 的 测 试 用 例 能 够 覆 盖 更 多的代码指令和分支,更有可能触发漏洞 . 在该部分实验中将重复运行 10 次遗传算法来 优 化 生 成 测 试 用 例 ,同 时 使 用 Jacoco 分 别 统 计 这 10 次优化的测试用例和初始测试用例在目标应用
+程 序 WebGoatv8. 1、Vulnerable-app、和 Hello-java
+sec 中的 SQL 注入接口代码上的覆盖率情况 ,统计 结果如表 6所示 . 表 6使用字节码指令覆盖率和分支覆盖率作 为衡量指标 . 字节码指令覆盖率表明了在所有的 字节码指令中,执行指令的比例 . 分支覆盖率则统 计了代码中 if 和 switch 分支语句的执行情况 .
+表 6中第 2列和第 4列显示了初始测试用例的 指 令 覆 盖 率 和 分 支 覆 盖 率 情 况 ,第 3 列 和 第 5 列 则 显示了优化后的测试用例相较于初始测试用例的 百分比增加 . 相较于初始用例,优化后的测试用例 在 3 个目标程序上的覆盖率指标均有所提高,其中 在 WebGoat 这一较为复杂的目标上提升效果最显 著 ,指 令 覆 盖 率 提 高 了 9. 5%,分 支 覆 盖 率 提 高 了
+8. 3%.
+这是因为 Webgoat 目标代码的逻辑较为复杂, 包 含 一 系 列 针 对 测 试 用 例 的 过 滤 条 件 ,同 时 在 代 码中也存在较多的分支语句 . 这种复杂性导致传 统的测试用例生成方法可能无法全面覆盖所有条 件和分支 . 然而,通过遗传算法进行优化的测试用 例 生 成 方 法 ,能 够 生 成 覆 盖 上 述 复 杂 条 件 的 测 试 用例 . 这种方法能够提高测试用例的覆盖率,特别 是在处理具有大量分支和过滤条件的复杂代码 时,其提升效果尤为显著 . 上述结果说明经过遗传算法优化后的测试用 例 更 具 有 多 样 性 ,能 够 覆 盖 更 多 的 代 码 执 行 ,增 大 了发现漏洞的可能性 .
+4. 3 漏洞检测与定位能力验证
+表 7 展 示 了 本 工 具 与 SQLMap、WFuzz 和 Wa
+piti 这 3 个对比工具在 3 个目标程序上的漏洞检测 与 定 位 情 况(“×”表 示 了 可 以 识 别 的 漏 洞 信 息 ). 表 7中第 2列数据为在被测目标上所测试的接口 数量总数目和该靶场目标中已知的 SQL 注入漏洞 数量 . 第 4列数据为各个工具在各被测目标中所 报告的 SQL 漏洞数量总数以及所报告漏洞总数中
+真 实 存 在 SQL 注 入 漏 洞 的 数 量 . 同 时 ,本 部 分 使
+用漏洞报告的正确率 PT 和误报率 PF 这两个指标
+来说明本文方法在漏洞检测和定位能力方面的可
+行性 . 两个指标计算公式如下所示 .
+PT = NT
+NG
+(5)
+P F = N report - N T
+N report
+(6)
+式 中 ,NT 表 示 各 漏 洞 检 测 工 具 所 识 别 的 真 实 存 在
+SQL 注 入 漏 洞 的 接 口 数 量 ,NG 表 示 各 目 标 靶 场 中
+真 实 存 在 SQL 注 入 漏 洞 的 数 量 ,N report 表 示 各 漏 洞
+检测工具所报告的 SQL 注入漏洞的数量 .
+从 漏 洞 检 测 数 量 上 来 看 ,本 工 具 与 SQLMap
+工 具 检 测 能 力 基 本 持 平 ,优 于 WFuzz 和 Wapiti 工
+具 . 在 WebGoat 目 标 上 ,本 工 具 相 较 于 WFuzz 和
+Wapiti 多检测出 2 个漏洞 . 经过对相应漏洞处的源
+码 的 分 析 得 知 ,这 两 处 漏 洞 都 采 用 了 一 定 的 过 滤
+措施,分别为空格过滤和关键字过滤 . 这两个工具
+中均没有相关措施进行绕过 . 因此这两个工具无
+法通过初始测试用例触发漏洞 . 本工具则可以通
+过 /**/替 换 空 格 和 关 键 字 复 写 的 变 异 策 略 完 成 注
+入 . 而 在 SQLMap 中 由 于 其 可 以 通 过 参 数“ --tam 
+per=space2comment”同 样 指 定/**/替 换 空 格 因 此
+也可以检测到该漏洞 . 但是 SQLMap 中并没有关
+键 字 冗 余 策 略 ,并 且 SQLMap 在 指 定 策 略 时 需 要
+人工手动添加,自动化程度低 .
+在 Hello-Java-Sec 和 VulnerableApp 目 标 上 ,
+本工具与 SQLMap 在漏洞检测能力上基本持平 ,
+表 6 优化测试用例覆盖率对比表
+Tab. 6 Optimize the test case coverage comparison table
+Goal
+WebGoat
+Hello-Java-Sec
+Vulner ableApp
+平均
+字节码指令覆盖率
+初始 Payload
+82. 0%
+85. 0%
+87. 0%
+84. 7%
+优化后 Payload
++9. 5%
++2. 6%
++4. 2%
++5. 4%
+分支覆盖率
+初始 Payload
+77. 0%
+83. 0%
+84. 0%
+81. 3%
+优化后 Payload
++8. 3%
++1. 7%
++3. 8%
++4. 6%
+
+
+第 5 期 吴昊天,等:基于模糊测试的 SQL 注入漏洞挖掘与定位技术研究 第 61 卷
+053001-10
+这主要是由于这两个目标程序中没有较为复杂的 安全过滤措施 ,但是相较于 WFuzz 和 Wapiti 工具 , 本工具仍然可以通过遗传算法丰富初始测试用例 的多样性,来达到注入的目的 . 从 漏 洞 定 位 信 息 来 看 ,本 工 具 在 识 别 漏 洞 后 能 够 获 取 与 其 相 关 的 详 尽 数 据 ,URL 的 接 口 和 响 应 报 文 信 息 、漏 洞 触 发 Payload、底 层 函 数 的 细 节 、 漏 洞 位 置 的 具 体 代 码 行 数 ,以 及 从 主 函 数 至 漏 洞 点 的 函 数 调 用 链 路 信 息 . 相 比 之 下 ,其 他 3 个 工 具 只能给出 URL 接口的报文数据和触发 Payload. 特 别地,WFuzz 在运行后只返回各个 Payload 传输完成 后 对 应 地 响 应 报 文 的 字 节 数 和 状 态 码 ,测 试 人 员 还 需手动检查异常以验证 SQL 注入漏洞的存在性 . 同 时 从 误 报 率 进 行 分 析 ,相 较 于 SQLMap、
+Wfuzz 和 Wapiti 这些黑盒漏洞扫描工具,本文所提 出 的 方 法 漏 洞 检 测 的 误 报 率 较 低 ,表 明 本 文 通 过 字节码插桩技术在目标运行时对各种状态信息进 行 拦 截 ,并 结 合 这 些 信 息 作 为 遗 传 算 法 中 是 否 出 现 漏 洞 的 这 种 灰 盒 检 测 模 式 具 有 较 好 的 性 能 ,可 以降低漏洞挖掘过程的误报率 . 除 此 之 外 ,与 其 他 模 糊 测 试 工 具 有 所 不 同 ,即 使 在 程 序 未 发 现 Web 应 用 程 序 的 漏 洞 时 ,本 工 具 也可以输出遗传算法优化后地测试用例 . 这有利 于测试人员通过优化后的个体集以手动方式再次 测试应用程序 . 由于这些个体是在适应度值的引 导 下 优 化 生 成 的 ,所 以 在 一 定 程 度 上 提 高 手 动 验 证的效率 .
+5结论
+针 对 于 Java Web 应 用 程 序 中 SQL 注 入 漏 洞 的模糊测试中的测试用例生成和漏洞检测与定位 两 大 核 心 问 题 ,本 文 结 合 遗 传 算 法 和 字 节 码 插 桩 技 术 ,提 出 一 种 基 于 模 糊 测 试 的 SQL 注 入 漏 洞 检 测与定位方法 . 在该方法中,首先通过遗传算法的 语义序列的划分、交叉、变异等阶段对初始 Payload 进 行 迭 代 生 成 ,并 在 变 异 阶 段 引 入 绕 过 安 全 过 滤 措施的变异策略和基于打分机制的变异策略调度 来 优 化 遗 传 算 法 的 性 能 . 同 时 基 于 ByteBuddy 的 字节码插桩技术来能够获取程序内部执行的细粒 度数据 ,并据此数据对漏洞进行精确检测与定位 . 实 验 结 果 表 明 ,本 文 遗 传 算 法 的 性 能 相 较 于 标 准
+遗 传 算 法 和 自 适 应 遗 传 算 法 性 能 更 高 ,能 更 快 生 成适应度值较高的测试用例 . 在漏洞检测方面,本 文相较于其他检测工具可以检测出更多的漏洞, 尤 其 在 程 序 设 置 安 全 策 略 的 情 况 下 ,效 果 更 为 明显 . 由于本文所提出的基于插桩技术的灰盒漏洞 检测思路仅限于 Java 语言开发的 Web 应用以及遗 传算法在数据预处理和适应度计算中仅针对于 SQL 注 入 漏 洞 ,因 此 本 文 在 场 景 应 用 上 具 有 一 定 的局限性 . 但是通过实验验证,本文所提出的方法 在 WEB 应用中注入类漏洞的挖掘检测过程中具 有更好的性能 . 未来将在本文的基础上,考虑进一 步探索如何检测多种开发语言上的 Web 应用程序 中 的 多 种 Web 漏 洞 类 型 ,以 及 增 加 对 多 种 语 言 开
+表 7 各工具在 Java Web 目标的漏洞检测与定位情况
+Tab. 7 Vulnerability detection and location of various tools in Java Web targets
+测试目标
+WebGoat
+Hello-Java-Sec
+VulnerableApp
+测试接口数 量/漏洞数量
+52/11
+18/5
+20/9
+工具名称
+本工具
+SQLMap
+WFuzz
+Wapiti
+本工具
+SQLMap
+WFuzz
+Wapiti
+本工具
+SQLMap
+WFuzz
+Wapiti
+报告漏洞数/ 真实存在漏洞
+13/11
+13/10
+15/8
+13/9
+7/5
+8/5
+6/3
+7/4
+8/7
+9/7
+9/6
+9/7
+漏洞定位信息
+URL
+信息
+×
+×
+×
+×
+×
+×
+×
+×
+×
+×
+×
+×
+Payload
+×
+×
+×
+×
+×
+×
+×
+×
+×
+×
+×
+×
+代码行 数定位
+×
+×
+×
+底层 函数
+×
+×
+×
+函数 调用链
+×
+×
+×
+正确率
+1. 000
+0. 910
+0. 727
+0. 818
+1. 000
+1. 000
+0. 800
+0. 800
+0. 778
+0. 778
+0. 667
+0. 778
+误报率
+0. 154
+0. 231
+0. 467
+0. 308
+0. 286
+0. 375
+0. 500
+0. 428
+0. 142
+0. 222
+0. 333
+0. 85
+
+
+第 61 卷 四川大学学报(自然科学版) 第 5 期
+053001-11
+发 的 WEB 应 用 的 插 桩 检 测 ,来 提 高 本 方 法 的 适 用 性和通用性 .
+参考文献:
+[1] CNVD. 国家信息安全漏洞共享平台[EB/OL].[2024
+01-25]. https://www. cnvd. org. cn/flaw/statistic.
+[2] Qian L,Zhu Z,Hu J,et al. Research of SQL injection
+attack and prevention technology[C]//2015 Interna
+tional Conference on Estimation,Detection and Infor
+mation Fusion(ICEDIF).[S. l.]:IEEE,2015:303.
+[3] Security Affairs. Schneider electric and siemens energy
+are two more victims of a MOVEit attack [EB/
+OL]. [2024-01-25]. https://securityaffairs. com/
+147865/data-breach/schneider-electric-siemens-energy
+moveit. html.
+[4] Manès V J M,Han H S,Han C,et al. The art,science,
+and engineering of fuzzing:A survey [J]. IEEE
+Transactions on Software Engineering,2019,47:2312.
+[5] McCall J. Genetic algorithms for modelling and opti
+misation[J]. Journal of computational and Applied
+M ath em atics ,2 0 0 5 ,1 8 4 :2 0 5 .
+[6] Sirisang W,Suttichaya V. Analyzing SQL injection
+statements using common substructure of parse
+tree[C]//2017 21st International Computer Science
+and Engineering Conference (ICSEC). [S. l.] :
+IEEE,2017:1.
+[7] Wan M,Liu K. An improved eliminating SQL injection
+attacks based regular expressions matching[C]//2012
+International Conference on Control Engineering and
+Communication Technology.[S. l.]:IEEE,2012:210.
+[8] Hlaing Z C S S,Khaing M. A detection and prevention
+technique on sql injection attacks [C]//2020 IEEE
+Conference on Computer Applications(ICCA).[S.
+l. ]:IE E E ,2020 :1.
+[9] Alghawazi M,Alghazzawi D,Alarifi S. Detection of
+sql injection attack using machine learning tech
+niques:A systematic literature review[J]. Journal of
+Cybersecurity and Privacy,2022,2:764.
+[10] Li Q,Li W,Wang J,et al. A SQL injection detec
+tion method based on adaptive deep forest[J]. IEEE
+Access,2019,7:145385.
+[11] Gandhi N, Patel J, Sisodiya R, et al. A CNN
+BiLSTM based approach for detection of SQL injec
+tion attacks [C]//2021 International Conference on
+Computational Intelligence and Knowledge Economy
+(ICCIKE).[S. l.]:IEEE,2021:378.
+[12] Hammersland R,Snekkenes E. Fuzz testing of web
+applications[J]. Retrieved,2008,7:2010.
+[13] Cai H,Yu X,Deng L. Research on the generation
+method of test cases in fuzzing[C]//2015 3rd Inter
+national Conference on Mechatronics and Industrial
+Informatics(ICMII 2015).[S. l.]:Atlantis Press,
+2015:345.
+[14] Huang M,Liu S N,Jiao X. The applied research of
+improved genetic algorithm in data automatic genera
+tion of software test [C]//2021 IEEE 9th Interna
+tional Conference on Computer Science and Network
+Technology(ICCSNT).[S. l.]:IEEE,2021:26.
+[15] Lu Z G. Research on Web vulnerability mining algo
+rithm based on improved fuzzy testing[D]. Nanning:
+Guangxi University,2018.[陆 紫 光 . 基 于 改 进 模 糊 测 试 的 Web 漏 洞 挖 掘 算 法 研 究[D]. 南 宁 :广 西 大
+学 ,2018. ]
+[16] Stamparm. SQLMap[EB/OL].[2024-01-25]. https://
+github. com/sqlmapproject/sqlmap. git.
+[17] Xmendez. Wfuzz[EB/OL].[2024-01-25]. https://
+github. com/NanoGitHub/wfuzz. git.
+[18] Devl00p. WaPiti[EB/OL].[2024-01-25]. https://
+github. com/wapiti-scanner/wapiti. git.
+[19] Chi H Z,Kong D Z. Research on Java method en
+hancement technology [J]. Reliability and Environ
+mental Testing of Electronic Products,2022,40: 75.[迟 慧 智 ,孔 德 智 . Java 方 法 增 强 技 术 研 究[J]. 电 子 产 品 可 靠 性 与 环 境 试 验 ,2022 ,40 :75. ]
+[20] Zhang C,Zhan Z H. Comparison of genetic algo
+rithm selection strategies[J]. Computer Engineering
+and Design,2009,30:5471.[张 琛 ,詹 志 辉 . 遗 传 算 法 选 择 策 略 比 较[J]. 计 算 机 工 程 与 设 计 ,2009,
+30 :5471. ]
+[21] Harikirank. sql-injection-payload-list[EB/OL].[2024
+01-25]. https://github. com/payloadbox/sql-injection
+payload-list8.
+(责 任 编 辑 :伍 少 梅)
