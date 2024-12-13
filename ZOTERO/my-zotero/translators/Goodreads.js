@@ -1,15 +1,15 @@
 {
 	"translatorID": "c3ecf413-ddd6-4d98-86e2-f63054bd2cc8",
+	"translatorType": 4,
 	"label": "Goodreads",
 	"creator": "Abe Jellinek",
 	"target": "^https?://www\\.goodreads\\.com/(book/show/|search\\?)",
 	"minVersion": "3.0",
-	"maxVersion": "",
+	"maxVersion": null,
 	"priority": 100,
 	"inRepository": true,
-	"translatorType": 4,
 	"browserSupport": "gcsibv",
-	"lastUpdated": "2021-07-07 18:32:10"
+	"lastUpdated": "2024-12-11 18:55:00"
 }
 
 /*
@@ -37,7 +37,7 @@
 
 
 function detectWeb(doc, url) {
-	if (url.includes('/book/show/') && doc.querySelector('meta[property="books:isbn"]')) {
+	if (url.includes('/book/show/') && getISBN(doc)) {
 		return "book";
 	}
 	else if (getSearchResults(doc, true)) {
@@ -73,7 +73,7 @@ function doWeb(doc, url) {
 }
 
 function scrape(doc, _url) {
-	let ISBN = ZU.cleanISBN(attr(doc, 'meta[property="books:isbn"]', 'content'));
+	let ISBN = getISBN(doc);
 	
 	// adapted from Amazon translator
 	let search = Zotero.loadTranslator('search');
@@ -91,6 +91,13 @@ function scrape(doc, _url) {
 	Z.debug(`Searching by ISBN: ${ISBN}`);
 	search.setSearch({ ISBN });
 	search.getTranslators();
+}
+
+function getISBN(doc) {
+	let json = text(doc, 'script[type="application/ld+json"]');
+	if (!json) return null;
+	json = JSON.parse(json);
+	return json.isbn;
 }
 
 /** BEGIN TEST CASES **/
