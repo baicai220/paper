@@ -1,0 +1,1398 @@
+ISSN1000G0054 CN11G2223/N
+清华大学学报 (自然科学版) JTsinghuaUniv(Sci& Technol)
+2018年 第58卷 第12期 2018,Vol.58, No.12
+6/10 1079G1094
+从自动化到智能化: 软件漏洞挖掘技术进展
+邹权臣1, 张 涛1, 吴润浦1, 马金鑫1, 李美聪1, 陈 晨2,3, 侯长玉4
+(1.中国信息安全测评中心,北京 100085;2.空军工程大学 信息与导航学院,西安 710077;
+3.北京邮电大学 网络空间安全学院,北京 100876;4.北京中测安华科技有限公司,北京 100085)
+收 稿 日 期 :2018G08G17
+基 金 项 目 :国 家 自 然 科 学 基 金 重 点 项 目 (U1736209);
+国 家 自 然 科 学 基 金 青 年 科 学 基 金 项 目 (61502536);
+国 家 自 然 科 学 基 金 面 上 项 目 (61872386)
+作 者 简 介 :邹 权 臣 (1986— ),男 ,博 士 后 .
+通 信 作 者 :张 涛 ,研 究 员 ,EGmail:zhangt@itsec.gov.cn
+摘 要:近年来,随着软件规模和复杂度的日益增 加,软 件
+漏洞挖掘技术正 逐 渐 向 高 度 自 动 化 和 智 能 化 演 变,该 文 从
+传统漏洞挖掘技术和基于学习的智能化漏洞挖掘技术两方
+面 深 入 调 研 和 分 析 了 相 关 的 研 究 进 展 .首 先 ,从 静 态 和 动 态
+挖掘技术2方面详细介绍了传统漏洞挖掘技术的研究现状,
+涉及的技术包括模型检测、二进制比对、模糊测试、符 号 执
+行以及漏洞可利 用 性 分 析 等,并 分 析 了 各 项 技 术 存 在 的 问
+题,提出当前的研究难点是 实 现 漏 洞 挖 掘 全 自 动 化.然 后,
+介绍了机器学 习 和 深 度 学 习 技 术 在 漏 洞 挖 掘 领 域 的 应 用,
+具 体 应 用 场 景 包 括 二 进 制 函 数 识 别 、函 数 相 似 性 检 测 、测 试
+输 入 生 成 、路 径 约 束 求 解 等 ,并 提 出 了 其 存 在 的 机 器 学 习 算
+法不够健壮安全、算法选择依靠经验、数据样本不 足、特 征
+选 择 依 赖 专 家 知 识 等 问 题 .最 后 ,对 未 来 研 究 工 作 进 行 了 展
+望 ,提 出 应 该 围 绕 提 高 漏 洞 挖 掘 的 精 度 和 效 率 、提 高 自 动 化
+和智能化的程度这2方面展开工作.
+关键词:漏洞挖掘;模糊 测 试;符 号 执 行;机 器 学 习;深 度
+学习
+中图分类号:TP311.5 文献标志码:A
+文 章 编 号 :1000G0054(2018)12G1079G16
+DOI:10.16511/j.cnki.qhdxxb.2018.21.025
+Fromautomationtointelligence: Surveyofresearchonvulnerability discoverytechniques
+ZOUQuanchen1,ZHANGTao1,WURunpu1,MAJinxin1, LIMeicong1,CHENChen2,3,HOUChangyu4
+(1.ChinaInformationTechnologysecurity EvaluationCenter,Beijing100085,China; 2.SchoolofInformationandNavigation,AirForce EngineeringUniversity,Xi􀆳an710077,China; 3.SchoolofCyberspaceSecurity,BeijingUniversity ofPostsandTelecommunications,Beijing100876,China; 4.BeijingCentralSecurityEvaluationTechnology Co.Ltd.,Beijing100085,China)
+Abstract:In recentyears,theincreasing size and complexity of software packages has led to vulnerability discovery techniques gradually becoming more automatic and intelligent. This paper
+reviewsthesearch characteristics ofboth traditionalvulnerability discovery techniques and learningGbased intelligent vulnerability discoverytechniques.Thetraditionaltechniquesincludestaticand dynamic vulnerability discovery techniques which involve model checking,binary comparisons,fuzzing,symbolic execution and vulnerability exploitability analyses. This paper analyzes the problemsofeach technique and the challengesforrealizing full automationofvulnerabilitydiscovery.Then,thispaperalsoreviews machine learning and deep learning techniques for vulnerability discovery that include binary function identification, function similarity detection,testinput generation,and path constraint solutions.Some challenges are the security and robustness of machinelearningalgorithms,algorithmselection,datasetcollection, andfeature selection.Finally,future research should focus on improvingthe accuracy and efficiency of vulnerability discovery algorithmsandimprovingtheautomationandintelligence.
+Keywords:vulnerability discovery;fuzzing;symbolic execution; machinelearning;deeplearning
+漏洞信息的不对称性已经成为导致网络战争中
+的实力对 比 悬 殊 的 关 键 因 素.从 早 年 爆 发 的 蠕 虫
+王、冲 击 波、 震 荡 波 病 毒, 到 近 年 来 爆 发 的
+WannaCry病毒,都借助 了 软 件 或 系 统 的 安 全 漏 洞
+进行传播.另 外,高 级 的 网 络 攻 击 (如 APT 攻 击)
+甚至会基于多个漏洞 交 叉、组 合 使 用,目 的 是 绕 过
+防火 墙、杀 毒 软 件、入 侵 检 测 系 统 等,摧 毁 隔 离 网
+的安全性,突破核心 网 络 节 点 而 进 入 内 网,进 行 后
+续 的 渗 透 攻 击 (如 窃 取 、修 改 、加 密 重 要 数 据 ,摧 毁
+核心设施等).特别是未公开的0day漏洞常常被 当
+成 秘 密 的 终 极 武 器 使 用 ,有 时 候 甚 至 能 起 到 决 定 性
+的作用.
+
+
+1080 清 华 大 学 学 报 (自 然 科 学 版) 2018,58(12)
+鉴 于 软 件 漏 洞 在 网 络 攻 防 中 的 重 要 性 ,各 大
+软 件 厂 商 及 高 校 、科 研 院 所 的 研 究 人 员 对 漏 洞 挖
+掘 技 术 展 开 了 大 量 的 研 究 .当 前 ,常 用 的 漏 洞 挖
+掘 技 术 包 括 模 型 检 测 、模 糊 测 试 、符 号 执 行 、二
+进 制 比 对 等 ,这 些 传 统 的 漏 洞 挖 掘 技 术 在 理 论 研
+究 上 已 经 比 较 成 熟 ,并 已 从 各 类 软 件 中 挖 掘 出 大
+量 漏 洞 .其 中 大 部 分 的 技 术 如 模 糊 测 试 、符 号 执
+行 等 都 已 基 本 实 现 自 动 化 ,可 以 在 不 需 要 或 较 少
+的 人 工 干 预 的 前 提 下 ,针 对 被 测 试 程 序 和 输 入 数
+据的不 同 特 点,借 助 各 种 程 序 动、静 态 分 析 技
+术 ,寻 找 分 析 深 度 和 分 析 效 率 之 间 的 平 衡 点 ,缓
+解 代 码 覆 盖 率 低 、扩 展 性 差 等 问 题 ;目 的 是 提 高
+漏 洞 挖 掘 的 效 率 ,实 现 在 更 短 的 时 间 内 发 现 更 多
+或更深层次的漏洞.
+机 器 学 习 、深 度 学 习 的 研 究 进 展 带 动 了 其 在 软
+件 漏 洞 挖 掘 领 域 的 应 用 ,目 前 已 经 开 展 了 一 些 探 索
+性的工作,如二进制 函 数 相 似 性 识 别、函 数 相 似 性
+检测、测 试 输 入 生 成、路 径 约 束 求 解 等,这 些 应 用
+为解决传统漏洞挖掘技术的瓶颈问题提供了新的思
+路,也使得软件漏洞 挖 掘 逐 渐 变 得 智 能 化.随 着 机
+器学习、深度学习研 究 的 爆 炸 式 发 展,以 及 这 方 面
+研 究 积 累 的 数 据 集 的 增 多 ,将 可 能 成 为 软 件 漏 洞 挖
+掘技术发展的关键点之一.
+本文以近年来软件漏洞挖掘技术所呈现出的自
+动 化 和 智 能 化 的 趋 势 作 为 切 入 点 ,介 绍 了 传 统 漏 洞
+挖掘技术和基于学习的智能化漏洞挖掘技术的研究
+进展.首先,本文从静 态 和 动 态 漏 洞 挖 掘 两 方 面 对
+传 统 的 漏 洞 挖 掘 技 术 进 行 了 分 类 分 析 ,指 出 了 各 自
+的 优 势 和 面 临 的 问 题 ;并 介 绍 了 漏 洞 可 利 用 性 分 析
+以及自动化 漏 洞 挖 掘 (如 CGC 大 赛 )的 研 究 进 展,
+指出漏洞挖掘的全自动化是当前研究的难点问题.
+然 后 ,对 基 于 学 习 的 智 能 化 软 件 漏 洞 挖 掘 技 术 进 行
+了分类,并深入分析 了 二 进 制 函 数 识 别、函 数 相 似
+性 检 测 等 不 同 应 用 场 景 的 研 究 工 作 ,归 纳 总 结 了 其
+面 临 的 机 器 学 习 算 法 不 够 健 壮 安 全 、算 法 选 择 依 靠
+经验、数据样本不足、特 征 选 择 依 赖 专 家 知 识 等 四
+大问题.最后进行了 总 结 和 展 望,指 出 未 来 应 在 提
+高 漏 洞 挖 掘 的 精 度 和 效 率 ,以 及 自 动 化 和 智 能 化 方
+面展开研究.
+1 传统漏洞挖掘技术
+传统的漏洞挖掘技术主要可分为静态和动态漏
+洞 挖 掘 技 术 ,漏 洞 可 利 用 性 分 析 也 已 经 成 为 漏 洞 挖
+掘 的 重 要 环 节 ,如 图 1 所 示 .
+图1 传统漏洞挖掘技术研究
+1.1 静态漏洞挖掘
+静态漏洞挖掘是指在不运行目标程序的前提下
+分 析 目 标 程 序 (源 代 码 或 二 进 制 )的 词 法 、语 法 和 语
+义等,并 结 合 程 序 的 数 据 流、控 制 流 信 息,通 过 类
+型推导、安全规则检 查、模 型 检 测 等 技 术 挖 掘 程 序
+中的漏洞.静态 漏 洞 挖 掘 是 常 用 的 软 件 测 试 技 术,
+在 软 件 测 试 中 占 有 非 常 重 要 的 地 位 .具 有 代 表 性 的
+静 态 漏 洞 挖 掘 工 具 有 面 向 C/C + + 源 码 的
+Cppcheck[1]、FlawFinder[2], 面 向 PHP 源 码 的
+RIPS[3],面 向 JAVA 源 码 的 FindBugs[4],以 及 能
+支持多种类型目标对象的著名商业化漏洞检测工具
+VeraCode[5]、Fortify[6]、Coverity[7]、Checkmarx[8]
+
+
+邹权臣,等: 从自动化到智能化:软件漏洞挖掘技术进展 1081
+等 .另 外 ,LLVM[9]、Clang[10]等 编 译 器 也 提 供 了 大
+量 的 静 态 检 测 功 能 ,能 在 编 译 阶 段 实 现 对 源 代 码 的
+安全性检查.
+针 对 目 标 程 序 的 不 同 形 式 ,采 用 的 静 态 分 析 技
+术也不尽相同.本节将按源代码和二进制 2 种目标
+程序分别介绍静态漏洞挖掘技术的研究现状.
+面向源代码的漏洞挖掘主要采用基于中间表示
+的分析和基于逻辑推理的分析技术[11].其 中,基 于
+中 间 表 示 的 分 析 技 术 主 要 包 括 数 据 流 分 析 、控 制 流
+分析、污 点 分 析、符 号 执 行 等.Pixy[12]采 用 了 取 值
+分析、污点分析、指针 别 名 分 析 等 静 态 分 析 技 术 实
+现对 PHP 源码中的 SQL 注入和跨站脚本等漏洞的
+检测.Prefix[13]采用了静 态 符 号 执 行 技 术 模 拟 执 行
+C/C++ 源码程序,并采用约束求解对程序中 的 部
+分路 径 进 行 检 测.Melange[14]采 用 数 据 流 分 析 的 框
+架,通过对程序进行 数 据 流、控 制 流 等 复 杂 分 析 检
+测安全相关的漏洞,并支持对大型 C/C++源码程
+序的分析.KGMiner[15]利用内 核 代 码 中 高 度 标 准 化
+的接口实现了可扩展性良好的指针分析以及全局的
+上下文敏感的分析 技 术,支 持 对 空 指 针 引 用、指针
+释放后 重 引 用 (useGafterGfree,UAF)、指 针 重 释 放
+(doublefree)、双重检查锁定(doubleGcheckedlock)等
+内 存 崩 溃 漏 洞 的 检 测 .基 于 逻 辑 推 理 的 分 析 技 术
+主 要 是 指 模 型 检 测 , 如 MOPS[16]、BLAST[17]、
+SLAM[18]是 典 型 的 面 向 C 程 序 的 模 型 检 测 工 具,
+其基本 思 路 是 将 程 序 结 构 抽 象 为 状 态 机 (布 尔 程
+序 ),然 后 基 于 归 纳 的 安 全 属 性 对 状 态 机 进 行 遍 历 ,
+检测其中存在的漏洞.
+面向二进制程序的静态漏洞的挖掘技术由于缺
+少 源 代 码 中 的 结 构 化 信 息 ,面 临 着 值 集 分 析 (vauleG
+setanalysis,VSA)[19]与 控 制 流 恢 复[2025]不 精 确 的
+问题.当前,二进制静 态 漏 洞 挖 掘 技 术 主 要 包 括 基
+于模式匹配和基于补 丁 比 对 的 技 术.其 中,在 基 于
+模式匹配的漏洞挖掘技术方面,GUEB[26]提 出 了 二
+进制程序中 UAF 漏 洞 模 式,并 基 于 此 模 式 挖 掘 出
+了 ProFTPD 程序 中 的 漏 洞.具 体 而 言,首 先 抽 象
+出二进制函数 中 的 内 存 模 型,然 后 采 用 VSA 分 析
+技 术 追 踪 堆 分 配 和 释 放 指 令 相 关 的 操 作 变 量 ,并 基
+于此建立 UAF 模式.LoongChecker[27]使 用 了 称 为
+半仿 真 的 二 进 制 静 态 漏 洞 挖 掘 技 术 .通 过 VSA 分
+析 和 数 据 依 赖 分 析 (data dependenceanalysis,
+DDA)技 术 实 现 对 变 量 地 址 的 追 踪 和 数 据 流 依 赖
+分析,并 采 用 污 点 分 析 技 术 检 测 潜 在 的 漏 洞.
+Saluki[28]使用了路径敏感和上下文敏感 的 数 据 依 赖
+分 析 ,并 采 用 完 备 的 逻 辑 系 统 推 理 检 测 程 序 中 的
+漏洞.在 基 于 补 丁 比 对 的 漏 洞 挖 掘 技 术 方 面,
+PVDF[29]以 二 进 制 漏 洞 程 序 (带 有 权 限 提 升 漏 洞 )
+和 补 丁 作 为 输 入 ,从 比 对 中 提 取 多 维 属 性 描 述 的
+漏洞 语 义 信 息,并 应 用 于 后 续 的 模 糊 测 试 中.
+BinHunt[30]通过对二进制程序和带补丁的二进制 程
+序间的比对提 取 漏 洞 相 关 的 语 义 信 息.具 体 而 言,
+就 是 把 二 进 制 程 序 翻 译 成 中 间 表 示 ,并 在 此 基 础 上
+构建控制流图,基 于 控 制 流 图 对 比 程 序 间 的 差 异,
+提取相关 的 约 束,然 后 采 用 符 号 执 行 技 术 进 行 验
+证 ,以 此 找 出 补 丁 对 应 的 漏 洞 .
+静态漏洞挖掘技术直接对目标程序进行分析,
+不 需 要 构 造 程 序 的 执 行 环 境 ,能 提 取 较 为 完 整 的 控
+制 流 等 信 息 ,可 能 发 现 动 态 漏 洞 挖 掘 技 术 难 以 发 现
+的漏 洞.但 是,一 方 面,由 于 静 态 漏 洞 挖 掘 技 术 往
+往 依 赖 于 人 工 构 造 的 漏 洞 模 式 ,对 先 验 知 识 依 赖 性
+较大;另一方面,因为 无 法 获 得 程 序 实 际 动 态 运 行
+过 程 中 的 上 下 文 信 息 ,静 态 漏 洞 挖 掘 技 术 具 有 精 度
+低 、误 报 率 高 的 缺 陷 .
+1.2 动态漏洞挖掘
+动态漏洞挖掘技术是指在实际执行程序的基础
+上 采 用 的 分 析 技 术 ,常 用 的 动 态 漏 洞 挖 掘 技 术 包 括
+模 糊 测 试 、符 号 执 行 等 .
+1.2.1 模糊测试
+模糊测 试 (fuzzing)是 一 种 自 动 化 或 者 半 自 动
+化的软件测试技术,通 过 构 造 随 机 的、非 预 期 的 畸
+形 数 据 作 为 程 序 的 输 入 ,并 监 控 程 序 执 行 过 程 中 可
+能产生的异常,之 后 将 这 些 异 常 作 为 分 析 的 起 点,
+确定漏洞的可 利 用 性.模 糊 测 试 技 术 可 扩 展 性 好,
+能 对 大 型 商 业 软 件 进 行 测 试 ,是 当 前 最 有 效 的 用 于
+挖 掘 通 用 程 序 漏 洞 的 分 析 技 术 ,已 经 被 广 泛 用 于 如
+微软、谷歌和 Adobe等主流软件公司的软件产品测
+试 和 安 全 审 计 ,也 是 当 前 安 全 公 司 和 研 究 人 员 用 于
+挖掘漏洞的主要方法之一.
+按 程 序 内 部 结 构 分 析 的 量 级 轻 重 程 度 分 ,模 糊
+测试 技 术 主 要 可 以 分 为 白 盒、黑 盒、灰 盒 模 糊 测
+试.其中,白盒模糊测 试 是 在 对 被 测 试 程 程 序 内 部
+结构、逻辑进行系统 性 分 析 的 基 础 上 进 行 测 试;黑
+盒 模 糊 测 试 把 程 序 当 成 黑 盒 处 理 ,不 对 程 序 内 部 进
+行 分 析 ;灰 盒 模 糊 测 试 介 于 黑 盒 和 白 盒 模 糊 测 试 之
+间,在对程序进 行 轻 量 级 分 析 的 基 础 上 进 行 测 试.
+按 样 本 生 成 方 式 划 分 ,模 糊 测 试 的 测 试 输 入 可 分 为
+基于变异和基于生成 2 种 方 式.其 中,基 于 变 异 的
+
+
+1082 清 华 大 学 学 报 (自 然 科 学 版) 2018,58(12)
+模糊测试在修改已知测试输入的基础上生成新的测
+试 用 例 ,而 基 于 生 成 的 模 糊 测 试 则 是 直 接 在 已 知 输
+入样本格式的基础上生成新的测试输入.
+根 据 不 同 的 研 究 侧 重 点 ,本 文 分 别 介 绍 基 于 变
+异的模糊 测 试、基 于 生 成 的 模 糊 测 试 和 其 他 优 化
+策略.
+1)基 于 变 异 的 模 糊 测 试 .
+在 基 于 变 异 的 模 糊 测 试 方 面 ,研 究 人 员 借 助 程
+序执行环 境 信 息 和 程 序 分 析 技 术,有 导 向 性 地 辅
+助、引 导 模 糊 测 试 的 变 异,具 有 代 表 性 的 工 作 有
+AFL[31]、VUzzer[32]、Honggfuzz[33]、libFuzzer[34]、
+Steelix[35]、 TGFuzz[36]、 AFLFast[37]、 AFLGo[38]、
+Driller[39]等 .
+a)代 码 覆 盖 率 制 导 .
+AFL[31]使 用 进 化 算 法 (evolutionaryalgorithms)
+生成测试输入,在正 常 输 入 的 基 础 上,通 过 简 单 的
+反馈回路 的 方 式 评 估 测 试 输 入 的 质 量.AFL 会 保
+留 任 何 能 触 发 新 路 径 的 测 试 输 入 ,并 对 其 进 行 变 异
+及 检 查 能 否 触 发 崩 溃. AFL 已 经 在 Mozilla
+Firefox、FFmpeg、OpenSSL 等 软 件 中 发 现 了 大 量
+的漏洞.但 AFL 也存在较大的缺陷:首先,变异的
+位 置 以 及 变 异 的 方 式 是 盲 目 的 ,缺 少 更 进 一 步 的 筛
+选 和 变 异 策 略 ,依 赖 这 种 方 式 很 难 发 现 深 层 次 的 漏
+洞;其次,通过哈希函 数 检 测 分 支 覆 盖 筛 选 种 子 的
+方式具有较高的误报率,其哈希位图(bitmap)只 有
+64kB 大小,导致 普 遍 存 在 哈 希 碰 撞 的 情 况,进 而
+导致其分 支 覆 盖 统 计 存 在 漏 报,进 而 影 响 种 子 筛
+选,间接影响了代 码 覆 盖 率 的 增 长.CollFuzz[40]采
+用 静 态 控 制 流 图 信 息 作 为 辅 助 ,并 设 计 了 能 避 免 哈
+希碰撞的基本块ID 分配策略,从而实现比 AFL 更
+精确的分支覆盖检测.
+b)污 点 分 析 辅 助 .
+BuzzFuzz[41]使用 动 态 污 点 分 析 技 术 自 动 定 位
+影 响 程 序 脆 弱 点 的 测 试 输 入 中 的 字 段 ,然 后 保 留 其
+他语法部分内容,只 对 这 些 字 段 进 行 变 异.这 样 既
+能通过语法检查,也 能 有 针 对 性 地 进 行 变 异,提 高
+漏洞挖掘的效率.TaintScope[42]使用 污 点 分 析 技 术
+推 断 程 序 中 与 校 验 和 处 理 相 关 的 代 码 ,以 此 帮 助 模
+糊测试工具绕过校验和检查.
+c)符 号 执 行 制 导 .
+Driller[39]采用 模 糊 测 试 和 符 号 执 行 交 替 探 索
+程 序 执 行 路 径 ,解 决 模 糊 测 试 陷 入 代 码 覆 盖 率 增 长
+慢 的 情 况 ,这 样 能 引 导 模 糊 测 试 探 索 到 程 序 更 深 层
+次 的 节 点 ,也 能 直 接 避 免 符 号 执 行 可 能 带 来 的 路 径
+爆炸问题.但文[39]和[43]等 的 实 验 结 果 表 明,使
+用 符 号 执 行 对 模 糊 测 试 中 部 分 路 径 约 束 求 解 时 ,仍
+然有很大一部分路 径 出 现 求 解 失 败 的 情 况 (文 [39]
+实验中有41个 测 试 程 序 陷 入 了 较 浅 路 径,使 用 符
+号执行对其求解时 只 有 13 个 程 序 能 够 生 成 新 的 测
+试输入).因 此,基 于 符 号 执 行 增 强 的 模 糊 测 试 技
+术 仍 然 会 受 限 于 符 号 执 行 中 的 约 束 求 解 问 题 ,符 号
+执行的引入可能会弱化模糊测试本身的可扩展性.
+d)控 制 流 和 数 据 流 信 息 制 导 .
+VUzzer[32]在“轻 量 级 ”的 动、静 态 分 析 基 础 上
+提 取 了 程 序 的 控 制 流 和 数 据 流 信 息 引 导 变 异 .具 体
+而言,VUzzer先 在 静 态 控 制 流 分 析 基 础 上 计 算 基
+本 块 的 权 重 ,然 后 在 动 态 执 行 时 筛 选 权 重 更 高 即 路
+径 更 深 的 执 行 路 径 对 应 的 测 试 输 入 为 种 子 文 件 ,并
+用动态污 点 分 析 定 位 变 异 点.相 比 AFL、Driller,
+VUzzer有更好的 种 子 筛 选、路 径 探 索 策 略 以 及 污
+染点定位、变异策略,能 定 向 引 导 探 索 更 深 的 执 行
+路径,并 定 点 变 异.在 DARPA CGC 和 LAVA 测
+试集以及部 分 常 用 应 用 程 序 上,VUzzer都 取 得 了
+更好的效果(用更 少 的 测 试 输 入 挖 掘 出 了 更 多 的 漏
+洞).Steelix[35]采用 了 轻 量 级 的 静 态 分 析 和 二 进 制
+插桩技术 提 取 代 码 覆 盖 率 信 息 和 魔 术 字 节 (magic
+byte)比较信 息 等 作 为 程 序 状 态 信 息 引 导 变 异.这
+种方式能在较小的开销下定位魔术字节在测试输入
+中 的 位 置 ,进 而 辅 助 模 糊 测 试 工 具 更 高 效 地 生 成 能
+通过魔术字节检验的测试输入.
+2)基 于 生 成 的 模 糊 测 试 .
+基于生成的模糊测试主要基于模型或者语法生
+成 能 满 足 程 序 语 法 和 语 义 检 查 的 测 试 输 入 ,常 用 于
+高度结构化的测试输入生成.
+a)基 于 模 型 的 模 糊 测 试 .
+Peach[44]、Spike[45]是 典 型 的 基 于 模 型 的 模 糊
+测试工具(Peach 也 具 有 基 于 变 异 进 行 模 糊 测 试 的
+功能),通 过 对 输 入 格 式 定 制 编 写 数 据 模 型 (data
+model)和 状 态 模 型 (statemodel)的 方 式 指 定 输 入 数
+据 的 类 型 和 依 赖 关 系 ,并 结 合 变 异 策 略 生 成 测 试 输
+入.其中 Peach通过编写配置文件实现对样本 格 式
+的约束,而 Spike需要 利 用 提 供 的 编 程 接 口 来 对 样
+本格式进行约束.Pham 等[46]结 合 输 入 模 型 和 符 号
+执 行 技 术 生 成 测 试 输 入 ,使 用 符 号 执 行 鉴 别 输 入 格
+式约束能有效保证输入的合法性.
+b)基 于 语 法 的 模 糊 测 试 .
+CSmith[47]根据 C 语 言 语 法 生 成 C 程 序 源 码,
+实现对 C 编译器的模糊测试.在 C 源码生成 方 面,
+
+
+邹权臣,等: 从自动化到智能化:软件漏洞挖掘技术进展 1083
+CSmith随机选取符合生 成 规 则 和 语 法 规 则 的 C 程
+序 ,这 种 方 法 能 避 免 因 未 定 义 和 未 声 明 而 导 致 编 译
+报错的情 况 出 现.LangFuzz[48]基 于 语 法 学 习 测 试
+集 中 的 代 码 片 段 ,并 进 行 片 段 重 组 生 成 新 的 测 试 输
+入 .在 测 试 输 入 集 选 择 上 ,LangFuzz假 设 基 于 问 题
+测试集重组生成的测试输入比随机收集的测试输入
+更有可能 触 发 程 序 缺 陷.IFuzzer[49]使 用 上 下 文 无
+关的语言语法 作 为 输 入,并 使 用 语 法 生 成 解 析 树,
+然 后 从 测 试 集 中 抽 取 代 码 片 段 ,并 使 用 遗 传 进 化 算
+法 对 代 码 片 段 重 组 生 成 新 的 测 试 输 入 .Jsfunfuzz[50]
+使用了历史漏洞知识和硬编码规则生成测试输入,
+以 Mozilla浏览 器 中 的 Javascript解 释 器 为 测 试 目
+标,发现了1800 多个缺 陷.Dewey等[51]使 用 了 称
+为 约 束 逻 辑 编 程 (constraintlogicprogramming,
+CLP)的技术 生 成 测 试 输 入.通 过 指 定 句 法 特 征 和
+语义行为,CLP 能生成满足语法和语义合法性的测
+试输入.
+3)其 他 优 化 策 略 .
+除 了 上 述 进 展 外 ,还 有 一 些 重 要 研 究 侧 重 于 种
+子 筛 选 策 略 优 化[3738,5255] 和 调 度 策 略 优 化[3738].
+Rebert等[53]把种子 筛 选 问 题 转 化 成 整 数 线 性 规 划
+问 题 ,并 以 挖 掘 更 多 漏 洞 为 目 标 提 出 了 多 种 种 子 筛
+选策略.AFLFast[37]采用了把模糊测试问题建模 为
+Markov模 型 ,并 采 用 特 定 的 策 略 引 导 AFL 优 先
+选择低频路径和变异频率较低的文件作为种子文
+件 进 行 变 异 ,以 此 在 相 同 的 测 试 时 间 内 探 索 更 多
+的 路 径 .AFLGo[38] 采 用 了 模 拟 退 火 (simulated
+annealing,SA)算法对能 逼 近 特 定 目 标 位 置 的 测 试
+输 入 分 配 更 高 的 能 量 ,并 优 先 选 取 高 能 量 种 子 文 件
+进行变异.AFLGo 的 实 验 结 果 表 明,这 种 导 向 型
+灰盒模 糊 测 试 (directedgreyboxfuzzing,DFG)比
+符号执行引导的白盒模糊测试和非导向型模糊测试
+具 有 更 好 的 性 能 、更 高 的 代 码 覆 盖 率 并 可 挖 掘 出 更
+多的漏洞.
+总 体 而 言 ,模 糊 测 试 是 当 前 挖 掘 漏 洞 最 有 效 的
+方法,比其他漏 洞 挖 掘 技 术 更 能 应 对 复 杂 的 程 序,
+具 有 可 扩 展 性 好 的 优 势 .但 在 大 规 模 漏 洞 分 析 测 试
+中,模糊测试方法仍 然 依 赖 于 种 子 输 入 的 质 量,依
+赖 于 对 测 试 输 入 对 象 格 式 的 深 度 理 解 和 定 制 ,存 在
+测试冗余、测试攻击 面 模 糊、测 试 路 径 盲 目 性 较 高
+等问题.另外,目前模 糊 测 试 也 存 在 整 体 测 试 时 间
+长 、生 成 单 个 测 试 用 例 漏 洞 触 发 能 力 弱 的 问 题 .
+1.2.2 符号执行
+符号执行于20世纪70年代被 提 出[5659],是 一
+种能够系统性探索程序执行路径的程序分析技术,
+通过对程序执行过程中的被污染的分支条件及其相
+关变量的收集和翻译,生 成 路 径 约 束 条 件,然 后 使
+用 可 满 足 模 理 论 (SMT)求 解 器 进 行 求 解 ,判 断 路 径
+的 可 达 性 以 及 生 成 相 应 的 测 试 输 入 .通 过 这 种 方 式
+产生的测 试 输 入 与 执 行 路 径 之 间 具 有 一 对 一 的 关
+系,能够避免冗余测 试 输 入 的 产 生,进 而 能 有 效 解
+决模糊测试冗余测试用例过多导致的代码覆盖率增
+长慢的问题.
+符号执行技术应用已经被学术和工业界应用在
+漏 洞 挖 掘 领 域 .自 从 符 号 执 行 特 别 是 动 态 符 号 执 行
+技 术 被 提 出 以 来 ,已 经 有 很 多 相 关 的 工 具 被 应 用 到
+实 际 的 软 件 测 试 当 中, 如 SAGE[60]、S2E[61]、
+Mayhem[62]、KLEE[63]、Triton[64]、angr[6566] 等.
+其中 SAGE 已经 被 应 用 到 了 微 软 内 部 的 日 常 开 发
+安全测试 中,每 天 有 上 百 台 机 器 同 时 在 运 行 此 工
+具,并 发 现 了 Windows7 系 统 中 三 分 之 一 的 漏
+洞[60].MergePoint[67]已 经 在 Debian 系 统 下 发 现 上
+百个可利用漏洞.
+虽然符号执行相比其他程序测试和分析技术有
+诸多的优势,但就当 前 的 形 势 而 言,要 大 规 模 应 用
+到 工 业 领 域 仍 然 还 有 很 多 问 题 需 要 解 决 .符 号 执 行
+概念提出至今 已 有 40 多 年,而 现 代 符 号 执 行 技 术
+特 别 是 动 态 符 号 执 行 技 术 的 提 出 也 有 10 多 年 之 久 ,
+但至今符号执行仍然难以在主流的软件测试和漏洞
+挖 掘 中 占 据 主 导 地 位,归 因 于 以 下 尚 待 解 决 的
+难题.
+1)路 径 爆 炸 (pathexplosion)问 题 .
+路径 爆 炸 又 称 为 状 态 爆 炸 (stateexplosion),
+是指在程序运行过程中路径数随着分支条件的增多
+而 出 现 指 数 级 增 长 的 情 况 .由 于 路 径 爆 炸 问 题 的 存
+在,在大型复杂的程 序 中,符 号 执 行 容 易 出 现 代 码
+覆 盖 率 增 长 慢 的 问 题 ,很 难 在 合 理 有 限 的 时 间 内 遍
+历程序的所有执行路 径.为 了 缓 解 这 一 问 题,研 究
+人员采用了具有制导性的启发式搜索以及状态空间
+简化等操作减少对冗余状态的探索.
+启发式 搜 索 (searchheuristics)是 一 种 以 特 定
+目 标 优 先 的 路 径 搜 索 策 略 .符 号 执 行 过 程 中 对 路 径
+的 探 索 可 以 看 成 是 对 符 号 执 行 树 的 探 索 ,在 执 行 树
+中 ,从 根 节 点 到 叶 子 节 点 的 一 条 路 径 代 表 程 序 实 际
+执 行 中 的 一 条 路 径 ,而 其 中 的 分 支 节 点 则 表 示 程 序
+实 际 执 行 中 的 分 支 条 件 .大 部 分 启 发 式 技 术 都 专 注
+于避免因陷入某部分相似路径而导致代码覆盖率低
+增长的情 况,以 期 获 得 更 高 的 代 码 和 路 径 覆 盖.
+
+
+1084 清 华 大 学 学 报 (自 然 科 学 版) 2018,58(12)
+KLEE[63]中 提 出 结 合 随 机 路 径 选 择 (random path
+selection)和 覆 盖 优 化 搜 索 (coverageGoptimized
+search)的 混 合 搜 索 算 法 ,2 种 路 径 选 择 方 法 交 叉
+使用探索执行路径既能达到高代码覆盖率的 目
+的 ,又 能 防 止 某 种 算 法 陷 入 困 境 导 致 路 径 探 索 无
+法 进 行 .Ma等[68]提出了以指定 行 代 码 可 达 性(line
+reachability)为目标 的 搜 索 策 略.以 程 序 中 某 行 或
+多 行 代 码 为 目 标 ,找 出 能 够 驱 动 程 序 执 行 这 些 代 码
+的 实 际 输 入 问 题 称 为 代 码 行 可 达 性 问 题 .Godefroid
+等[60]提出 了 代 搜 索 (generationalsearch)算 法,在
+每一代新 生 成 的 路 径 约 束 中,对 所 有 分 支 条 件 取
+反 ,然 后 能 选 择 覆 盖 新 代 码 块 最 多 的 测 试 输 入 作 为
+新的种子输入.
+状 态 空 间 简 化 通 过 相 似 路 径 合 并 、冗 余 路 径 删
+减 的 方 式 达 到 减 少 路 径 探 测 的 目 的 .除 了 启 发 式 探
+索 程 序 执 行 路 径 之 外 ,研 究 人 员 还 提 出 了 利 用 程 序
+分析和软件验证等技术减少精简路径的措施来缓解
+路径 爆 炸 问 题.Godefroid 等[69]采 用 了 函 数 摘 要 的
+方式,对重用的函数提取 约 束 组 合(摘 要),实 现 对
+函 数 路 径 的 组 合 执 行 ,避 免 了 多 次 重 复 符 号 执 行 带
+来的 开 销.Ramos等[70]提 出 的 限 定 约 束 的 符 号 执
+行 (underGconstraintedsymbolicexecution)采 用 了
+直 接 面 向 独 立 函 数 的 符 号 执 行 技 术 ,此 技 术 限 定 了
+符 号 执 行 的 范 围 ,用 精 确 度 换 取 可 扩 展 性 的 方 式 来
+提升符号执行的性能.Veritesting[67]采 用 了 静 态 符
+号 执 行 技 术 增 强 动 态 符 号 执 行 技 术 ,实 现 路 径 合 并
+和 冗 余 路 径 删 减. Boonstoppel 等[71] 提 出 了
+RWSet,从状态变量的 相 似 性 鉴 别 冗 余 性,如 果 当
+前 状 态 的 变 量 跟 之 前 的 路 径 变 量 一 样 ,则 会 停 止 对
+当前状态的探索.
+2)约 束 求 解 问 题 .
+约束求解问题是动态符号执行遇到的另一个瓶
+颈问题.在动态符号 执 行 中,对 路 径 约 束 条 件 可 达
+性的判定以及相应测试输入生成都需要频繁地调用
+SMT 求解器进 行 求 解;而 约 束 求 解 本 身 又 是 一 个
+NP 完 全 (NPGcomplete)问 题 ,在 最 差 的 情 况 下 求 解
+NP 完 全 问 题 的 复 杂 度 为 指 数 级.频 繁 调 用 加 上 高
+的求解难度直接导致约束求解消耗了符号执行系统
+中的大部分资源.
+当前约束求解问题可以归结为求解能力和求解
+效 率 问 题 .求 解 能 力 问 题 是 指 当 前 求 解 器 对 复 杂 约
+束条件处理能力的不 足.例 如 对 于 浮 点 数 运 算、非
+线 性 运 算 等 一 些 复 杂 运 算 的 约 束 ,求 解 器 都 不 能 很
+好 地 处 理 .而 求 解 效 率 问 题 是 指 对 于 含 有 大 量 的 约
+束 条 件 的 路 径 约 束 ,求 解 器 的 性 能 会 随 着 约 束 条 件
+数 量 的 增 长 而 逐 渐 下 降 .这 使 得 符 号 执 行 对 大 型 程
+序进 行 分 析 时 整 体 性 能 下 降,从 而 影 响 其 可 扩
+展性.
+针 对 约 束 求 解 的 两 大 问 题 ,研 究 人 员 提 出 了 很
+多 约 束 求 解 性 能 优 化 措 施 ,主 要 可 分 为 内 部 优 化 和
+外 部 优 化 .求 解 器 内 部 优 化 是 指 通 过 优 化 求 解 器 本
+身对约束条件处理能力和效率来提高符号执行的性
+能 ,虽 然 近 年 来 这 方 面 的 研 究 已 经 取 得 了 比 较 大 的
+突破[7276],但 仍 然 严 重 依 赖 于 可 满 足 模 理 论 以 及
+NP 完 全 问 题 的 研 究 进 展.求 解 器 外 部 优 化 主 要 是
+指在调用约束求解器对路径约束求解之前的优化,
+是通过减少甚至避免符号查询的工作来增加符号执
+行 性能的措施.例如,CUTE[77]和 KLEE[63]采 用 了
+如 表 达 式 重 写 、符 号 值 的 实 际 替 换 、不 相 关 约 束
+的 删 除 以 及 约 束 缓 存 等 一 系 列 措 施 ,对 路 径 约 束
+进 行 精 简 和 结 果 重 用 .而 近 年 来 在 这 方 面 的 研 究
+又 有 了 不 小 的 突 破 , 包 括 Green[78]、Recal[79]、
+GeenTrie[80]、Memoise[81]等,这些工具的提出 主 要
+侧重于解决优 化 符 号 执 行 结 果 切 分、标 准 化 命 名、
+约束式逻辑转化、求 解 结 果 的 缓 存、搜 索 和 重 用 的
+效率问题.有关这些 工 具 的 实 验 结 果 表 明:路 径 约
+束 的 精 简 能 减 轻 约 束 求 解 的 负 担 ,而 约 束 求 解 结 果
+的缓存和重复使用能在同一程序的不同路径以及不
+同程序的不同路径间的约束求解问题上极大地减少
+对求解器的调用.
+3)其 他 问 题 .
+除 了 上 述 2 个 问 题 之 外 ,符 号 执 行 还 面 临 着 内
+存 建 模[62,6566]、 环 境 交 互[61,63,8283]、 并 行 计
+算[67,84]等 问 题 .
+总 体 而 言 ,基 于 符 号 执 行 的 漏 洞 挖 掘 技 术 依 赖
+于 约 束 求 解 器 的 求 解 能 力 和 效 率 ,并 受 限 于 程 序 状
+态爆炸问题.另外,它 在 主 动 漏 洞 挖 掘 方 面 还 依 赖
+于在对程序进行分 析 的 基 础 上 构 造 预 置 条 件 (漏 洞
+约束).符号执 行 应 用 于 大 型 程 序 是 一 个 多 种 性 能
+优 化 措 施 并 行 且 不 断 地 对 性 能 调 优 的 过 程 ,虽 然 研
+究人员提出了一系列性能优化措施来改善符号执行
+的可扩展性,但当前 业 界 和 学 术 界 普 遍 认 为,单 独
+使用符号执行技术对大型程序进行漏洞挖掘仍然比
+较困难.
+1.3 漏洞可利用性分析
+在 漏 洞 可 利 用 性 判 定 方 面 ,现 有 的 一 些 工 具
+如 !exploitable[85]、gdbGexploitable[86]、ASan[87]等,
+已经可以对漏洞挖掘过程中的异常或崩溃的可利用
+
+
+邹权臣,等: 从自动化到智能化:软件漏洞挖掘技术进展 1085
+性 进 行 初 步 分 类 .例 如 ,!exploitable 对 崩 溃 按 可 利
+用(exploitable)、高可 利 用 (probablyexploitable)、不
+可利用(probablynotexploitable)、未知(unknown)进
+行评级划分,并提供 了 哈 希 去 重 功 能.但 上 述 工 具
+具 有 误 报 率 高 的 缺 陷 ,实 际 验 证 的 时 候 仍 然 需 要 具
+有丰富漏洞挖掘和分析经验的专家进行手工逆向分
+析、调试进行审核确 认,并 编 写 利 用 漏 洞 的 验 证 程
+序.在崩溃样本量较 大 时,这 种 方 式 低 效 而 且 对 分
+析人员具有较高要求.
+在自动化 漏 洞 利 用 生 成 方 面,APEG [88] 使 用
+了 基 于 补 丁 对 比 的 漏 洞 利 用 生 成 技 术 ,该 技 术 基 于
+补丁 定 位 漏 洞 位 置, 并 采 用 切 分 技 术 (slicing
+technique)生成从 输 入 源 至 漏 洞 点 的 路 径 约 束,但
+APEG 只 适 用 于 单 检 查 点 修 补 的 补 丁.Heelan
+等[89]提出了自 动 化 提 取 控 制 流 劫 持 的 漏 洞 利 用 技
+术,但该技术只 在 提 供 崩 溃 输 入 和 已 知 漏 洞 (如 栈
+溢 出 覆 盖 EIP 指 针 )的 前 提 下 适 用.AGE[83]、
+Mayhem[90] 采 用 预 置 条 件 的 符 号 执 行 (preG
+conditionedsymbolicexecution)技术寻找 可 利 用 的
+漏洞路径,并自动生 成 利 用 代 码.但 该 技 术 只 支 持
+对栈 溢 出、格 式 化 字 符 串 等 部 分 漏 洞 的 检 测;另
+外 ,其 自 动 化 生 成 的 漏 洞 利 用 程 序 不 支 持 绕 过 编 译
+器或 OS 对 抗 机 制 如 ASLR(addressspacelayout
+randomization)、DEP(dataexecutionprevention)、
+CFI(controlGflowintegrity)等.FlowStitch[91]采 用
+了 称 为 数 据 流 缝 合 (dataGflowstitching)的 面 向 数 据
+流 的 自 动 化 漏 洞 利 用 生 成 技 术 ,该 技 术 在 不 改 变 程
+序 控 制 流 的 情 况 下 ,利 用 已 知 的 内 存 错 误 修 改 数 据
+流 中 关 键 变 量 的 方 式 构 建 漏 洞 利 用 程 序.
+FlowStitch 从 已 知 漏 洞 程 序 中 发 现 了 多 个 未 知 的 漏
+洞利用方 式,自 动 生 成 的 所 有 利 用 程 序 都 能 通 过
+CFI和 DEP,并有部 分 能 绕 过 ASLR,进 而 实 现 信
+息 泄 露 或 权 限 提 升 .但 该 方 案 仍 然 依 赖 于 已 知 的 内
+存错误和相应的测试输入.
+总 体 而 言 ,漏 洞 可 利 用 性 判 定 、漏 洞 利 用 程
+序生成是制约实现漏洞挖掘自动化的主要瓶颈
+之一.
+1.4 自动化漏洞挖掘
+2016年 8 月,美 国 国 防 部 高 等 研 究 计 划 署
+(DARPA)举 办 了 网 络 超 级 挑 战 赛 (cybergrand
+challenge,CGC)大 赛 的 决 赛.参 赛 团 队 研 发 的 网
+络推理系统(cyberreasoningsystem,CRS)具 备 自
+动 化 挖 掘 漏 洞 、自 动 部 署 补 丁 和 进 行 系 统 防 御 的 能
+力,可以快速有效地 应 对 新 的 攻 击,降 低 从 攻 击 出
+现 到 防 御 生 效 之 间 的 时 间 差 ,实 现 网 络 安 全 攻 防 系
+统的全自 动 化.CGC 大 赛 提 供 了 一 个 自 动 化 的 攻
+防 比 赛 平 台 ,所 设 置 的 科 学 的 评 测 体 系 可 以 比 较 全
+面地评估 CRS 系 统 的 自 动 化 网 络 推 理 能 力,也 为
+以后的自动化、智 能 化 网 络 攻 防 研 究 指 明 了 方 向.
+此外,大赛提供 的 赛 题 还 成 为 后 续 研 究 的 测 试 集,
+用于评估平台、工具 的 漏 洞 挖 掘 能 力 和 性 能,在 关
+于 VUzzer[32]、Steelix[35]、Driller[40]等 的 文 献 中 都
+被采用.
+但 CGC 大 赛 仍 然 有 比 较 大 的 局 限 性 .首 先 ,
+比 赛 环 境 与 真 实 环 境 有 差 别 .为 了 简 化 比 赛 环 境 ,
+增 加 可 控 性 , 为 比 赛 定 制 开 发 的 DECREE
+(DARPA experimental cybersecurity research
+evaluationenvironment)系 统 只 提 供 了 7 个 系 统 调
+用;其次,CRS系统漏 洞 挖 掘 能 力 有 限,只 能 挖 掘
+一 些 简 单 程 序 的 低 级 漏 洞 ,对 于 浏 览 器 等 比 较 复 杂
+的大型程序还不能很 好 地 分 析 和 处 理;最 后,自 动
+化、智能化能力有限,在 大 赛 中 各 参 赛 队 伍 使 用 的
+仍然是传统的模糊测 试、符 号 执 行 等 技 术,并 结 合
+预设的漏洞模式、攻 击 模 式 进 行 部 署,没 有 使 用 机
+器学习、深 度 学 习 技 术,缺 乏 自 我 学 习 的 能 力.
+CGC 大赛离实 现 高 度 自 动 化 甚 至 是 智 能 化 漏 洞 挖
+掘还有比较大的差距.
+综 上 所 述 ,模 型 检 测 、二 进 制 比 对 、模 糊 测 试 、
+符号执行等传统技术是当前漏洞挖掘的主要手段,
+漏洞可利用性 分 析 仍 然 依 赖 人 工 参 与,以 CGC 大
+赛为代表的自动化漏洞挖掘研究离现实应用有比较
+大 的 差 距 ,实 现 漏 洞 挖 掘 全 自 动 化 是 当 前 研 究 的 难
+点问题.
+2 基于学习的智能化漏洞挖掘技术
+机 器 学 习、深 度 学 习[92]已 经 广 泛 应 用 于 图 像
+识别、语音 识 别、自 然 语 言 处 理、医 学 自 动 诊 断、
+搜 索 引 擎 广 告 推 送 等 众 多 的 领 域 ,并 取 得 了 大 量 突
+破性进展.在网络安 全 领 域,也 已 经 应 用 于 恶 意 软
+件检测、垃圾邮件和 网 络 钓 鱼 分 类、账 户 异 常 检 测
+和日志分析等场景.
+受 益 于 上 述 的 研 究 进 展 ,研 究 人 员 在 近 年 来 也
+开始采用机器学习技术缓解软件漏洞挖掘领域的一
+些瓶颈问题.通过采 用 现 有 的 机 器 学 习、深 度 学 习
+等技术,帮助相应的 漏 洞 挖 掘 工 具、系 统 在 海 量 的
+漏 洞 相 关 的 数 据 中 提 取 经 验 和 知 识 ,然 后 根 据 训 练
+生成的模型对新的样 本 进 行 分 类、预 测,提 高 对 软
+件漏洞挖掘的精度和效率.
+
+
+1086 清 华 大 学 学 报 (自 然 科 学 版) 2018,58(12)
+2.1 应用场景
+近年来已经有智能化漏洞挖掘技术研究基于机
+器学习、深 度 学 习 技 术 展 开,如 表 1 所 示.从 应 用
+场景看,涉及了二进 制 程 序 函 数 识 别、函 数 相 似 性
+检测、测 试 输 入 生 成、测 试 输 入 筛 选、路 径 约 束 求
+解等领域;从使用的 机 器 学 习 算 法 看,这 些 工 作 中
+分别采用了逻辑回归、随 机 森 林、长 短 时 记 忆 网 络
+(LSTM)、强化学 习 等 多 种 机 器 学 习、深 度 学 习 的
+算 法 ;从 发 表 年 份 看 ,这 方 面 的 研 究 成 果 从2014 年
+开始 发 表 在 信 息 安 全 顶 级 会 议 上,自 2017 年 以 来
+其 数 量 逐 渐 上 升 ,并 已 经 成 为 当 前 信 息 安 全 研 究 领
+域的热点.
+表1 基于学习的智能化漏洞挖掘技术研究
+应用场景 论文 年份 算法
+二进制程序 文[93] 2014 WeightedPrefixTree
+函数识别 文[94] 2015 RNN,BiGRNN, LSTM,GRU
+文[96] 2017 GRU
+函数相似性检测 文[97] 2017 Structure2vec
+测试输入生成 文[99] 2017 CharGRNN(LSTM)
+文[100] 2018 CNN
+文[100] 2018 QGLearning
+文[102] 2017 GAN
+测试输入筛选 文[103] 2017 LSTM,Seq2Seqetal.
+文[104] 2017 QGLearning
+路径约束求解 文[105] 2018 GradientDescent
+漏洞程序筛选 文[106] 2016 Logistic Regression, MLP,Random forest etal.
+源代码漏洞点 预测
+文[107] 2018 BLSTM
+2.1.1 二进制程序函数识别
+二 进 制 程 序 函 数 识 别 是 二 进 制 分 析 的 基 础 ,对
+于软件漏洞分析与修 复,甚 至 恶 意 软 件 检 测、协 议
+逆 向 等 都 至 关 重 要 .由 于 二 进 制 代 码 缺 少 高 级 语 言
+程序中的信息,函数 的 识 别 往 往 比 较 困 难,现 有 的
+反汇编 分 析 工 具 具 有 识 别 正 确 率 低 的 缺 陷.Bao
+等[93]提出了 ByteWeight方 案,采 用 机 器 学 习 算 法
+实现对二进制程序函 数 的 识 别.具 体 而 言,首 先 采
+用加权前缀树(weightedprefixtree)学 习 函 数 的 签
+名,并通过签名 匹 配 二 进 制 片 段 的 方 式 识 别 函 数.
+其 中 ,树 中 每 个 节 点 与 二 进 制 中 的 字 节 或 指 令 相 对
+应 ,而 从 根 节 点 到 某 个 既 定 节 点 的 路 径 代 表 了 可 能
+的 字 节 或 指 令 序 列 ,权 重 则 表 示 了 对 数 据 集 采 用 简
+单线性扫 描 算 法 学 习 到 的 字 节 或 指 令 序 列 的 置 信
+度 .在 鉴 别 函 数 的 同 时 ,ByteWeight采 用 值 集 分 析
+(valuesetanalysis,VSA)和 增 量 控 制 流 恢 复 算 法
+实 现 对 函 数 边 界 的 识 别 .此 种 方 案 可 以 获 得 比IDA
+Pro和 BAP 工具[94]更高 的 准 确 率.Shin 等[95]用 循
+环神经网络 算 法 改 进 了 ByteWeight的 性 能,在 模
+型 训 练 时 间 上 有 了 数 量 级 上 的 提 升 ,并 取 得 了 更 高
+的准确率.
+2.1.2 函数相似性检测
+现 代 应 用 程 序 中 ,直 接 调 用 第 三 方 函 数 可 以 节
+约开发成本、提高开 发 效 率,是 被 广 泛 接 受 的 开 发
+惯例.但这种方式容 易 导 致 供 应 链 安 全 风 险,一 旦
+被 调 用 函 数 存 在 漏 洞 ,则 调 用 这 一 函 数 的 程 序 也 可
+能 存 在 漏 洞 .通 过 函 数 相 似 性 检 测 技 术 可 以 实 现 对
+不 同 程 序 间 的 同 源 性 漏 洞 的 检 测 ,但 当 前 基 于 图 的
+相似度匹 配 的 方 法 具 有 计 算 量 大、准 确 率 低 的 缺
+陷.Xu等[97]提 出 了 Gemini方 案,Gemini把 函 数
+控制流图 CFG 简化为 带 节 点 属 性 (数 字 特 征)的 控
+制流图(ACFG),然后用 Structure2vec算法转化为
+数字向 量,使 用 Siamese网 络 架 构 训 练,实 现 相 似
+的 函 数 距 离 近 的 目 标 ,最 后 通 过 计 算 函 数 向 量 距 离
+实现函数 相 似 性 的 检 测.Gemini能 应 用 到 跨 平 台
+的 二 进 制 函 数 相 似 性 检 测 ,并 取 得 了 比 其 他 基 于 图
+相似性匹配 的 工 具 (如 Genius[98])更 高 的 准 确 率 和
+检测效率.
+2.1.3 测试输入生成
+在 软 件 漏 洞 挖 掘 中 ,构 造 代 码 覆 盖 率 高 或 脆 弱
+性导向型的测试输入能提高漏洞挖掘的效率和针对
+性 .利 用 机 器 学 习 技 术 可 以 对 海 量 测 试 样 本 进 行 分
+析、学习,并利用生成 模 型 指 导 生 成 更 高 质 量 的 测
+试输 入 样 本.Godefroid 等[99]首 次 把 模 糊 测 试 中 的
+高结构化样本生成 问 题 转 换 成 了 NLP 领 域 的 文 本
+生 成 问 题, 采 用 了 CharGRNN (recurrentneural
+network)模型实 现 对 PDF 文 件 格 式 中 的 obj语 法
+的学习,并用训 练 好 的 模 型 生 成 具 有 多 样 性 的 obj
+对象和 PDF 文件.She等[100]提 出 了 采 用 深 度 神 经
+网络指导 模 糊 测 试 输 入 生 成 的 方 案 Neuzz.Neuzz
+采用了 CNN(convolutionalneuralnetwork)学习连
+续可微的神 经 程 序 (neuralprogram),用 来 近 似 模
+拟 目 标 程 序 中 的 实 际 逻 辑 ,然 后 通 过 对 学 习 好 的 神
+经 程 序 求 梯 度 的 方 式 指 导 测 试 输 入 生 成 ,以 此 取 得
+
+
+邹权臣,等: 从自动化到智能化:软件漏洞挖掘技术进展 1087
+对目标程序更高的分 支 覆 盖.与 AFL 相 比,Neuzz
+在6个不 同 的 常 用 程 序 中 多 发 现 了 70 倍 的 分 支,
+并多 发 现 了 36 个 缺 陷.Bottinger等[101]提 出 了 深
+度强化学习增强 的 模 糊 测 试 技 术,借 助 Markov模
+型把模糊 测 试 问 题 转 化 成 强 化 学 习 问 题,并 利 用
+QGlearning算法优化预定 义 的 奖 励 函 数.实 验 结 果
+表 明 ,使 用 深 度 强 化 学 习 增 强 的 模 糊 测 试 技 术 比 随
+机变异能取得更高的代码 覆 盖 率.Nichols等[102]提
+出了生成 对 抗 网 络 (GAN)增 强 模 糊 测 试 技 术.该
+方案不依 赖 于 大 数 据 量 的 样 本 训 练,并 能 比 AFL
+的随机变异 和 基 于 LSTM 模 型 引 导 的 变 异 更 高 效
+地发现更多的路径.
+2.1.4 测试输入筛选
+动态漏洞挖掘依赖于测试输入的实际运行来检
+测 是 否 能 触 发 崩 溃 或 漏 洞 ,当 有 海 量 样 本 需 要 被 执
+行测试时,会非常耗 时 且 低 效.测 试 样 本 筛 选 的 目
+的是从海量样本中选择更有可能触发新路径或触发
+漏 洞 的 测 试 输 入 .使 用 机 器 学 习 技 术 通 过 对 大 量 的
+测 试 样 本 进 行 处 理 ,从 而 决 定 哪 些 应 该 被 进 一 步 分
+析,尽可能准确地对 样 本 进 行 标 记,然 后 再 用 于 寻
+找安 全 漏 洞.Rajpal等[103]使 用 LSTM、序 列 到 序
+列(Seq2seq)等神 经 网 络 学 习 模 糊 测 试 过 程 中 的 历
+史 变 异 样 本 及 代 码 覆 盖 率 等 数 据 ,训 练 出 能 指 导 对
+输入文件进行定向变 异 的 模 型.实 验 结 果 表 明,使
+用这种方法能获得比随机变异更高的代码覆盖率.
+但文[103]中采用 的 热 力 图 生 成 模 型 仅 仅 依 赖 于 基
+础 样 本 以 及 能 带 来 代 码 覆 盖 率 增 长 的 变 异 样 本 ,训
+练 生 成 的 模 型 并 没 有 记 录 测 试 输 入 与 变 异 点 、变 异
+方法、代码覆盖增长 情 况 之 间 的 关 联 信 息,基 于 这
+种模型生成的热力图不能精确标注记录测试输入中
+变 异 点 与 代 码 覆 盖 之 间 的 关 联 性 ,因 此 热 力 图 可 能
+带有误标注和漏 标 注.此 外,Spieker等[104]还 提 出
+了采用强化学习的算法优先筛选漏洞导向型的测试
+用 例,应 用 在 持 续 集 成 (continuousintegration,
+CI)及 回 归 测 试 (regressiontest)中 .
+2.1.5 路径约束求解
+模 糊 测 试 ,特 别 是 代 码 覆 盖 率 制 导 的 模 糊 测 试
+(如 AFL),侧 重 于 筛 选 可 以 覆 盖 新 路 径 的 样 本 为
+种 子 文 件 ,但 对 种 子 文 件 变 异 时 并 没 有 充 分 利 用 程
+序数据流等信 息 指 导 变 异,这 使 得 变 异 盲 目 低 效,
+生成 样 本 冗 余.现 有 的 一 些 启 发 式 优 化 工 作 如
+Steelix[35]能 够 对 魔 术 字 节 跟 踪 定 位 ,但 无 法 对 其 他
+路 径 约 束 求 解 .具 备 路 径 约 束 求 解 能 力 是 符 号 执 行
+比 模 糊 测 试 等 漏 洞 挖 掘 技 术 更 先 进 的 体 现 ,也 使 得
+符号执行在理论上具备了系统性探索程序执行路径
+的能力.但 复 杂 程 序 中 的 路 径 爆 炸 问 题 带 来 的 对
+SMT 求解器的频繁调用,以及 SMT 求解器本身的
+能 力 和 效 率 的 不 足 ,使 得 约 束 求 解 占 用 了 符 号 执 行
+中 主 要 的 性 能 开 销 ,约 束 求 解 问 题 也 成 为 符 号 执 行
+中 面 临 的 主 要 瓶 颈 问 题 之 一.Chen 等[105]提 出 了
+Angora,采 用 污 点 追 踪 测 试 输 入 中 影 响 条 件 分 支 的
+字 节 ,然 后 使 用 梯 度 下 降 的 方 式 对 变 异 后 生 成 的 路
+径约束进 行 求 解.这 种 方 式 避 免 了 符 号 执 行 调 用
+SMT 求解器可能 带 来 的 开 销 以 及 复 杂 约 束 不 可 解
+的 问 题 ,但 梯 度 下 降 对 目 标 函 数 不 可 导 或 存 在 不 可
+导 点 时 ,仍 然 会 出 现 求 解 困 难 的 问 题 .
+2.1.6 漏洞程序筛选
+传 统 的 漏 洞 挖 掘 技 术 如 模 糊 测 试 、符 号 执 行 等
+已 经 成 功 地 从 各 类 软 件 中 发 现 了 大 量 的 漏 洞 ,但 当
+被 测 试 程 序 复 杂 且 数 量 庞 大 的 时 候 ,使 用 这 些 技 术
+挖掘漏洞显得效率低 下.VDiscover[106]采 用 机 器 学
+习技术从大量的程序中快速筛选更有可能带有漏洞
+的程序.具 体 而 言,VDiscover收 集 程 序 中 的 标 准
+C库函数调用序列及其参数的动态值作为静态和动
+态特征,并对其做标 注,然 后 采 用 带 监 督 的 机 器 学
+习算法(如随机森林,逻 辑 回 归 等)训 练 模 型,当 有
+新 的 被 测 试 程 序 需 要 分 类 的 时 候 ,训 练 好 的 模 型 可
+以直接对提取的相应特征进行预判和标注.
+VDiscover首次验证了 采 用 机 器 学 习 技 术 筛 选
+漏 洞 程 序 的 可 行 性 ,但 其 采 用 人 工 定 义 和 提 取 特 征
+的方 法 具 有 较 大 的 局 限 性. 漏 洞 成 因 复 杂,
+VDiscover提取的程序静 态 特 征 和 动 态 特 征 并 不 能
+精 确 地 表 征 各 种 类 型 的 漏 洞 ,这 可 能 造 成 较 高 的 误
+报和漏报.另外,采用 机 器 学 习 直 接 对 漏 洞 程 序 进
+行预测的方式无法生成测试用例来动态验证漏洞.
+2.1.7 源代码漏洞点预测
+传 统 静 态 漏 洞 挖 掘 技 术 中 ,依 赖 于 人 工 定 义 漏
+洞 模 式 的 检 测 方 式 经 常 会 导 致 较 高 的 漏 报 率.Li
+等[107]提出了 VulDeePecker方案,采用 BLSTM 算
+法对 C/C++源代码中的漏洞点进行预测.鉴于传
+统的漏洞 分 类 过 细 导 致 难 以 抽 象 提 取 为 特 征 的 问
+题,其设计了能覆盖 多 种 漏 洞 类 型 的 特 征,这 种 方
+式 不 以 函 数 为 粒 度 ,只 考 虑 数 据 流 保 留 语 义 上 关 联
+的代码行作 为 代 码 小 部 件 (codegadgets)对 程 序 进
+行表征,然后转换成 向 量 作 为 深 度 学 习 的 输 入.但
+VulDeePecker方案 中,代 码 小 部 件 转 换 成 向 量 的
+
+
+1088 清 华 大 学 学 报 (自 然 科 学 版) 2018,58(12)
+过程存在较大的信息 丢 失 问 题;另 外,该 方 案 只 支
+持对缓冲区溢出和资源管理相关的漏洞的检测.
+2.1.8 其他
+此 外 ,机 器 学 习 还 应 用 于 模 糊 测 试 参 数 配 置 预
+测[108]和 漏 洞 可 利 用 性 分 析[109110]等 场 景 中 .
+2.2 面临的问题
+2.2.1 机器学习的局限性
+虽然以机器学习为代表的人工智能技术取得了
+非常瞩目的进 展,但 其 本 身 也 面 临 着 巨 大 的 挑 战.
+基于机器学习的漏洞挖掘技术受限于算法本身的能
+力 ,也 受 限 于 算 法 本 身 的 安 全 性 和 健 壮 性 .
+当前的机器学习技术并没有解决人工智能的核
+心问 题,不 是 通 向 人 工 智 能 的 最 佳 途 径[111].传 统
+的机器学习技术需要 人 工 设 计、构 建 特 征,然 后 转
+换 成 向 量 作 为 机 器 学 习 算 法 的 输 入 ,不 具 备 对 原 始
+数据自动提取 特 征 的 能 力,严 重 依 赖 于 专 家 知 识.
+深度学习具有在高维数据中自动提取特征的能力,
+并已经取 得 了 广 泛 应 用,但 其 仍 然 面 临 着 持 续 学
+习 、数 据 饥 饿 、可 解 释 性 等 问 题 [111112].
+另 外 ,当 前 的 机 器 学 习 算 法 的 安 全 性 和 健 壮 性
+问题也逐渐暴露出来.一 方 面,常 用 机 器 学 习 工 具
+存在漏洞.Stevens等[113]利用模糊测 试 方 法 挖 掘 出
+了 OpenCVScikitGLearn、NumPy 等 常 用 的 机 器 学
+习 软 件 的 库 文 件 中 的 堆 溢 出 等 漏 洞 ,这 些 漏 洞 能 导
+致 Dos攻击或任意代码执行,或直接修改分类判定
+结果.另一方面,机器 学 习 算 法 本 身 的 健 壮 性 问 题
+容 易 导 致 对 抗 式 攻 击 (adversarialattack)[114119].对
+抗 式 攻 击 又 称 为 对 抗 性 训 练 或 对 抗 性 机 器 学 习 ,通
+过在数据集中注入被污染的数据而欺骗模型做出错
+误的 判 断.此 外,健 壮 性 问 题 还 容 易 导 致 污 染 攻
+击[120122],逃 逸 攻 击[123126]、模 型 倒 置 攻 击[127128],
+模 型 (参 数)提 取 攻 击[129131]等,这 类 攻 击 通 常 具 有
+较高的隐蔽性.
+2.2.2 算法选择
+机器学习、深度学 习 虽 然 已 经 在 图 像 识 别、自
+然 语 言 处 理 等 领 域 已 经 有 比 较 成 熟 的 应 用 ,但 在 漏
+洞 挖 掘 领 域 ,不 同 的 应 用 场 景 下 可 能 只 适 用 于 部 分
+机器学习算法,甚至 同 一 场 景 中,选 择 不 同 的 适 用
+算 法 也 会 导 致 结 果 的 显 著 差 异 .但 现 有 的 研 究 工 作
+大 部 分 只 凭 经 验 选 取 了 部 分 机 器 学 习 算 法 ,并 未 对
+各类算法性能 进 行 较 系 统 性 的 比 对.如 在 文 [103,
+107]中采用 了 LSTM 等 循 环 神 经 网 络 算 法 实 现 可
+变长序列预测和 文 本 生 成,但 当 前 CNN 已 经 可 以
+取得比 LSTM 更 好 的 性 能[132133].其 次,还 要 考 虑
+根据数据量大小的问 题,如 果 数 据 量 小,人 工 指 定
+规 则 的 传 统 机 器 学 习 可 能 会 有 更 好 地 性 能 .深 度 学
+习虽然能自动对各种简单的特征学习并组合成更加
+复 杂 的 特 征 ,在 特 征 提 取 上 比 传 统 的 机 器 学 习 算 法
+具 有 更 大 的 优 势 ,但 深 度 学 习 更 适 合 大 数 据 量 的 学
+习.另外,对同一种算 法 的 不 同 参 数 配 置 也 能 产 生
+不 同 的 模 型 ,需 要 在 对 模 型 进 行 评 估 的 基 础 上 选 择
+泛化误差小的模型.
+2.2.3 数据收集
+机器学习、深度学 习 需 要 大 量 的 样 本,特 别 是
+深度学习在数据量不足时容易导致过拟合的问题.
+目前,在现 有 工 作 中 针 对 不 同 应 用 场 景 和 学 习 任
+务,收 集 的 样 本 对 象 包 括 了 二 进 制 程 序、PDF 文
+件、C/C+ + 源 码、IOT 固 件 等,这 些 数 据 的 收 集
+方式 参 差 不 齐,如 模 糊 测 试 生 成、符 号 执 行 生 成、
+人工编译生成、网络 爬 虫 等.对 于 常 用 的 文 件 格 式
+如 DOC、PDF、SWF 等,采用网络爬虫获取测试输
+入 集 是 比 较 常 用 的 方 法 .爬 取 方 式 可 按 特 定 文 件 扩
+展 名 (后 缀 )为 筛 选 条 件 进 行 下 载 ,或 者 按 特 定 魔 术
+字 节 或 其 他 签 名 的 方 式 下 载 ,爬 取 的 结 果 很 容 易 就
+能达 到 TB 数 量 级 (如 Skyfire[133]).但 对 于 其 他 数
+据如 崩 溃 样 本、漏 洞 程 序 等,因 其 具 有 稀 缺 性,存
+在收集困难的问题.当 前 缺 少 通 用 的、认 可 度 较 高
+的 漏 洞 相 关 的 数 据 集 可 供 基 于 机 器 学 习 、深 度 学 习
+的技术进行训练和测试.
+收集漏洞相关的大数据集能为基于机器学习的
+智 能 化 漏 洞 挖 掘 和 分 析 提 供 学 习 素 材 ,也 关 系 到 训
+练 模 型 的 效 果 .构 建 面 向 机 器 学 习 的 大 规 模 漏 洞 数
+据 集 对 后 续 的 研 究 将 起 到 至 关 重 要 的 作 用 ,应 当 成
+为未来研究的重点问题之一.
+2.2.4 特征选择
+传 统 机 器 学 习 算 法 分 类 、预 测 的 准 确 性 既 与 数
+据量的大小有 关,也 依 赖 于 从 数 据 中 提 取 的 特 征.
+在 漏 洞 挖 掘 中 ,程 序 结 构 和 执 行 信 息 与 漏 洞 并 没 有
+直 接 的 关 联 性 ,如 何 从 程 序 中 筛 选 出 漏 洞 相 关 的 显
+著特 征、摒 弃 非 显 著 特 征,需 要 结 合 机 器 学 习 算
+法、程序执行环 境 及 漏 洞 产 生 原 理 等 多 方 面 考 虑.
+例如在二进制程序中,静 态 特 征 可 以 从 调 用 图、控
+制流图、数据流 图 等 获 取 (同 时 要 考 虑 图 信 息 获 取
+不精确的问题),动 态 特 征 可 以 通 过 插 桩 执 行 跟 踪
+(trace)实 际 函 数 调 用 以 及 调 用 参 数 的 方 式 捕 获 .另
+外,还要考虑动、静态 特 征 提 取 时 带 来 的 开 销 和 可
+
+
+邹权臣,等: 从自动化到智能化:软件漏洞挖掘技术进展 1089
+扩展性问题.如在二 进 制 程 序 中,对 目 标 程 序 建 立
+各 种 基 于 图 的 结 构 计 算 量 较 大 ,动 态 特 征 提 取 则 依
+赖 于 实 际 执 行 插 桩 跟 踪 测 试 程 序 ,而 插 桩 特 别 是 动
+态 插 桩 会 带 来 比 较 大 的 开 销 ,甚 至 会 影 响 程 序 实 际
+执行时的内存空间布局.
+综上所述,探索基 于 学 习 的 漏 洞 挖 掘 技 术,研
+究机器学习算法对软件漏洞挖掘中的不同应用场景
+的适用性,借助机器 学 习 的 分 类、预 测 能 力 甚 至 深
+度 学 习 的 自 动 特 征 提 取 能 力 来 缓 解 、突 破 传 统 技 术
+的 瓶 颈 问 题 ,是 当 前 智 能 化 漏 洞 挖 掘 研 究 的 热 点 和
+难点.
+3 结论与展望
+本文分析了传统漏洞挖掘技术及基于学习的智
+能 化 漏 洞 挖 掘 技 术 的 研 究 进 展 ,针 对 这 些 技 术 呈 现
+出 的 自 动 化 、智 能 化 的 趋 势 及 面 临 的 问 题 进 行 了 深
+入 的 调 研 分 析 、归 类 和 总 结 .
+下一步的研究应从以下2点展开:
+1)提 高 漏 洞 挖 掘 的 效 率 与 精 度 .
+漏 洞 挖 掘 是 计 算 密 集 型 的 工 作 ,与 软 件 的 规 模
+和复杂度、硬件系统 性 能、采 用 的 分 析 技 术 都 有 非
+常 大 的 关 联 性 ,在 研 究 实 践 中 往 往 需 要 根 据 这 些 影
+响 因 素 动 态 调 整 程 序 分 析 策 略 ,在 分 析 效 率 与 分 析
+深度之间取得较好的 平 衡 和 折 中.一 方 面,需 要 研
+究轻量级分析 技 术、启 发 式 状 态 空 间 探 测 技 术 (如
+脆弱路径筛 选、低 频 路 径 筛 选 等),在 较 小 的 开 销
+内增强漏洞挖掘的导 向 性.另 一 方 面,需 要 研 究 高
+效的 规 模 化、并 行 化 分 析 方 法.漏 洞 挖 掘 在 算 法、
+分 析 数 据 存 储 和 处 理 方 面 都 有 显 著 特 征 ,现 有 的 技
+术 对 大 型 复 杂 程 序 分 析 效 率 低 下 ,没 有 充 分 利 用 高
+性能硬件设备 提 供 的 并 行 处 理 能 力.探 索 规 模 化、
+并 行 化 漏 洞 挖 掘 技 术 ,增 强 对 异 构 化 计 算 资 源 的 利
+用 率 ,能 很 好 应 对 大 型 复 杂 软 件 快 速 分 析 的 需 求 .
+2)提 高 漏 洞 挖 掘 的 自 动 化 与 智 能 化 .
+在 自 动 化 方 面 ,研 究 不 依 赖 或 较 少 依 赖 于 人 工
+参 与 的 漏 洞 挖 掘 技 术 如 漏 洞 利 用 程 序 自 动 生 成 、高
+结 构 化 测 试 输 入 生 成 等 仍 然 是 当 前 研 究 的 难 点 ,这
+对实现全自动的漏洞挖掘甚至网络攻防都有重要的
+推进作用.在 智 能 化 方 面,需 要 研 究 机 器 学 习 (如
+深度学习、强 化 学 习、生 成 对 抗 网 络 等)在 漏 洞 挖
+掘领域的应用.适 用 场 景 还 应 包 括 脆 弱 路 径 筛 选、
+高结构化输入生成、约 束 求 解 配 置 预 测 等.基 于 机
+器学习的漏洞挖掘技术为解决传统漏洞挖掘技术的
+一 些 瓶 颈 问 题 提 供 了 新 途 径 ,既 能 提 升 漏 洞 挖 掘 的
+自 动 化 程 度 ,也 能 提 高 漏 洞 挖 掘 的 效 率 和 精 度 .
+参考文献 (References)
+[1] CPPCHECK TEAM. Cppcheck software official website
+[EB/OL].[2018G08G02].http://cppcheck.sourceforge.net/.
+[2] WHEELERDA.Flawfindersoftwareofficialwebsite[EB/OL].
+[2018G08G02].https://www.dwheeler.com/flawfinder/.
+[3] DAHSE J. RIPS software official website [EB/OL].
+[2018G08G02].http://ripsGscanner.sourceforge.net/.
+[4] PUGH B, LOSKUTOV A. FindBugs software official
+website [EB/OL]. [2018G08G02]. http://findbugs.
+sourceforge.net/index.html.
+[5] C A TECHNIQUES. VeraCode software official website
+[EB/OL].[2018G08G02].https://www.veracode.com/.
+[6] NETWORK DESIGN & MANAGEMENT, INC. Fortify
+softwareofficialwebsite[EB/OL].[2018G08G02].http://www.
+ndm.net/sast/hpGfortifyGstaticGcodeGanalyzer.
+[7] SYNOPSYS, INC. Coverity software official website
+[EB/OL].[2018G08G02].https://scan.coverity.com/.
+[8] CHECKMARX LTD.Checkmarx software official website
+[EB/OL].[2018G08G02].https://www.checkmarx.com/.
+[9] LLVMGADMIN TEAM. LLVM software official website
+[EB/OL].[2018G08G02].https://llvm.org/.
+[10]LLVMGADMIN TEAM. Clang software official website
+[EB/OL].[2018G08G02].http://clang.llvm.org/.
+[11] 吴世忠,郭涛,董国伟.软 件 漏 洞 分 析 技 术 [M].北 京:科
+学 出 版 社 ,2014.
+WUSZ,GUO T,DONG G W.Thetechniquesofsoftware
+vulnerabilityanalysis[M].Beijing:SciencePress,2014.(in
+Chinese)
+[12]JOVANOVIC N,KRUEGEL C,KIRDA E.Pixy:Astatic
+analysis tool for detecting web application
+vulnerabilities[C]// Proceedings of the 2006 IEEE
+Symposium on Security and Privacy.Oakland,California,
+USA:IEEEComputerSociety,2006:258 263.
+[13]BUSH W R,PINCUSJD,SIELAFFDJ.Astaticanalyzer
+for finding dynamic programming errors[J]. Software:
+PracticeandExperience,2000,30(7):775 802.
+[14]SHASTRYB,YAMAGUCHIF,RIECK K,etal.Towards
+vulnerabilitydiscovery usingstaged program analysis[C]//
+Proceedingsofthe13thInternationalConferenceonDetection
+ofIntrusionsand Malware,and Vulnerability Assessment.
+New York,USA:Springer,2016:78 97.
+[15]GENS D, SCHMITT S, DAVI L, et al. KGMiner:
+Uncovering memorycorruptioninLinux[C]//Proceedingsof
+the2018 Annual Networkand Distributed System Security
+Symposium (NDSS).SanDiego,California,USA:Internet
+Society,2018.10.14722/ndss.2018.23326
+
+
+1090 清 华 大 学 学 报 (自 然 科 学 版) 2018,58(12)
+[16]CHEN H, WAGNER D. MOPS: An infrastructure for
+examiningsecuritypropertiesofsoftware[C]// Proceedings
+of the 9th ACM Conference on Computer and
+CommunicationsSecurity. Washington,DC,USA:ACM,
+2002:235 244.
+[17]HENZINGER T A,JHALA R, MAJUMDAR R,etal.
+Softwareverification with BLAST[C]//InternationalSPIN
+Workshop on Model Checking of Software. Heidelberg,
+Berlin:Springer,2003:235 239.
+[18]BURCH J, CLARKE E M, Long D. Symbolic model
+checking with partitioned transition relations [M].
+CarnegieGMellon University. Department of Computer
+Science,1991.
+[19]BALAKRISHNAN G,REPS T.WYSINWYX:Whatyou
+seeis not what you execute [J]. ACM Transactions on
+Programming Languages and Systems (TOPLAS),2010,
+32(6):23.
+[20]CIFUENTESC,VAN EMMERIK M.Recoveryofjumptable
+casestatementsfrombinarycode [C]//InternationalWorkshop
+onProgram Comprehension.Pittsburgh,Pennsylvania,USA:
+IEEEComputerSociety,1999:192 199.
+[21]KINDERJ,VEITH H.Jakstab:Astaticanalysisplatform
+for binaries [C]// International Conference on Computer
+Aided Verification. Princeton, USA: Springer,
+2008:423 427.
+[22]KRUEGELC,ROBERTSON W,VALEURF,etal.Static
+disassemblyofobfuscatedbinaries [C]// USENIX Security
+Symposium.San Diego,CA USA:USENIX Association,
+2004(13):18 18.
+[23]SCHWARZ B,DEBRAY S,Andrews G.Disassembly of
+executablecoderevisited [C]// Proceedings ofthe Ninth
+Working Conference on Reverse Engineering. Richmond,
+VA,USA:IEEEComputerSociety,2002:45 54.
+[24]TROGER J,CIFUENTES C.Analysis ofvirtual method
+invocationfor binary translation [C]// Proceedings ofthe
+Ninth WorkingConferenceonReverseEngineering.Richmond,
+VA,USA:IEEEComputerSociety,2002:65 74.
+[25]XU L,SUN F,SU Z.Constructing precisecontrolflow
+graphs from binaries [R]. University of California,
+Davis:2009.
+[26]FEISTJ,MOUNIER L,POTET M L.Staticallydetecting
+useafterfree on binary code [J].Journal of Computer
+VirologyandHackingTechniques,2014,10(3):211 217.
+[27]CHENG S, YANG J, WANG J,et al.Loongchecker:
+Practical summaryGbased semiGsimulation to detect
+vulnerabilityinbinarycode [C]// Proceedingsofthe2011
+IEEE10thInternationalConferenceon Trust,Securityand
+Privacyin Computing and Communications. Washington,
+DC,USA:IEEEComputerSociety,2011:150 159.
+[28]GOTOVCHITSI,VAN TonderR,BRUMLEY D.Saluki:
+Finding taintGstyle vulnerabilities with static property
+checking [C]// Networkand Distributed SystemsSecurity
+(NDSS) Symposium. San Diego, CA, USA: Internet
+Society,2018.10.14722/bar.2018.23019.
+[29]SHA L,FU J,JING C,et al.PVDF: An automatic
+patchGbased vulnerability description and fuzzing
+method[C]//CommunicationsSecurityConference.Beijing,
+China:IET,2014:1 8.
+[30]GAO D,REITER M K,SONG D.BinHunt:Automatically
+finding semantic differences in binary programs [C]//
+InternationalConferenceonInformationandCommunications
+Security.Birmingham UK:Springer,2008:238 255.
+[31]GOOGLEINC.AFL software official website [EB/OL].
+[2018G08G02].http://lcamtuf.coredump.cx/afl/
+[32]RAWAT S, JAIN V, KUMAR A, et al. Vuzzer:
+ApplicationGawareevolutionaryfuzzing [C]//Proceedingsof
+the Network and Distributed System Security Symposium
+(NDSS).SanDiego,CA,USA:InternetSociety,2017.10.
+14722/ndss.2017.23404.
+[33]GOOGLE INC. Honggfuzz software official website
+[EB/OL].[2018G08G02].http://honggfuzz.com
+[34]GOOGLEINC.LibFuzzersoftwareofficialwebsite [EB/OL].
+[2018G08G02].https://github.com/Dor1s/libfuzzerGworkshop.
+[35]LIY,CHEN B,CHANDRAMOHAN M,etal.Steelix:
+ProgramGstatebasedbinaryfuzzing [C]//Joint Meetingon
+FoundationsofSoftwareEngineering.Paderborn,Germany:
+ACM,2017:627 637.
+[36]PENG H,SHOSHITAISHVILI Y,PAYER M,TGFuzz:
+Fuzzingbyprogramtransformation [C]//IEEESymposium
+onSecurityand Privacy (SP).San Francisco,CA,USA:
+IEEEComputerSociety,2018:697 710.
+[37]BÖHME M, PHAM V T, ROYCHOUDHURY A.
+CoverageGbased greybox fuzzing as Markov chain [C]//
+Proceedings of the 2016 ACM SIGSAC Conference on
+Computerand CommunicationsSecurity.Vienna,Austria:
+ACM,2016:1032 1043.
+[38]BÖHME M,PHAM V T,NGUYEN M D,etal.Directed
+greybox fuzzing [C]// Proceedings of the 2017 ACM
+SIGSAC Conference on Computer and Communications
+Security.Dallas,TX,USA:ACM,2017:2329 2344.
+[39]STEPHENS N, GROSEN J,SALLS C,et al. Driller:
+Augmenting fuzzing through selective symbolic execution
+[C]//Proceedingsofthe Networkand Distributed System
+SecuritySymposium.San Diego,California,USA:Internet
+Society,2016:1 16.
+
+
+邹权臣,等: 从自动化到智能化:软件漏洞挖掘技术进展 1091
+[40]GANS,ZHANG C,QIN X,etal,CollAFL:Pathsensitive
+fuzzing [C]//2018IEEESymposiumonSecurityandPrivacy
+(SP).San Fransisco,CA,USA:IEEE ComputerSociety,
+2018:660 677.
+[41]GANESH V,LEEK T,RINARD M.TaintGbaseddirected
+whiteboxfuzzing [C]//InternationalConferenceonSoftware
+Engineering. British Columbia, Canada: IEEE,
+2009:474 484.
+[42] WANG T, WEI T, GU G, et al. TaintScope: A
+checksumGawaredirectedfuzzingtoolforautomaticsoftware
+vulnerabilitydetection [C]//IEEE Symposium on Security
+and Privacy.Oakland,California, USA:IEEE Computer
+Society,2010:497 512.
+[43]DOLANGGAVITT B,HULIN P,KIRDA E,etal.Lava:
+LargeGscale automated vulnerability addition [C]// IEEE
+Symposium on Securityand Privacy.SanJose,California,
+USA:IEEEComputerSociety,2016:110 121.
+[44]PEACH TECH.Peachsoftwareofficialwebsite [EB/OL].
+[2018G08G02].http://www.peachfuzzer.com/products/
+peachGplatform/
+[45]BRADSHAW S.Spikesoftwareofficialwebsite [EB/OL].
+[2018G08G02].http://www.immunitysec.com/
+[46]PHAM V T, BÖHME M, ROYCHOUDHURY A.
+ModelGbased whiteboxfuzzingfor program binaries [C]//
+Proceedingsofthe31stIEEE/ACMInternationalConference
+on Automated Software Engineering. Singapore: ACM,
+2016:543 553.
+[47]YANG X, CHEN Y, EIDE E, et al. Finding and
+understanding bugsin C compilers [J]. ACM SIGPLAN
+Notices,2011,46(6):283 294.
+[48]HOLLER C,HERZIG K,ZELLER A.Fuzzing withcode
+fragments [C]// USENIX Security Symposium. San
+Francisco,California,USA:USENIX Association,2012:
+445 458.
+[49]VEGGALAM S,RAWATS,HALLERI,etal.Ifuzzer:An
+evolutionaryinterpreterfuzzer using genetic programming
+[C]// European Symposium on Research in Computer
+Security.Heraklion,Greece:Springer,2016:581 601.
+[50]RUDERSMAN J.Jsfunfuzz software official website
+[EB/OL].[2018G08G02].http://www.squarefree.com/2007/
+08/02/introducingGjsfunfuzz/
+[51]DEWEY K, ROESCH J, HARDEKOPF B. Language
+fuzzing using constraint logic programming [C]//
+Proceedingsofthe29th ACM/IEEEinternationalconference
+on Automated software engineering. Vasteras, Sweden:
+ACM,2014:725 730.
+[52] WOO M,SANG K C,GOTTLIEB S,etal.Scheduling
+blackGboxmutationalfuzzing [C]//Proceedingsofthe2013
+ACM SIGSAC Conferenceon Computer & Communications
+Security.Berlin,Germany:ACM,2013:511 522.
+[53]REBERT A,CHASK,AVGERINOST,etal.Optimizing
+seed selection for fuzzing [C]// USENIX Security
+Symposium. San Jose, California, USA: USENIX
+Association,2014:861 875.
+[54] WANGS,NAMJ,TANL.QTEP:QualityGawaretestcase
+prioritization [C]// Proceedings of the 2017 11th Joint
+Meeting on Foundations of Software Engineering.
+Paderborn,Germany:ACM,2017:523 534.
+[55]PETSIOST,ZHAOJ,KEROMYTISA D,etal.Slowfuzz:
+Automated domainGindependent detection of algorithmic
+complexity vulnerabilities [C]// Proceedings ofthe 2017
+ACM SIGSACConferenceonComputerandCommunications
+Security.Dallas,TX,USA:ACM,2017:2155 2168.
+[56]BOYER R S,ELSPAS B,LEVITT K N.SELECT—A
+formal system for testing and debugging programs by
+symbolicexecution [J].ACM SigPlanNotices,1975,10(6):
+234 245.
+[57]CLARKELA.Aprogramtestingsystem [C]//Proceedings
+ofthe1976annualconference.Texas,USA:ACM,1976:
+488 491.
+[58]HOWDEN W E.SymbolictestingandtheDISSECTsymbolic
+evaluation system [J].IEEE Transactions on Software
+Engineering,1977 (4):266 278.
+[59]KING J C.Symbolicexecution and program testing [J].
+CommunicationsoftheACM,1976,19(7):385 394.
+[60]GODEFROID P,LEVIN M Y, Molnar D A.Automated
+whiteboxfuzztesting [C]//ProceedingsoftheNetworkand
+DistributedSystemSecuritySymposium (NDSS).SanDiego,
+California,USA:InternetSociety,2008,8:151 166.
+[61]CHIPOUNOV V,KUZNETSOV V,CANDEA G.S2E:A
+platformforinGvivo multiGpathanalysisofsoftwaresystems
+[J]. ACM Sigarch Computer Architecture News,2011,
+47(4):265 278.
+[62]CHAS K,AVGERINOS T,Rebert A,etal.Unleashing
+mayhemonbinarycode [C]//IEEESymposium onSecurity
+andPrivacy (SP).SanFrancisco,California,USA:IEEE,
+ComputerSociety,2012:380 394.
+[63]CADARC,DUNBARD,ENGLERDR.KLEE:Unassisted
+andautomaticgenerationofhighGcoveragetestsforcomplex
+systemsprograms [C]// USENIX Conferenceon Operating
+Systems Design and Implementation. San Diego USA:
+USENIX Association,2009:209 224.
+
+
+1092 清 华 大 学 学 报 (自 然 科 学 版) 2018,58(12)
+[64]SAUDEL F,SALWAN J. Triton: A dynamic symbolic
+executionframework [C]// Symposium surlasécuritédes
+technologiesdel􀆳informationetdescommunications.Rennes,
+France:SSTIC,2015:31 54.
+[65]SHOSHITAISHVILIY,KRUEGEL C,VIGNA G,etal.
+Sok:(stateof)theartofwar:Offensivetechniquesinbinary
+analysis [C]// 2016 IEEE Symposium on Security and
+Privacy (SP).SanJose,California,USA:IEEE Computer
+Society,2016:138 157.
+[66]SHOSHITAISHVILI Y, WANG R, HAUSER C,etal.
+FirmaliceGautomatic detection of authentication bypass
+vulnerabilitiesinbinaryfirmware [C]// Proceedingsofthe
+Network and Distributed System Security Symposium
+(NDSS).San Diego,California, USA:Internet Society,
+2015.10.14722/ndss.2015.23294.
+[67]AVGERINOST,REBERT A,ChaS K,etal.Enhancing
+symbolicexecutionwithveritesting [C]//Proceedingsofthe
+36th International Conference on Software Engineering.
+Hyderabad,India:ACM,2014:1083 1094.
+[68] MA K K,PHANG K Y,FOSTER J S,etal.Directed
+symbolic execution [C]// International Static Analysis
+Symposium.Heidelberg,Berlin:Springer,2011:95 111.
+[69]GODEFROID P, NORI A V, Rajamani S K, et al.
+CompositionalmayGmustprogram analysis:Unleashingthe
+power of alternation [J]//ACM Sigplan Notices,2010,
+45(1):43 56.
+[70]RAMOSD A,ENGLER D R.UnderGconstrainedsymbolic
+execution:Correctnesscheckingforrealcode[C]//USENIX
+Security Symposium. Washington,D.C.,USA:USENIX
+Association,2015:49 64.
+[71]BOONSTOPPEL P, CADAR C, ENGLER D. RWset:
+AttackingpathexplosioninconstraintGbasedtestgeneration
+[C]//InternationalConferenceonToolsand Algorithmsfor
+the Construction and Analysis of Systems. Budapest,
+Hungary:Springer,2008:351 366.
+[72]BORRALLERASC,LUCASS,OLIVERAS A,etal.SAT
+modulolineararithmeticforsolving polynomialconstraints
+[J]. Journal of Automated Reasoning, 2012, 48(1):
+107 131.
+[73]ARMANDO A,BONACINA M P,RANISES,etal.New
+resultsonrewriteGbasedsatisfiabilityprocedures [J].ACM
+Transactions on Computational Logic (TOCL), 2009,
+10(1):4.
+[74]CIMATTIA,GRIGGIO A,SCHAAFSMA BJ,etal.The
+mathSAT5 SMT solver [C]//InternationalConferenceon
+Toolsand AlgorithmsfortheConstructionand Analysisof
+Systems.Rome,Italy:Springer,2013:93 107.
+[75]JHA S,LIMAYE R,SESHIA S A.Beaver:Engineeringan
+efficient smt solver for bitGvector arithmetic [C]//
+International Conference on Computer Aided Verification.
+Heidelberg,Berlin:Springer,2009:668 674.
+[76]VAN K T,OGAWA M.SMTforpolynomialconstraintson
+realnumbers[J].ElectronicNotesin TheoreticalComputer
+Science,2012,289:27 40.
+[77]SEN K,MARINOV D,AGHA G.CUTE:Aconcolicunit
+testing engine for C [J]//ACM SIGSOFT Software
+EngineeringNotes.ACM,2005,30(5):263 272.
+[78]VISSER W, GELDENHUYS J, DWYER M B. Green:
+Reducing,reusing and recycling constraints in program
+analysis [C]// Proceedings of the ACM SIGSOFT 20th
+International Symposium on the Foundations of Software
+Engineering.Cary,NC,USA:ACM,2012:1 11.
+[79]AQUINO A,BIANCHI F A,CHEN M,etal.Reusing
+constraintproofsinprogram analysis [C]// Proceedingsof
+the2015InternationalSymposium onSoftware Testingand
+Analysis.Baltimore,MD,USA:ACM,2015:305 315.
+[80]JIA X,GHEZZIC,YING S.Enhancingreuseofconstraint
+solutionstoimprovesymbolicexecution [C]//Proceedingsof
+the2015InternationalSymposium onSoftware Testingand
+Analysis.Baltimore,MD,USA:ACM,2015:177 187.
+[81]YANG G,PǍSǍREANU C S,KHURSHID S.Memoized
+symbolic execution [C]// Proceedings of the 2012
+InternationalSymposium onSoftwareTestingand Analysis.
+Minneapolis,MN,USA:ACM,2012:144 154.
+[82]CADARC,GANESH V,PAWLOWSKIP M,etal.EXE:
+Automatically generating inputs of death [J]. ACM
+TransactionsonInformationandSystem Security (TISSEC),
+2008,12(2):10.
+[83]AVGERINOST,CHASK,REBERT A,etal.Automatic
+exploitgeneration [J].CommunicationsoftheACM,2014,
+57(2):74 84.
+[84]BUCUR S, URECHE V, ZAMFIR C,et al. Parallel
+symbolicexecutionforautomatedrealGworldsoftwaretesting
+[C]// Proceedings of the sixth conference on Computer
+systems.Salzburg,Austria:ACM,2011:183 198.
+[85] MICORSOFT INC. !exploitable software official website
+[EB/OL]. [2018G08G02].https://archive.codeplex.com/?
+p= msecdbg
+[86]SoftwareEngineeringInstitute,Carnegie Mellon University.
+gdbGexploitable software official website [EB/OL].
+[2018G08G02].https://github.com/jfoote/exploitable
+[87]Google Inc. ASan software official website [EB/OL].
+[2018G08G02].https://github.com/google/sanitizers
+
+
+邹权臣,等: 从自动化到智能化:软件漏洞挖掘技术进展 1093
+[88]BRUMLEY D, POOSANKAM P, SONG D, et al.
+Automatic patchGbased exploit generation is possible:
+Techniques and implications [C]// IEEE Symposium on
+Security and Privacy. Oakland, California, USA:IEEE
+ComputerSociety,2008:143 157.
+[89]HEELANS.Automaticgenerationofcontrolflow hijacking
+exploits for software vulnerabilities [D]. Oxford, UK:
+UniversityofOxford,2009.
+[90]CHASK,AVGERINOST,REBERT A,etal.Unleashing
+mayhemonbinarycode [C]//IEEESymposium onSecurity
+andPrivacy (SP).San Francisco,California,USA:IEEE
+ComputerSociety,2012:380 394.
+[91]HU H, CHUA Z L, ADRIAN S, et al. Automatic
+generationofdataGorientedexploits [C]// USENIX Security
+Symposium. Washington, D.C., USA: USENIX
+Association,2015:177 192.
+[92]LECUN Y,BENGIO Y,HINTON G.Deeplearning [J].
+Nature,2015,521(7553):436 444.
+[93]BAO T,BURKET J, WOO M,etal.BYTEWEIGHT:
+Learning to recognize functions in binary code [C]//
+USENIX Security Symposium.SanJose,California,USA:
+USENIX Association,2014:845 860.
+[94]CYLAB SECURITY AND PRIVACY INSTITUTE.BAP
+software official website [EB/OL]. [2018G08G02].http:
+//bap.ece.cmu.edu/.
+[95]SHIN E C R, SONG D, MOAZZEZI R. Recognizing
+functionsin binaries with neuralnetworks [C]// USENIX
+Security Symposium. Washington,D.C.,USA:USENIX
+Association,2015:611 626.
+[96]CHUAZL,SHEN S,SAXENA P,etal.Neuralnetscan
+learnfunctiontypesignaturesfrom binaries [C]// USENIX
+Security Symposium. Vancouver, BC, Canada: USENIX
+Association,2017:99 115.
+[97]XU X,LIU C,FENG Q,etal.NeuralnetworkGbasedgraph
+embeddingforcrossGplatform binarycodesimilaritydetection
+[C]//Proceedingsofthe2017 ACM SIGSACConferenceon
+ComputerandCommunicationsSecurity.Dallas,TX,USA:
+ACM,2017:363 376.
+[98]FENG Q,ZHOU R,XU C,etal.ScalablegraphGbasedbug
+searchforfirmwareimages [C]// Proceedingsofthe2016
+ACM SIGSACConferenceonComputerandCommunications
+Security.Vienna,Austria:ACM,2016:480 491.
+[99]GODEFROID P, PELEG H, SINGH R. Learn&fuzz:
+Machinelearningforinputfuzzing [C]//Proceedingsofthe
+32nd IEEE/ACM International Conference on Automated
+Software Engineering. Urbana,IL, USA:IEEE Press,
+2017:50 59.
+[100]SHE D,PEI K,EPSTEIN D,etal.NEUZZ:Efficient
+fuzzing with neuralprogram learning [J/OL]. (2018G07G
+15).https://arxiv.org/abs/1807.05620.
+[101]BÖTTINGER K, GODEFROID P, SINGH R. Deep
+reinforcementfuzzing [J/OL].(2018G01G14).https://arxiv.
+org/abs/1801.04589.
+[102]NICHOLS N,RAUGAS M,JASPER R,etal.Faster
+fuzzing:Reinitialization withdeepneural models [J/OL].
+(2017G11G08).https://arxiv.org/abs/1711.02807.
+[103]RAJPAL M,BLUM W,SINGH R. Not all bytes are
+equal:Neuralbytesieveforfuzzing [J/OL].(2017G11G10).
+https://arxiv.org/abs/1711.04596.
+[104]SPIEKER H, GOTLIEB A, MARIJAN D, et al.
+Reinforcementlearningforautomatictestcaseprioritization
+andselectionincontinuousintegration [C]//Proceedingsof
+the 26th ACM SIGSOFT International Symposium on
+SoftwareTestingandAnalysis.SantaBarbara,CA,USA:
+ACM,2017:12 22.
+[105]CHEN P, CHEN H. Angora: Efficient fuzzing by
+principledsearch [C]//IEEE Symposium onSecurityand
+Privacy. San Francisco, CA, USA: IEEE Computer
+Society,2018:758 772
+[106]GRIECO G,GRINBLAT G L,UZAL L,etal.Toward
+largeGscalevulnerability discovery using machinelearning
+[C]//ProceedingsoftheSixth ACM Conferenceon Data
+and ApplicationSecurityand Privacy.New Orleans,LA,
+USA:ACM,2016:85 96.
+[107]LIZ,ZOU D, XU S,et al. VulDeePecker: A deep
+learningGbased system for vulnerability Detection [C]//
+Network and Distributed Systems Security (NDSS)
+Symposium.SanDiego,California USA:InternetSociety,
+2018.10.14722/ndss.2018.23158.
+[108]HOUSEHOLDER A D,FOOTE J M.ProbabilityGbased
+parameter selection for blackGbox fuzz testing [R].
+Pittsburgh,PA:Software EngineeringInstitute,Carnegie
+Mellon University,2012.
+[109]YAN G,KUCUK Y,SLOCUM M,etal.A Bayesian
+cognitive approach to quantifying software exploitability
+basedonreachabilitytesting [C]//InternationalConference
+onInformationSecurity.Honolulu,USA:Springer,2016:
+343 365.
+[110]YAN G,LU J,SHU Z,etal.ExploitMeter:Combining
+fuzzing with machinelearningforautomatedevaluationof
+softwareexploitability [C]// 2017 IEEE Symposium on
+PrivacyGAwareComputing (PAC).WashingtonDC,USA:
+IEEE,2017:164 175.
+[111] MARCUSG.DeepLearning:Acriticalappraisal[J/OL].
+(2018G10G02).https://arxiv.org/abs/1801.00631.
+
+
+1094 清 华 大 学 学 报 (自 然 科 学 版) 2018,58(12)
+[112]STOICAI,SONG D,POPA R A,etal.Aberkeleyviewof
+systemschallengesforAI[J/OL].(2017G12G15).https://
+arxiv.org/abs/1712.05855.
+[113]STEVENS R,SUCIU O, RUEF A,et al. Summoning
+demons:Thepursuitofexploitablebugsin machinelearning
+[J/OL].(2017G01G17).https://arxiv.org/abs/1701.04739.
+[114]GOODFELLOW IJ,SHLENSJ,SZEGEDY C.Explaining
+andharnessingadversarialexamples[J].ComputerScience,
+2014
+[115]GEHR T,MIRMAN M,DRACHSLERGCOHEN D,etal.
+AI2:Safetyandrobustnesscertificationofneuralnetworks
+with abstractinterpretation [C]// IEEE Symposium on
+Security and Privacy (SP).San Francisco,CA, USA:
+IEEEComputerSociety,2018.10.1109/SP.2018.00058
+[116]CARLINI N, WAGNER D. Towards evaluating the
+robustnessofneuralnetworks [C]///IEEESymposium on
+Securityand Privacy (SP).San Jose,CA,USA:IEEE
+ComputerSociety,2017:39 57
+[117]HUANGX,KWIATKOWSKA M,WANGS,etal.Safety
+verification of deep neural networks [C]// International
+Conferenceon Computer Aided Verification. Heidelberg:
+Springer,2017:3 29.
+[118]PEIK,CAO Y,YANGJ,etal.Deepxplore:Automated
+whitebox testing of deep learning systems [C]//
+Proceedingsofthe26thSymposium on OperatingSystems
+Principles.Shanghai,China:ACM,2017:1 18.
+[119]JAGIELSKI M, OPREA A, BIGGIO B, et al.
+Manipulating machine learning: Poisoning attacks and
+countermeasures for regression learning [C]// IEEE
+SymposiumonSecurityandPrivacy (SP).San Francisco,
+CA,USA:IEEEComputerSociety,2018.
+[120]LIB,WANG Y,SINGH A,etal.Datapoisoningattacks
+onfactorizationGbasedcollaborativefiltering[C]//Advances
+in Neural Information Processing Systems. Barcelona,
+Spain:NIPSPress,2016:1885 1893.
+[121]YANG G,GONG NZ,CAIY.FakecoGvisitationinjection
+attacks to recommender systems [C]// Network and
+Distributed System Security Symposium. San Diego,
+California,USA:InternetSociety,2017.
+[122]KE L,LIB,VOROBEYCHIK Y.Behavioralexperiments
+inemailfilterevasion [C]//ThirtiethAAAIConferenceon
+ArtificialIntelligence.Arizona,USA:AAAIPress,2016:
+827 833.
+[123]LIU Y,CHEN X,LIU C,etal.Delvingintotransferable
+adversarialexamplesandblackGboxattacks[J/OL].(2016G11G08).
+https://arxiv.org/abs/1611.02770.
+[124]PAPERNOT N, Mcdaniel P,GOODFELLOW I,etal.
+PracticalblackGboxattacksagainstmachinelearning [C]//
+Proceedings of the 2017 ACM on Asia Conference on
+Computer and Communications Security. Abu Dhabi,
+UnitedArabEmirates:ACM,2017:506 519.
+[125]XU W,QIY,EVANSD.Automaticallyevadingclassifiers
+[C]// Proceedings ofthe 2016 Network and Distributed
+SystemsSymposium.SanDiego,California,USA:Internet
+Society,2016.10.14722/ndss.2016.23115.
+[126]FREDRIKSON M,JHA S, RISTENPART T. Model
+inversion attacksthatexploitconfidenceinformation and
+basiccountermeasures [C]//Proceedingsofthe22nd ACM
+SIGSAC Conference on Computer and Communications
+Security.Denver,USA:ACM,2015:1322 1333.
+[127]FREDRIKSON M,LANTZ E,JHA S,etal.Privacyin
+pharmacogenetics:AnendGtoGendcasestudyofpersonalized
+warfarindosing [C]// USENIX SecuritySymposium.San
+Jose, California, USA: USENIX Association, 2014:
+17 32.
+[128]LOWD D, MEEK C. Adversarial learning [C]//
+Proceedingsofthe Eleventh ACM SIGKDD International
+Conference on Knowledge Discovery in Data Mining.
+Chicago,IL,USA:ACM,2005:641 647.
+[129]TRAMÈR F, ZHANG F,JUELS A,et al. Stealing
+machinelearningmodelsviapredictionAPIs[C]//USENIX
+Security Symposium. Austin, TX, USA: USENIX
+Association,2016:601 618.
+[130] WANG B, GONG N Z. Stealing hyperparameters in
+machinelearning [C]//IEEE Symposium onSecurityand
+Privacy. San Francisco, CA, USA: IEEE Computer
+Society,2018.
+[131]DAUPHIN Y N,FAN A, AULI M,et al.Language
+modeling with gated convolutional networks [J/OL].
+(2016G12G23).https://arxiv.org/abs/1612.08083.
+[132]YIN W,KANN K,YU M,etal.Comparativestudyof
+CNN and RNN fornaturallanguage processing [J/OL].
+(2017G02G07).https://arxiv.org/abs/1702.01923.
+[133] WANG J,CHEN B,WeiL,etal.Skyfire:DataGdriven
+seed generation forfuzzing [C]// IEEE Symposium on
+Securityand Privacy (SP).San Jose,CA,USA:IEEE
+ComputerSociety,2017:579 594.
+(责任编辑 刘森)
