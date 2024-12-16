@@ -1,0 +1,3 @@
+所有论文pdf放在zotero里面。
+
+notepress里面只有部分论文的索引
